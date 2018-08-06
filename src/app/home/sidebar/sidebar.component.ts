@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {NavList, NavListChild} from '../../shared/global.service';
+import {NavList, NavListChild} from '../../common/services/global.service';
 import {Router} from '@angular/router';
 
 @Component({

@@ -1,6 +1,6 @@
-import {Component, OnDestroy} from '@angular/core';
-import {ReqService} from './shared/req.service';
-import {GlobalService} from './shared/global.service';
+import {Component} from '@angular/core';
+import {ReqService} from './common/services/req.service';
+import {GlobalService} from './common/services/global.service';
 
 @Component({
   selector: 'app-root',

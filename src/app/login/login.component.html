@@ -1,50 +1,42 @@
-<div class="container-fluid">
-  <div class="login">
-    <div class="login-box text-center">
-      <p><i class="fa fa-user-circle-o"></i></p>
-      <p>welcome <span style="color:#D9E470;">back</span></p>
-      <form class="form-horizontal" [formGroup]="userLoginInfoForm" (submit)="OnSubmitInfo()">
-        <div class="form-group has-error">
-          <label for="username" class="col-sm-2 control-label">
-            <i class="fa fa-user"></i>
-          </label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="username" placeholder="username" formControlName="uname">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="password" class="col-sm-2 control-label">
-            <i class="fa fa-lock"></i>
-          </label>
-          <div class="col-sm-10">
-            <input type="password" class="form-control" id="password" placeholder="password" formControlName="upwd">
-          </div>
-        </div>
-       <!-- <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-10">
-            <div class="checkbox">
-              <span class="checkbox-1"></span>
-              <span class="checkbox-2"></span>
-              <span class="checkbox-3">记住我</span>
+<div class="login">
+  <div class="login-box">
+    <div class="text-center">
+      <h2>贵州高投交通大数据管理系统</h2>
+      <!--<h4>视频监控子系统</h4>-->
+    </div>
+    <div class="form">
+      <form class="form-horizontal"  [formGroup]="myFromModule" (submit)="onSubmit()">
+        <!--账号-->
+        <div class="form-group ">
+          <label for="username" class="control-label">账号</label>
+          <input type="text" formControlName="username" class="form-control" id="username" placeholder="请输入账号" name="userN" autocomplete="off">
+          <div *ngIf="formUsername.invalid && (formUsername.dirty || formUsername.touched)" class="text-danger ">
+            <div *ngIf="formUsername.errors.required">
+              账号是必填项
             </div>
           </div>
-        </div>-->
+        </div>
+        <!--密码-->
         <div class="form-group">
-          <div class="btn-login">
-            <button type="submit" class="btn btn-danger btn-block">登录</button>
+          <label for="password" class="control-label">密码</label>
+          <input type="password" formControlName="password" class="form-control" id="password" placeholder="请输入密码"  name="passW" autocomplete="off">
+          <div *ngIf="formPassword.invalid && (formPassword.dirty || formPassword.touched)" class="text-danger ">
+            <div *ngIf="formPassword.errors.required">
+              密码是必填项
+            </div>
           </div>
         </div>
+        <!--登陆-->
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary" id="login">
+            登<span>录</span>
+          </button>
+          <a class="pull-right">忘记密码?</a>
+        </div>
       </form>
-      <h4 class="text-center">贵州中铝彩铝科技有限公司</h4>
-      <h4 class="text-center">贵州红鸟智能技术服务有限公司</h4>
     </div>
-  </div>
-  <div class="login-footer text-center">
-    <span>联系电话：1234567890</span>
-    <span>邮箱：hongniao@thinkjoy.cn</span>
-    <span>copynight@2018</span>
+    <footer class="text-center">
+      <h5>贵阳红鸟智能技术服务有限公司</h5>
+    </footer>
   </div>
 </div>
-
-
-

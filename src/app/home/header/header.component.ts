@@ -2,9 +2,9 @@ import { Component, OnInit, TemplateRef} from '@angular/core';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
-import {ReqService} from '../../shared/req.service';
+import {ReqService} from '../../common/services/req.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {GlobalService, PersonInfo} from '../../shared/global.service';
+import {GlobalService, PersonInfo} from '../../common/services/global.service';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',

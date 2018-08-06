@@ -6,7 +6,9 @@ import {HeaderComponent} from './header/header.component';
 import {SidebarComponent} from './sidebar/sidebar.component';
 import {FooterComponent} from './footer/footer.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {ModalModule} from 'ngx-bootstrap';
+import {ButtonModule, DialogModule, InputTextModule} from 'primeng/primeng';
+import {TableModule} from 'primeng/table';
+
 
 @NgModule({
   imports: [
@@ -14,7 +16,10 @@ import {ModalModule} from 'ngx-bootstrap';
     HomeRoutersModule,
     FormsModule,
     ReactiveFormsModule,
-    ModalModule.forRoot()
+    InputTextModule,
+    DialogModule,
+    ButtonModule,
+    TableModule,
   ],
   declarations: [
     HomeComponent,

@@ -7,13 +7,6 @@ const homeRoutes: Routes = [
     children: [
       {path: '', redirectTo: 'main', pathMatch: 'full'},
       {path: 'main', loadChildren: 'app/business/main/main.module#MainModule'},
-      {path: 'department', loadChildren: 'app/business/department/department.module#DepartmentModule'},
-      {path: 'device', loadChildren: 'app/business/device/device.module#DeviceModule'},
-      {path: 'jurisdiction', loadChildren: 'app/business/jurisdiction/jurisdiction.module#JurisdictionModule'},
-      {path: 'mobile', loadChildren: 'app/business/mobile/mobile.module#MobileModule'},
-      {path: 'technology', loadChildren: 'app/business/technology/technology.module#TechnologyModule'},
-      {path: 'users', loadChildren: 'app/business/users/users.module#UsersModule'},
-      {path: 'videos', loadChildren: 'app/business/videos/videos.module#VideosModule'},
     ]
   },
 ];
