@@ -1,13 +1,12 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {HomeRoutersModule} from './home.routers.module';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HomeComponent} from './home.component';
 import {HeaderComponent} from './header/header.component';
 import {SidebarComponent} from './sidebar/sidebar.component';
 import {FooterComponent} from './footer/footer.component';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {ButtonModule, DialogModule, InputTextModule} from 'primeng/primeng';
-import {TableModule} from 'primeng/table';
+
 
 
 @NgModule({
@@ -16,10 +15,6 @@ import {TableModule} from 'primeng/table';
     HomeRoutersModule,
     FormsModule,
     ReactiveFormsModule,
-    InputTextModule,
-    DialogModule,
-    ButtonModule,
-    TableModule,
   ],
   declarations: [
     HomeComponent,
