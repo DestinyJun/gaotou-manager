@@ -8,48 +8,51 @@ import {Router} from '@angular/router';
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit {
+  public logoShow = false;
   public navLists: NavList[] = [
-    new NavList('首页', 'main', 'fa fa-university', true, [] , true),
-    new NavList('组织管理', '', 'fa fa-laptop', false, [
-      new NavListChild('组织管理', false, 'department/organization-management'),
-      new NavListChild('部门管理', false, 'department/organization')
+  /*  new NavList('监控管理', 'main', 'fa fa-camera', true, [
+      new NavListChild('视频监控', false, 'department/organization-management'),
+      new NavListChild('视频管理', false, 'department/organization')
     ] , true),
-    new NavList('设备管理', '', 'fa fa-th-large', false, [
+    new NavList('车流管理', '', 'fa fa-car', false, [
+      new NavListChild('数据采集', false, 'department/organization-management'),
+      new NavListChild('部门管理', false, 'department/organization')
+    ] , true),*/
+    /*new NavList('业态管理', '', 'fa fa-bar-chart', false, [
       new NavListChild('生产线', false, 'device/proline'),
       new NavListChild('模块数据', false, 'device/prolicm'),
       new NavListChild('设备数据', false, 'device/proldata'),
       new NavListChild('传感器', false, 'device/prolsen'),
-    ] , true),
+    ] , true),*/
+    new NavList('用户管理', 'users', 'fa fa-address-card-o', false, [] , true),
     new NavList('权限管理', '', 'fa fa-outdent', false, [
       new NavListChild('模块信息', false, 'jurisdiction/modalma'),
       new NavListChild('按钮管理', false, 'jurisdiction/btnma'),
       new NavListChild('接口信息', false, 'jurisdiction/interma'),
       new NavListChild('用户权限', false, 'jurisdiction/userma')
     ] , true),
-    new NavList('移动端管理', 'mobile', 'fa fa-sitemap', false, [] , true),
-    new NavList('工艺管理', '', 'fa fa-hdd-o', false, [
-      new NavListChild('默认工艺包', false, 'technology/amend'),
-      new NavListChild('温度工艺包', false, 'technology/temperature')
-    ] , true),
-    new NavList('用户管理', 'users', 'fa fa-graduation-cap', false, [] , true),
-    new NavList('视频管理', '', 'fa fa-graduation-cap', false, [
-      new NavListChild('监控窗口', false, 'videos/videowin'),
-      new NavListChild('视频管理', false, 'videos/videoman')
-    ] , true)
+    new NavList('移动端管理', 'mobile', 'fa fa-desktop', false, [] , true),
+    new NavList('系统配置', 'mobile', 'fa fa-cog', false, [] , true),
   ];
   public slidinghight: number;
   public slidingTop: number;
   public difulHeight: number;
   constructor(private router: Router) {}
   ngOnInit() {}
-  onMouseleave() {
-    this.slidingTop = -120;
+  public menuOnMousEnter(element): void {
+    element.srcElement.style.left = '0';
+    this.logoShow = true;
   }
-  mainLiMouseEnter(element) {
+  public onMouseleave(element): void {
+    this.slidingTop = -120;
+    element.srcElement.style.left = '-143px';
+    this.logoShow = false;
+  }
+  public mainLiMouseEnter(element): void {
     this.slidingTop =  element.offsetTop;
     this.slidinghight = element.offsetHeight;
   }
-  mainLiClick(mainul, element, list) {
+  public mainLiClick(mainul, element, list): void {
     if (list.routers) {
       this.router.navigate(['/home/' + list.routers]);
     }
@@ -91,12 +94,12 @@ export class SidebarComponent implements OnInit {
       }, 200);
     }
   }
-  menuliMouseEnter(element) {
+  public menuliMouseEnter(element): void {
     this.slidingTop =  element.offsetTop;
     this.slidinghight = element.offsetHeight;
     element.setState = true;
   }
-  menuliClick(element) {
+  public menuliClick(element): void {
     this.navLists.forEach((item) => {
       item.clsstate = false;
       item.children.forEach((itemchild) => {
