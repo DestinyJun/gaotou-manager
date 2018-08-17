@@ -84,7 +84,7 @@
   padding-top: 15px;
   color: #646464;
   line-height: 38px;
-  box-shadow: 0 10px 15px #A2A2A2;
+  box-shadow: 0px 10px 15px #A2A2A2;
 }
 .user .boxone ul {
   list-style: none;
