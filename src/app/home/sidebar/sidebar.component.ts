@@ -10,29 +10,32 @@ import {Router} from '@angular/router';
 export class SidebarComponent implements OnInit {
   public logoShow = false;
   public navLists: NavList[] = [
-  /*  new NavList('监控管理', 'main', 'fa fa-camera', true, [
-      new NavListChild('视频监控', false, 'department/organization-management'),
-      new NavListChild('视频管理', false, 'department/organization')
+    new NavList('系统首页', 'main', 'fa fa-university', true, [] , true),
+    new NavList('区域管理', 'area', 'fa fa-car', false, [
+     /* new NavListChild('数据采集', false, 'department/organization-management'),
+      new NavListChild('部门管理', false, 'department/organization')*/
     ] , true),
-    new NavList('车流管理', '', 'fa fa-car', false, [
-      new NavListChild('数据采集', false, 'department/organization-management'),
-      new NavListChild('部门管理', false, 'department/organization')
-    ] , true),*/
-    /*new NavList('业态管理', '', 'fa fa-bar-chart', false, [
-      new NavListChild('生产线', false, 'device/proline'),
+    new NavList('组织管理', 'org', 'fa fa-car', false, [
+     /* new NavListChild('数据采集', false, 'department/organization-management'),
+      new NavListChild('部门管理', false, 'department/organization')*/
+    ] , true),
+    new NavList('用户管理', 'user', 'fa fa-bar-chart', false, [
+      /*new NavListChild('生产线', false, 'device/proline'),
       new NavListChild('模块数据', false, 'device/prolicm'),
       new NavListChild('设备数据', false, 'device/proldata'),
-      new NavListChild('传感器', false, 'device/prolsen'),
-    ] , true),*/
-    new NavList('用户管理', 'users', 'fa fa-address-card-o', false, [] , true),
-    new NavList('权限管理', '', 'fa fa-outdent', false, [
-      new NavListChild('模块信息', false, 'jurisdiction/modalma'),
-      new NavListChild('按钮管理', false, 'jurisdiction/btnma'),
-      new NavListChild('接口信息', false, 'jurisdiction/interma'),
-      new NavListChild('用户权限', false, 'jurisdiction/userma')
+      new NavListChild('传感器', false, 'device/prolsen'),*/
     ] , true),
-    new NavList('移动端管理', 'mobile', 'fa fa-desktop', false, [] , true),
-    new NavList('系统配置', 'mobile', 'fa fa-cog', false, [] , true),
+    new NavList('权限管理', '', 'fa fa-outdent', false, [
+      new NavListChild('菜单权限', false, 'jurisdiction/modalma'),
+      new NavListChild('按钮管理', false, 'jurisdiction/btnma'),
+      new NavListChild('路由权限', false, 'jurisdiction/interma'),
+    ] , true),
+    new NavList('服务区管理', 'serarea', 'fa fa-cog', false, [] , true),
+    new NavList('门店管理', 'store', 'fa fa-address-card-o', false, [] , true),
+    new NavList('卡口管理', 'intercept', 'fa fa-desktop', false, [] , true),
+    new NavList('视频管理', 'videom', 'fa fa-desktop', false, [] , true),
+    new NavList('收银机配置', 'cash', 'fa fa-cog', false, [] , true),
+    new NavList('系统配置', 'system', 'fa fa-cog', false, [] , true),
   ];
   public slidinghight: number;
   public slidingTop: number;
