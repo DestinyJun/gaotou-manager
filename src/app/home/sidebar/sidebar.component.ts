@@ -26,9 +26,9 @@ export class SidebarComponent implements OnInit {
       new NavListChild('传感器', false, 'device/prolsen'),*/
     ] , true),
     new NavList('权限管理', '', 'fa fa-outdent', false, [
-      new NavListChild('菜单权限', false, 'jurisdiction/modalma'),
-      new NavListChild('按钮管理', false, 'jurisdiction/btnma'),
-      new NavListChild('路由权限', false, 'jurisdiction/interma'),
+      new NavListChild('菜单权限', false, 'limit/menu', 'fa fa-snowflake-o'),
+      new NavListChild('按钮管理', false, 'limit/button', 'fa fa-snowflake-o'),
+      new NavListChild('路由权限', false, 'limit/route', 'fa fa-snowflake-o'),
     ] , true),
     new NavList('服务区管理', 'serarea', 'fa fa-cog', false, [] , true),
     new NavList('门店管理', 'store', 'fa fa-address-card-o', false, [] , true),

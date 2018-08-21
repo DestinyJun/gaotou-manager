@@ -19,7 +19,7 @@ import {LoginGuard} from './common/guard/login.guard';
     ReactiveFormsModule,
   ],
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   providers: [
     GlobalService,

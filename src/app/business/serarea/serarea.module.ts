@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SerareaComponent } from './serarea.component';
+import {SerareaRoutersModule} from './serarea.routers.module';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    SerareaRoutersModule
   ],
   declarations: [SerareaComponent]
 })

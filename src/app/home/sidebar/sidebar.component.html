@@ -25,6 +25,7 @@
             (mouseenter)="menuliMouseEnter(menuli)"
             (click)="menuliClick(listchild)">
             <span style="margin-left: 18px">{{listchild.title}}</span>
+            <i [ngClass]="[listchild.icon,'menu-mainli-i-before']"></i>
           </a>
         </li>
       </ul>

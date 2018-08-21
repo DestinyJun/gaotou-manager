@@ -44,7 +44,8 @@ export class NavListChild {
   constructor(
     public title: string,
     public setState: boolean,
-    public routers: string
+    public routers: string,
+    public icon: string,
   ) {}
 }
 
