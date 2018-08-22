@@ -6,8 +6,7 @@ import {HomeComponent} from './home.component';
 import {HeaderComponent} from './header/header.component';
 import {SidebarComponent} from './sidebar/sidebar.component';
 import {FooterComponent} from './footer/footer.component';
-
-
+import {SharedModule} from '../common/shared.module';
 
 @NgModule({
   imports: [
@@ -15,6 +14,7 @@ import {FooterComponent} from './footer/footer.component';
     HomeRoutersModule,
     FormsModule,
     ReactiveFormsModule,
+    SharedModule
   ],
   declarations: [
     HomeComponent,
