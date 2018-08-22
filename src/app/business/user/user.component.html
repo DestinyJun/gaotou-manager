@@ -1,22 +1,25 @@
 <div class="user-manage">
   <h1 class="text-center">用户管理</h1>
-  <h3 class="first">Basic</h3>
   <app-s-button></app-s-button>
-  <p-table [value]="cars">
-    <ng-template pTemplate="header">
+  <p-table [value]="cars" [columns]="cols">
+    <ng-template pTemplate="header" let-columns>
       <tr>
-        <th>Vinsds</th>
-        <th>Year</th>
-        <th>Brand</th>
-        <th>Color</th>
+        <th *ngFor="let col of columns">
+          {{col.header}}
+        </th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-car>
       <tr>
-        <td>{{car.vin}}</td>
-        <td>{{car.year}}</td>
-        <td>{{car.brand}}</td>
-        <td>{{car.color}}</td>
+        <td>
+          <p-checkbox name="group1" value="{{car.id}}" label="{{car.id}}" [(ngModel)]="selectedCities" inputId="ny"></p-checkbox>
+        </td>
+        <td>{{car.name}}</td>
+        <td>{{car.position}}</td>
+        <td>{{car.phone}}</td>
+        <td>{{car.email}}</td>
+        <td>{{car.department}}</td>
+        <td>{{car.remark}}</td>
       </tr>
     </ng-template>
   </p-table>
