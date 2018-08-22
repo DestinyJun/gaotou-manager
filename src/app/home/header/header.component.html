@@ -11,11 +11,11 @@
               <i class="fa fa-search search-i" aria-hidden="true"></i>
               <input type="text" placeholder="Search">
             </li>
-            <li class="li" style="position: relative;">
+            <li class="li" style="position: relative;" (click)="remindClick()">
               <span class="markone">4</span>
               <i class="fa fa-bell font" aria-hidden="true"></i>
             </li>
-            <li class="li" style="position: relative;">
+            <li class="li" style="position: relative;" (click)="messageClick()">
               <span class="marktwo">5</span>
               <i class="fa fa-envelope font" aria-hidden="true"></i>
             </li>
@@ -23,7 +23,7 @@
               <i class="fa fa-cog font" aria-hidden="true"></i>
             </li>
           </ul>
-          <div class="boxone" [hidden]="true">
+          <div class="boxone" [hidden]="remindShow">
             <ul>
               <li>
                 <i class="fa fa-bug" aria-hidden="true"></i>
@@ -43,7 +43,7 @@
               </li>
             </ul>
           </div>
-          <div class="boxtwo" [hidden]="true">
+          <div class="boxtwo" [hidden]="messageShow">
             <ul>
               <li>
                 <img class="rounded-circle" src="./assets/Nasta.png" alt="">
@@ -71,3 +71,4 @@
       </div>
   </div>
 </nav>
+

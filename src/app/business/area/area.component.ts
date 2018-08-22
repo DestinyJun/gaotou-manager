@@ -6,20 +6,19 @@ import {Car} from '../../common/model/user-model';
   templateUrl: './area.component.html',
   styleUrls: ['./area.component.css']
 })
+
 export class AreaComponent implements OnInit {
   public cars: Car[];
+  public clicks = 0;
   cols: any[];
 
   constructor() { }
 
   ngOnInit() {
   }
-  export class ButtonDemo {
 
-  clicks: number = 0;
-
-  count() {
+  public count() {
     this.clicks++;
   }
-}
+
 }

@@ -5,6 +5,26 @@ import { Component, OnInit} from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  public remindShow = true;
+  public messageShow = true;
   constructor() {}
-  ngOnInit() {}}
+  ngOnInit() {
+    let that = this;
+    document.addEventListener('click', function (e) {
+      console.log(e.srcElement);
+      that.messageShow = true;
+      that.remindShow = true;
+    });
+  }
+  public remindClick() {
+    this.remindShow = !this.remindShow;
+    this.messageShow = true;
+  }
+  public messageClick(){
+    this.messageShow = !this.messageShow;
+    this.remindShow = true;
+
+  }
+
+}
 
