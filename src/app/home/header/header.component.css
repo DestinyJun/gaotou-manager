@@ -85,6 +85,7 @@
   color: #646464;
   line-height: 38px;
   box-shadow: 0 10px 15px #A2A2A2;
+  z-index: 9999;
 }
 .user .boxone ul {
   list-style: none;
@@ -102,6 +103,7 @@
   color: #646464;
   line-height: 38px;
   box-shadow: 0 10px 15px #A2A2A2;
+  z-index: 9999;
 }
 .user .boxtwo ul {
   list-style: none;

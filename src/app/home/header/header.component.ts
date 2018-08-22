@@ -9,12 +9,14 @@ export class HeaderComponent implements OnInit {
   public messageShow = true;
   constructor() {}
   ngOnInit() {
-    let that = this;
-    document.addEventListener('click', function (e) {
-      console.log(e.srcElement);
-      that.messageShow = true;
-      that.remindShow = true;
-    });
+    // let that = this;
+    // document.addEventListener('click', function (e) {
+    //   // console.log(e.srcElement.parentElement.parentElement.className);
+    //     if (!(e.srcElement.id === 'remind')) {
+    //       that.messageShow = true;
+    //       that.remindShow = true;
+    //     } else if(!(e.srcElement.id === 'message'))
+    // });
   }
   public remindClick() {
     this.remindShow = !this.remindShow;
