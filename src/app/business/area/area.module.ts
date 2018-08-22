@@ -4,13 +4,15 @@ import { AreaComponent } from './area.component';
 import {AreaRoutersModule} from './area.routers.module';
 import {TableModule} from 'primeng/table';
 import {ButtonModule} from 'primeng/button';
+import {SharedModule} from '../../common/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     AreaRoutersModule,
     TableModule,
-    ButtonModule
+    ButtonModule,
+    SharedModule,
   ],
   declarations: [AreaComponent]
 })
