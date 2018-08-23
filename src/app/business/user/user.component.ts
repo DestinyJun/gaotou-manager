@@ -8,7 +8,8 @@ import {UserService} from '../../common/services/user.service';
   styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit {
-  public cars: Persons[];
+  public personsModel;
+  public persons: Persons[];
   public cols: any[];
   public selectedCities: string[] = [];
 
@@ -18,7 +19,11 @@ export class UserComponent implements OnInit {
 
   ngOnInit() {
     this.cols = this.userService.cols;
-    this.cars = this.userService.cars;
+    this.userService.getPersons().subscribe(
+      (value) => {
+        this.persons = value;
+      }
+    );
   }
 
 }

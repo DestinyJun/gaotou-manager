@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {Persons} from '../model/user-model';
+import {Observable} from 'rxjs/Observable';
 
 
 @Injectable()
@@ -13,13 +15,10 @@ export class UserService {
     {field: 'department', header: '部门'},
     {field: 'remark', header: '备注'}
   ];
-  public cars = [
-    {id: 1, name: 'dsad231ff', position: '2012', phone: 'VW', email: 'Orange', department: '阿三大好的', remark: '飒飒大'},
-    {id: 2, name: 'gwregre345', position: '2011', phone: 'Audi', email: 'Black', department: '阿三大好的', remark: '飒飒大'},
-    {id: 3, name: 'h354htr', position: '2005', phone: 'Renault', email: 'Gray', department: '阿三大好的', remark: '飒飒大'},
-    {id: 4, name: 'j6w54qgh', position: '2003', phone: 'BMW', email: 'Blue', department: '阿三大好的', remark: '飒飒大'},
-  ];
   constructor(
     private http: HttpClient
   ) { }
+  public getPersons(): Observable<any> {
+    return this.http.post('http://localhost/gaotou/user.php', '');
+  }
 }

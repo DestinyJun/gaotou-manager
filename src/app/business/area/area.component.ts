@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {Car} from '../../common/model/user-model';
 
 @Component({
   selector: 'app-area',
@@ -8,7 +7,6 @@ import {Car} from '../../common/model/user-model';
 })
 
 export class AreaComponent implements OnInit {
-  public cars: Car[];
   public clicks = 0;
   cols: any[];
 
