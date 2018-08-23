@@ -5,6 +5,10 @@ import {AreaRoutersModule} from './area.routers.module';
 import {TableModule} from 'primeng/table';
 import {ButtonModule} from 'primeng/button';
 import {SharedModule} from '../../common/shared.module';
+import {ConfirmationService, ConfirmDialogModule, DialogModule, TreeTableModule} from 'primeng/primeng';
+import {DropdownModule} from 'primeng/dropdown';
+import {AreaService} from '../../common/services/area.service';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -12,8 +16,17 @@ import {SharedModule} from '../../common/shared.module';
     AreaRoutersModule,
     TableModule,
     ButtonModule,
+    FormsModule,
     SharedModule,
+    ConfirmDialogModule,
+    DialogModule,
+    DropdownModule,
+    TreeTableModule,
   ],
-  declarations: [AreaComponent]
+  declarations: [AreaComponent],
+  providers: [
+    AreaService,
+    ConfirmationService,
+  ]
 })
 export class AreaModule { }
