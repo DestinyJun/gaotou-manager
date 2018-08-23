@@ -23,6 +23,23 @@ export class AreaComponent implements OnInit {
   constructor(private confirmationService: ConfirmationService) { }
 
   ngOnInit() {
+    this.newfiles =   {
+      'data': {
+        'name': '',
+      },
+      'children': [
+        {
+          'data': {
+            'name': '',
+          },
+          'children': [
+            {
+              'data': {'name': ''},
+            }
+          ]
+        }
+      ]
+    };
     // 表格内容
     this.files1 = [
       {
@@ -128,14 +145,22 @@ export class AreaComponent implements OnInit {
     this.display = true;
   }
   addData() {
+    this.files1.push(this.newfiles);
+    console.log(this.files1);
   }
   public provinceChange(e) {
-    console.log(e.value);
+    this.newfiles.data.name = e.value;
+    console.log(this.newfiles);
+
   }
   public citiesChange(e) {
-    console.log(e.value);
+    this.newfiles.children[0].data.name = e.value;
+    console.log(this.newfiles);
+
   }
   public countryChange(e) {
-    console.log(e.value);
+    this.newfiles.children[0].children[0].data.name = e.value;
+    console.log(this.newfiles);
+
   }
 }
