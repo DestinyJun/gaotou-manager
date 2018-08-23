@@ -1,23 +1,59 @@
 <h1 class="text-center">区域管理</h1>
 <div class="area">
-  <app-s-button></app-s-button>
-  <p-table [value]="cars">
+  <div class="btn-manner">
+    <button class="btn btn-primary" (click)="showDialog()">增加</button>
+    <button class="btn btn-danger">删除</button>
+    <div class="pull-right">
+      <div class="ui-inputgroup">
+        <button label="Search"  type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+          <span class="ui-button-text ui-clickable">搜索 </span>
+        </button>
+        <input placeholder="请输入关键字..." type="text" class="ui-inputtext ui-corner-all ui-state-default ui-widget">
+      </div>
+    </div>
+  </div>
+  <!--增加按钮弹窗内容-->
+  <p-dialog header="区域管理" [(visible)]="display" [modal]="true" [responsive]="true" [width]="500" [minWidth]="200" [minY]="70"
+            [maximizable]="true" [baseZIndex]="10000">
+    <div style="height: 300px;padding-top: 20px" >
+      <div class="select">
+        <span>请选择省：</span>
+        <p-dropdown [options]="province" [(ngModel)]="selectedCar1" [style]="{'width':'200px'}" editable="true" placeholder="四川" (onChange)="provinceChange($event)"></p-dropdown>
+      </div>
+      <div class="select">
+        <span>请选择市：</span>
+        <p-dropdown [options]="cities" [(ngModel)]="selectedCar2" [style]="{'width':'200px'}" editable="true" placeholder="成都" (onChange)="citiesChange($event)"></p-dropdown>
+      </div>
+      <div class="select">
+        <span>请选择县/区：</span>
+        <p-dropdown [options]="country" [(ngModel)]="selectedCar3" [style]="{'width':'200px'}" editable="true" placeholder="眉山" (onChange)="countryChange($event)"></p-dropdown>
+      </div>
+    </div>
+
+    <p-footer>
+      <button type="button" pButton icon="pi pi-check" (click)="display=false;addData()" label="确认"></button>
+      <button type="button" pButton icon="pi pi-close" (click)="display=false" label="取消" class="ui-button-secondary"></button>
+    </p-footer>
+  </p-dialog>
+ <!--表格-->
+ <!--表格-->
+
+  <h3 class="first">Basic</h3>
+  <p-treeTable [value]="files1">
     <ng-template pTemplate="header">
       <tr>
-        <th>Vin</th>
-        <th>Year</th>
-        <th>Brand</th>
-        <th>Color</th>
+        <th>Name</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-car>
+    <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
       <tr>
-        <td>{{car.vin}}</td>
-        <td>{{car.year}}</td>
-        <td>{{car.brand}}</td>
-        <td>{{car.color}}</td>
+        <td>
+          <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+          {{rowData.name}}
+        </td>
       </tr>
     </ng-template>
-  </p-table>
+  </p-treeTable>
+
 </div>
 
