@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-s-button',
@@ -6,10 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./s-button.component.css']
 })
 export class SButtonComponent implements OnInit {
-
+  @Output() public clickEvent = new EventEmitter();
   constructor() { }
 
   ngOnInit() {
   }
-
+  public addClick(): void {
+    this.clickEvent.emit();
+  }
 }

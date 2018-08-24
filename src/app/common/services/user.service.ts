@@ -15,10 +15,11 @@ export class UserService {
     {field: 'department', header: '部门'},
     {field: 'remark', header: '备注'}
   ];
+
   constructor(
     private http: HttpClient
   ) { }
   public getPersons(): Observable<any> {
-    return this.http.post('http://localhost/gaotou/user.php', '');
+    return this.http.post('http://localhost/gaotouService/user.php', '');
   }
 }

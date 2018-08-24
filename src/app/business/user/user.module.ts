@@ -6,6 +6,7 @@ import {UserRoutersModule} from './user.routers.module';
 import {TableModule} from 'primeng/table';
 import {SharedModule} from '../../common/shared.module';
 import {CheckboxModule} from 'primeng/checkbox';
+import {DialogModule} from 'primeng/dialog';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import {CheckboxModule} from 'primeng/checkbox';
     FormsModule,
     ReactiveFormsModule,
     CheckboxModule,
-    SharedModule
+    SharedModule,
+    DialogModule
   ],
   declarations: [UserComponent]
 })
