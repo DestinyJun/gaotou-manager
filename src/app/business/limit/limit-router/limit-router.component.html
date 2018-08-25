@@ -1,1 +1,30 @@
-<h1 class="text-center">路由权限控制</h1>
+<app-s-loation locationTitle="权限管理/路由权限控制"></app-s-loation>
+<div class="router-manage">
+  <h1 class="text-center">路由控制</h1>
+  <app-s-button (clickEvent)="addRoleWindow()"></app-s-button>
+  <p-table [value]="routerLists">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>
+          <p-checkbox name="group1" [(ngModel)]="selectedRouter" inputId="quanxian"></p-checkbox>
+          全选/全不选
+        </th>
+        <th>路由ID</th>
+        <th>路由名称</th>
+        <th>路由地址</th>
+        <th>修改时间</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-role>
+      <tr>
+        <td>
+          <p-checkbox name="group1" [(ngModel)]="selectedRouter" inputId="ny"></p-checkbox>
+        </td>
+        <td>{{role.id}}</td>
+        <td>{{role.routerName}}</td>
+        <td>{{role.routerUrl}}</td>
+        <td>{{role.routerAmendTime}}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

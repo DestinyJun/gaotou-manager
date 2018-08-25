@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Persons} from '../model/user-model';
 import {Observable} from 'rxjs/Observable';
 
 
 @Injectable()
 export class UserService {
   public cols = [
+    {field: 'checkbox', header: '全选/全不选'},
     {field: 'id', header: '编号'},
     {field: 'name', header: '姓名'},
     {field: 'position', header: '职位'},

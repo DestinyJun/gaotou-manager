@@ -1,3 +1,4 @@
+<app-s-loation locationTitle="用户管理"></app-s-loation>
 <div class="user-manage">
   <h1 class="text-center">用户管理</h1>
   <app-s-button (clickEvent)="addPersonWindow()"></app-s-button>
@@ -5,6 +6,7 @@
     <ng-template pTemplate="header" let-columns>
       <tr>
         <th *ngFor="let col of columns">
+          <p-checkbox name="group1" [(ngModel)]="selectedCities" inputId="quanxian" *ngIf="col.field === 'checkbox'"></p-checkbox>
           {{col.header}}
         </th>
       </tr>
@@ -12,8 +14,9 @@
     <ng-template pTemplate="body" let-car>
       <tr>
         <td>
-          <p-checkbox name="group1" value="{{car.id}}" label="{{car.id}}" [(ngModel)]="selectedCities" inputId="ny"></p-checkbox>
+          <p-checkbox name="group1" [(ngModel)]="selectedCities" inputId="ny"></p-checkbox>
         </td>
+        <td>{{car.id}}</td>
         <td>{{car.name}}</td>
         <td>{{car.position}}</td>
         <td>{{car.phone}}</td>
@@ -24,137 +27,68 @@
     </ng-template>
   </p-table>
 </div>
-<p-dialog header="Godfather I" [(visible)]="display" [modal]="true"
-          [responsive]="true" [minHeight]="200" [minY]="70"
+<p-dialog header="添加用户" [(visible)]="display" [modal]="true"
+          [responsive]="true"  [width]="1000" [minY]="70"
           [maximizable]="true" [baseZIndex]="10000">
-<!--  <form class="form-horizontal" id="commentForm" [formGroup]="personsModel" (submit)="onSubmit()">
-    &lt;!&ndash;姓名&ndash;&gt;
-    <div class="form-group">
-      <label for="name" class="col-sm-2 control-label">您的姓名：</label>
-      <div class="col-sm-10">
-        <input type="text" formControlName="name"  class="form-control" id="name" placeholder="请填写" name="name">
-      </div>
-      <div *ngIf="formName.invalid && (formName.dirty || formName.touched)" class="col-sm-2 control-label">
-        <div *ngIf="formName.errors.required">
-          姓名不能为空
-        </div>
-      </div>
-    </div>
-    &lt;!&ndash;联系方式&ndash;&gt;
-    <div class="form-group">
-      <label for="phone" number class="col-sm-2 control-label">联系方式：</label>
-      <div class="col-sm-10">
-        <input type="text" formControlName="phone" class="form-control" id="phone" name="phone" placeholder="请填写电话">
-      </div>
-      <div *ngIf="formPhone.invalid && (formPhone.dirty || formPhone.touched)" class="col-sm-2 control-label">
-        <div *ngIf="!(formPhone.hasError('mobileValidators','username'))">
-          请输入合法的手机号
-        </div>
-      </div>
-    </div>
-    &lt;!&ndash;身份证&ndash;&gt;
-    <div class="form-group">
-      <label for="card" number class="col-sm-2 control-label">身份证号：</label>
-      <div class="col-sm-10">
-        <input type="text" formControlName="card" class="form-control" id="card" name="card" placeholder="请填写身份证号/或者不填">
-      </div>
-    </div>
-    &lt;!&ndash;描述&ndash;&gt;
-    <div class="form-group">
-      <label for="describe" class="col-sm-2 control-label">事件描述：</label>
-      <div class="col-sm-10">
-        <textarea class="form-control" formControlName="content" rows="3" id="describe" placeholder="请输入描述事时间内容" name="describe"></textarea>
-      </div>
-      <div *ngIf="formContent.invalid && (formPhone.dirty || formContent.touched)" class="col-sm-2 control-label">
-        <div *ngIf="formContent.errors.required">
-          事件描述不能为空
-        </div>
-      </div>
-    </div>
-    &lt;!&ndash;图片上传&ndash;&gt;
-    <div class="form-group">
-      <label for="describe" style="margin-bottom: 25px" class="col-sm-2 control-label">请上传身份证及现场图片：</label>
-      <div class="col-sm-12">
-        <input type="file" #uploadfiles name="uploadfiles" style="display: none" id="uploadfiles" multiple (change)="onChangeFiles($event,fileImage)">
-        <div class="filebox" id="filebox" (click)="fileboxClick(uploadfiles)"></div>
-        <div class="file-image" id="fileImage" #fileImage></div>
-      </div>
-    </div>
-  </form>-->
-  <form [formGroup]="userForm" (ngSubmit)="doRegister()" class="form-horizontal" role="form" novalidate>
-    <div class="form-group" [ngClass]="{'has-error': formErrors.userName }">
-      <label class="col-sm-3 control-label">用户名</label>
+  <form [formGroup]="userForm" (ngSubmit)="addUser()" class="form-horizontal" role="form" novalidate>
+    <div class="form-group" [ngClass]="{'has-error': formErrors.name }">
+      <label class="col-sm-3 control-label">姓名</label>
       <div class="col-sm-8">
-        <input formControlName="userName" type="text" class="form-control" placeholder="{{'userRegister.userName-placeholder'}}">
-        <div *ngIf="formErrors.userName" class="text-danger">
-          {{ formErrors.userName }}
+        <input formControlName="name" type="text" class="form-control" placeholder="请输入姓名">
+        <div *ngIf="formErrors.name" class="text-danger">
+          {{ formErrors.name }}
         </div>
       </div>
     </div>
-    <!--<div class="form-group" [ngClass]="{'has-error': formErrors.nickName }">
-      <label class="col-sm-3 control-label">昵称</label>
+    <div class="form-group" [ngClass]="{'has-error': formErrors.position }">
+      <label class="col-sm-3 control-label">职位</label>
       <div class="col-sm-8">
-        <input formControlName="nickName" type="text" class="form-control" placeholder="{{'userRegister.nickName-placeholder'}}">
-        <div *ngIf="formErrors.nickName" class="text-danger">
-          {{ formErrors.nickName }}
+        <input formControlName="position" type="text" class="form-control" placeholder="职位">
+        <div *ngIf="formErrors.position" class="text-danger">
+          {{ formErrors.position }}
+        </div>
+      </div>
+    </div>
+    <div class="form-group" [ngClass]="{'has-error': formErrors.phone }">
+      <label class="col-sm-3 control-label">电话</label>
+      <div class="col-sm-8">
+        <input formControlName="phone" reverse=true type="text" class="form-control" placeholder="请输入电话">
+        <div *ngIf="formErrors.phone" class="text-danger">
+          {{ formErrors.phone }}
         </div>
       </div>
     </div>
     <div class="form-group" [ngClass]="{'has-error': formErrors.email }">
       <label class="col-sm-3 control-label">邮箱</label>
       <div class="col-sm-8">
-        <input formControlName="email" type="email" class="form-control" placeholder="{{'userRegister.email-placeholder'}}">
+        <input formControlName="email" type="email" class="form-control" placeholder="请输入邮箱">
         <div *ngIf="formErrors.email" class="text-danger">
           {{ formErrors.email }}
         </div>
       </div>
     </div>
-    <div class="form-group">
-      <div class="col-sm-offset-2 col-sm-10">
-        <p class="form-control-static text-danger">{{'userRegister.notice'}}</p>
-      </div>
-    </div>
-    <div class="form-group" [ngClass]="{'has-error': formErrors.password }">
-      <label class="col-sm-3 control-label">密码</label>
+    <div class="form-group" [ngClass]="{'has-error': formErrors.department }">
+      <label class="col-sm-3 control-label">请输入部门</label>
       <div class="col-sm-8">
-        <input formControlName="password" validateEqual="confirmPassword" reverse=true type="password" class="form-control" placeholder="{{'userRegister.password-placeholder'}}">
-        <div *ngIf="formErrors.password" class="text-danger">
-          {{ formErrors.password }}
+        <input formControlName="department"  type="text" class="form-control" placeholder="请输入部门">
+        <div *ngIf="formErrors.department" class="text-danger">
+          {{ formErrors.department }}
         </div>
       </div>
     </div>
-    <div class="form-group" [ngClass]="{'has-error': formErrors.confirmPassword }">
-      <label class="col-sm-3 control-label">重复密码</label>
+    <div class="form-group" [ngClass]="{'has-error': formErrors.remark }">
+      <label class="col-sm-3 control-label">备注</label>
       <div class="col-sm-8">
-        <input formControlName="confirmPassword" validateEqual="password" type="password" class="form-control" placeholder="{{'userRegister.repeat-pwd-placeholder'}}">
-        <div *ngIf="formErrors.confirmPassword" class="text-danger">
-          {{ formErrors.confirmPassword }}
+        <input formControlName="remark" type="text" class="form-control" placeholder="请输入备注">
+        <div *ngIf="formErrors.remark" class="text-danger">
+          {{ formErrors.remark }}
         </div>
       </div>
     </div>
-    <div class="form-group" [ngClass]="{'has-error': formErrors.vcode }">
-      <label class="col-sm-3 control-label">验证码：</label>
-      <div class="col-sm-5">
-        <input formControlName="vcode" class="form-control" placeholder="验证码">
-        <div *ngIf="formErrors.vcode" class="text-danger">
-          {{ formErrors.vcode }}
-        </div>
-      </div>
-      <div class="col-sm-3">
-        <img id="vCodeImg" src="" alt="验证码">
-        <button class="btn btn-primary" id="reloadVCode">重新获取</button>
-      </div>
-    </div>
-    <div *ngIf="formErrors.formError" class="col-sm-offset-3 col-sm-8 alert alert-danger">{{ formErrors.formError}}</div>
-    <div class="form-group">
-      <div class="col-sm-offset-3 col-sm-8">
-        <button [disabled]="userForm.invalid" type="submit" class="btn btn-success">注册</button>
-      </div>
-    </div>-->
+    <div *ngIf="formErrors.formError" class="col-sm-offset-3 col-sm-8 alert alert-danger">{{ formErrors.formError }}</div>
   </form>
-
   <p-footer>
-    <button type="submit" class="btn btn-primary" (click)="display=false" >确定</button>
+    <button type="submit" class="btn btn-primary" (click)="addUser()" >确定</button>
     <button type="button"  class="btn btn-danger" (click)="display=false">取消</button>
   </p-footer>
 </p-dialog>

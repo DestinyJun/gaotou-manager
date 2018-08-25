@@ -13,12 +13,12 @@ import {DialogModule} from 'primeng/dialog';
   imports: [
     CommonModule,
     UserRoutersModule,
-    TableModule,
     FormsModule,
     ReactiveFormsModule,
-    CheckboxModule,
     SharedModule,
-    DialogModule
+    TableModule,
+    CheckboxModule,
+    DialogModule,
   ],
   declarations: [UserComponent]
 })
