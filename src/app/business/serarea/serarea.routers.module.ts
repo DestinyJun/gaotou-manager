@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {SerareaComponent} from './serarea.component';
+import {SerareaSernumComponent} from './serarea-sernum/serarea-sernum.component';
+import {SerareaFieldsComponent} from './serarea-fields/serarea-fields.component';
 const mainRoutes: Routes = [
-  {path: '', component: SerareaComponent},
+  {path: 'sernum', component: SerareaSernumComponent},
+  {path: 'fields', component: SerareaFieldsComponent},
 ];
 
 @NgModule({

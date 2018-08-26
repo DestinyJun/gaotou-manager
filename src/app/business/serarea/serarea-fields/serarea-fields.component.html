@@ -1,0 +1,30 @@
+<app-s-loation locationTitle="服务区管理/服务区字段管理"></app-s-loation>
+<div class="serarea-manage">
+  <h4 class="text-center">服务区字段管理</h4>
+  <app-s-button (clickEvent)="addSerFieldWindow()"></app-s-button>
+  <p-table [value]="serFileds">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>
+          <p-checkbox name="group1" [(ngModel)]="selectedFileds" inputId="quanxian"></p-checkbox>
+          全选/全不选
+        </th>
+        <th>服务区信息字段ID</th>
+        <th>服务区信息字段名称</th>
+        <th>服务区信息字段编码</th>
+        <th>修改时间</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-Filed>
+      <tr>
+        <td>
+          <p-checkbox name="group1" [(ngModel)]="selectedRole" inputId="ny"></p-checkbox>
+        </td>
+        <td>{{Filed.id}}</td>
+        <td>{{Filed.fieldName}}</td>
+        <td>{{Filed.fieldCoding}}</td>
+        <td>{{Filed.uploadTime}}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

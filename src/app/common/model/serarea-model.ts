@@ -1,6 +1,15 @@
 export class SerArea {
   id?: number;
-  routerName: string;
-  routerUrl: string;
-  routerAmendTime: string;
+  SetTime: string;
+  floorArea: string;
+  serviceTime: string;
+  serviceManager: string;
+  cleanerNum: number;
+  securityer: number;
+}
+export class Field {
+  id?: number;
+  fieldName: string;
+  fieldCoding: string;
+  uploadTime: string;
 }

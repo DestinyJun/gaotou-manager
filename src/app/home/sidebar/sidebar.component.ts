@@ -31,7 +31,10 @@ export class SidebarComponent implements OnInit {
       new NavListChild('按钮管理', false, 'limit/button', 'fa fa-snowflake-o'),*/
       new NavListChild('路由权限', false, 'limit/route', 'fa fa-snowflake-o'),
     ] , true),
-    new NavList('服务区管理', 'serarea', 'fa fa-cog', false, [] , true),
+    new NavList('服务区管理', '', 'fa fa-cog', false, [
+      new NavListChild('服务区', false, 'serarea/sernum', 'fa fa-snowflake-o'),
+      new NavListChild('服务区字段', false, 'serarea/fields', 'fa fa-snowflake-o'),
+    ] , true),
     new NavList('门店管理', 'store', 'fa fa-address-card-o', false, [] , true),
     new NavList('卡口管理', 'intercept', 'fa fa-desktop', false, [] , true),
     new NavList('视频管理', 'videom', 'fa fa-desktop', false, [] , true),

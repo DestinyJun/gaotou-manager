@@ -1,2 +1,36 @@
 <app-s-loation locationTitle="门店管理"></app-s-loation>
-<h1 class="text-center">门店管理</h1>
+<div class="store-manage">
+  <h1 class="text-center">门店管理</h1>
+  <app-s-button (clickEvent)="addStoreWindow()"></app-s-button>
+  <p-table [value]="stores">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>
+          <p-checkbox name="group1" [(ngModel)]="selectedStore" inputId="quanxian"></p-checkbox>
+          全选/全不选
+        </th>
+        <th>门店ID</th>
+        <th>门店名称</th>
+        <th>门店电话</th>
+        <th>门店老板</th>
+        <th>更新时间</th>
+        <th>详情</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-store>
+      <tr>
+        <td>
+          <p-checkbox name="group1" [(ngModel)]="selectedStore" inputId="ny"></p-checkbox>
+        </td>
+        <td>{{store.id}}</td>
+        <td>{{store.name}}</td>
+        <td>{{store.phone}}</td>
+        <td>{{store.manner}}</td>
+        <td>{{store.update}}</td>
+        <td>
+          <button class="btn btn-info">查看详情</button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

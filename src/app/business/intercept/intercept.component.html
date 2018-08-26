@@ -1,2 +1,31 @@
 <app-s-loation locationTitle="卡口管理"></app-s-loation>
-<h1 class="text-center">卡口管理</h1>
+<div class="intercept-manage">
+  <h1 class="text-center">卡口管理</h1>
+  <app-s-button (clickEvent)="addInterceptWindow()"></app-s-button>
+  <p-table [value]="intercepts">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>
+          <p-checkbox name="group1" [(ngModel)]="selectedIntercept" inputId="quanxian"></p-checkbox>
+          全选/全不选
+        </th>
+        <th>卡口ID</th>
+        <th>卡口安装地址</th>
+        <th>设备ID</th>
+        <th>修改时间</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-intercept>
+      <tr>
+        <td>
+          <p-checkbox name="group1" [(ngModel)]="selectedIntercept" inputId="ny"></p-checkbox>
+        </td>
+        <td>{{intercept.id}}</td>
+        <td>{{intercept.address}}</td>
+        <td>{{intercept.deviceID}}</td>
+        <td>{{intercept.updateTime}}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+

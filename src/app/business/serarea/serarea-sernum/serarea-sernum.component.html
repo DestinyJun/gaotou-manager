@@ -1,0 +1,36 @@
+<app-s-loation locationTitle="服务区管理/服务区信息管理"></app-s-loation>
+<div class="serarea-manage">
+  <h1 class="text-center">服务区信息管理</h1>
+  <app-s-button (clickEvent)="addSernumWindow()"></app-s-button>
+  <p-table [value]="sernums">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>
+          <p-checkbox name="group1" [(ngModel)]="selectedRole" inputId="quanxian"></p-checkbox>
+          全选/全不选
+        </th>
+        <th>服务区id</th>
+        <th>服务区名称</th>
+        <th>服务区所属</th>
+        <th>服务区管理人员</th>
+        <th>管理人电话</th>
+        <th>详细信息</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-sernum>
+      <tr>
+        <td>
+          <p-checkbox name="group1" [(ngModel)]="selectedSer" inputId="ny"></p-checkbox>
+        </td>
+        <td>{{sernum.id}}</td>
+        <td>{{sernum.serviceName}}</td>
+        <td>{{sernum.serviceAdress}}</td>
+        <td>{{sernum.serviceManager}}</td>
+        <td>{{sernum.serviceManagerPhoone}}</td>
+        <td>
+          <button class="btn btn-info">查看详情</button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
