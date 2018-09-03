@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ReqService} from '../common/services/req.service';
 import {Router} from '@angular/router';
-import {GlobalService} from '../common/services/global.service';
 
 @Component({
   selector: 'app-login',
@@ -30,10 +28,14 @@ export class LoginComponent implements OnInit {
 
 //  登陆
   public onSubmit() {
-    this.route.navigate(['/home/main']);
-    /*if (this.myFromModule.valid) {
+    // this.route.navigate(['/home/main']);
+    if (this.myFromModule.valid) {
       console.log(this.myFromModule.value);
-     /!* this.loginService.getLogin(this.myFromModule.value).subscribe((data) => {
+      this.myFromModule.reset({
+        username: '',
+        password: ''
+      });
+      /*this.loginService.getLogin(this.myFromModule.value).subscribe((data) => {
         if (data.success) {
           // 本地存储信息
           for ( const i in data.obj) {
@@ -47,9 +49,9 @@ export class LoginComponent implements OnInit {
           this.loginMsg = data.msg;
           window.alert(this.loginMsg);
         }
-      });*!/
+      });*/
     } else {
       window.alert('请输入合法的用户名和密码');
-    }*/
+    }
   }
 }
