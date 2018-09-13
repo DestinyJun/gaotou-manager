@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {SerareaService} from '../../../commom/services/serarea.service';
+import {SerareaService} from '../../../common/services/serarea.service';
 
 @Component({
   selector: 'app-serarea-sernum',

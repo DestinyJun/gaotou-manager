@@ -8,7 +8,7 @@ import { SerareaFieldsComponent } from './serarea-fields/serarea-fields.componen
 import {TableModule} from 'primeng/table';
 import {CheckboxModule, DialogModule} from 'primeng/primeng';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { SerareaService } from '../../commom/services/serarea.service';
+import { SerareaService } from '../../common/services/serarea.service';
 
 @NgModule({
   imports: [
