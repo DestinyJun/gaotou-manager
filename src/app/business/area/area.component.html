@@ -19,16 +19,16 @@
     <div style="height: 300px;padding-top: 20px" >
       <div class="select">
         <span>请选择省：</span>
-        <p-dropdown [options]="province" [(ngModel)]="selectedCar1" [style]="{'width':'200px'}" editable="true" placeholder="四川" (onChange)="provinceChange($event)"></p-dropdown>
+        <p-dropdown [options]="province" [(ngModel)]="selectedCar1" [style]="{'width':'200px'}" editable="true" placeholder="请选择开通的省..." (onChange)="provinceChange($event)"></p-dropdown>
       </div>
       <div class="select">
         <span>请选择市：</span>
-        <p-dropdown [options]="cities" [(ngModel)]="selectedCar2" [style]="{'width':'200px'}" editable="true" placeholder="成都" (onChange)="citiesChange($event)"></p-dropdown>
+        <p-dropdown [options]="cities" [(ngModel)]="selectedCar2" [style]="{'width':'200px'}" editable="true" placeholder="请选择开通的市..." (onChange)="citiesChange($event)"></p-dropdown>
       </div>
-      <div class="select">
+    <!--  <div class="select">
         <span>请选择县/区：</span>
-        <p-dropdown [options]="country" [(ngModel)]="selectedCar3" [style]="{'width':'200px'}" editable="true" placeholder="眉山" (onChange)="countryChange($event)"></p-dropdown>
-      </div>
+        <p-dropdown [options]="country" [(ngModel)]="selectedCar3" [style]="{'width':'200px'}" editable="true" placeholder="请选择开通的县..." (onChange)="countryChange($event)"></p-dropdown>
+      </div>-->
     </div>
 
     <p-footer>
@@ -37,24 +37,23 @@
     </p-footer>
   </p-dialog>
  <!--表格-->
- <!--表格-->
-
   <h3 class="first">Basic</h3>
-  <p-treeTable [value]="files1">
-    <ng-template pTemplate="header">
+  <p-treeTable [value]="areaDates" [columns]="cols" [paginator]="true" [rows]="10">
+    <ng-template pTemplate="header" let-columns>
       <tr>
-        <th>Name</th>
+        <th *ngFor="let col of columns">
+          {{col.header}}
+        </th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+    <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
       <tr>
-        <td>
-          <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
-          {{rowData.name}}
+        <td *ngFor="let col of columns; let i = index">
+          <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+          {{rowData[col.field]}}
         </td>
       </tr>
     </ng-template>
   </p-treeTable>
-
 </div>
 
