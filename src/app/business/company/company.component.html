@@ -1,6 +1,6 @@
-<app-s-loation locationTitle="部门管理"></app-s-loation>
-<h1 class="text-center">部门管理</h1>
-<div class="area">
+<app-s-loation locationTitle="公司管理"></app-s-loation>
+<h1 class="text-center">公司管理</h1>
+<div class="company">
   <div class="btn-manner">
     <button class="btn btn-primary" (click)="showDialog()">增加</button>
     <button class="btn btn-danger">删除</button>
@@ -14,7 +14,7 @@
     </div>
   </div>
   <!--增加按钮弹窗内容-->
-  <p-dialog header="区域管理" [(visible)]="display" [modal]="true" [responsive]="true" [width]="500" [minWidth]="200" [minY]="70"
+  <p-dialog header="公司管理" [(visible)]="display" [modal]="true" [responsive]="true" [width]="500" [minWidth]="200" [minY]="70"
             [maximizable]="true" [baseZIndex]="10000">
     <div style="height: 300px;padding-top: 20px" >
       <div class="select">
@@ -37,8 +37,8 @@
     </p-footer>
   </p-dialog>
   <!--表格-->
-  <h3>frdfddg</h3>
-  <p-treeTable [value]="orgDates" [columns]="cols" [paginator]="true" [rows]="10">
+  <h3 class="first">Basic</h3>
+  <p-treeTable [value]="companyDates" [columns]="cols" [paginator]="true" [rows]="10">
     <ng-template pTemplate="header" let-columns>
       <tr>
         <th *ngFor="let col of columns">

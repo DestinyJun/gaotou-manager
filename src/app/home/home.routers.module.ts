@@ -8,6 +8,7 @@ const homeRoutes: Routes = [
       {path: '', redirectTo: 'main', pathMatch: 'full'},
       {path: 'main', loadChildren: 'app/business/main/main.module#MainModule'},
       {path: 'area', loadChildren: 'app/business/area/area.module#AreaModule'},
+      {path: 'company', loadChildren: 'app/business/company/company.module#CompanyModule'},
       {path: 'org', loadChildren: 'app/business/org/org.module#OrgModule'},
       {path: 'user', loadChildren: 'app/business/user/user.module#UserModule'},
       {path: 'limit', loadChildren: 'app/business/limit/limit.module#LimitModule'},
