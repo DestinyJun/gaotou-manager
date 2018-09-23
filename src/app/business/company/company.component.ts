@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import {CompanyService} from '../../common/services/company.service';
 import {TreeNode} from 'primeng/api';
-import {OrgService} from '../../common/services/org.service';
 
 @Component({
-  selector: 'app-org',
-  templateUrl: './org.component.html',
-  styleUrls: ['./org.component.css']
+  selector: 'app-company',
+  templateUrl: './company.component.html',
+  styleUrls: ['./company.component.css']
 })
-export class OrgComponent implements OnInit {
+export class CompanyComponent implements OnInit {
   // table显示相关
-  public orgDates: TreeNode[];
+  public companyDates: TreeNode[];
   public cols: any[];
   public province = [];
   public cities = [];
@@ -19,11 +19,11 @@ export class OrgComponent implements OnInit {
   public selectedCar1: string;
   public selectedCar2: string;
   constructor(
-    private orgService: OrgService
+    private companyService: CompanyService
   ) { }
 
   ngOnInit() {
-    this.getDate();
+    this.uploadData();
     // 表单县初始化
     this.country = [
       {label: '江口', value: '江口'},
@@ -34,7 +34,7 @@ export class OrgComponent implements OnInit {
       { field: 'name', header: 'Name' },
     ];
     // 表格内容
-    this.orgDates = [
+    this.companyDates = [
       {
         'data': {
           'name': '贵州',
@@ -109,23 +109,12 @@ export class OrgComponent implements OnInit {
       },
     ];
   }
-  public getDate(): void {
-    this.orgService.getArea({page: '1', nums: '5'} , {}).subscribe(
-      (value) => {
-        value.data.contents.map((val) => {
-          this.areaDates.push(
-            {data: {name: val.areaName}}
-          );
-        });
-        /* value.data.contents.map((j, index) => {
-           /!*this.province.push({label: j.areaName, value: j.areaName});
-           j.admionistrativeAreaList.map((k, kindex) => {
-             this.cities.push({label: k.areaName, value: k.areaName});
-           });*!/
-         });*/
+  public uploadData() {
+    this.companyService.getCompanyData({page: 1, nums: 5}, {}).subscribe(
+      (val) => {
+        console.log(val);
       }
     );
-
   }
   // 弹窗显示与隐藏
   public showDialog(): void {

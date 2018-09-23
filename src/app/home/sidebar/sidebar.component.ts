@@ -15,7 +15,11 @@ export class SidebarComponent implements OnInit {
      /* new NavListChild('数据采集', false, 'department/organization-management'),
       new NavListChild('部门管理', false, 'department/organization')*/
     ] , true),
-    new NavList('组织管理', 'org', 'fa fa-car', false, [
+    new NavList('公司管理', 'company', 'fa fa-car', false, [
+      /* new NavListChild('数据采集', false, 'department/organization-management'),
+       new NavListChild('部门管理', false, 'department/organization')*/
+    ] , true),
+    new NavList('部门管理', 'org', 'fa fa-car', false, [
      /* new NavListChild('数据采集', false, 'department/organization-management'),
       new NavListChild('部门管理', false, 'department/organization')*/
     ] , true),
