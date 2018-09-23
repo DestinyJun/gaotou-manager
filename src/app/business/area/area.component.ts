@@ -35,22 +35,7 @@ export class AreaComponent implements OnInit {
     ];
     this.cols = [
       { field: 'name', header: 'Name' },
-      { field: 'size', header: 'Size' },
-      { field: 'type', header: 'Type' }
     ];
-  }
-  public getDate(): void {
-    this.areaService.getFixationArea().subscribe(
-      (value) => {
-        value.data.map((j, index) => {
-          console.log(j);
-          this.province.push({label: j.areaName, value: j.areaName});
-          j.admionistrativeAreaList.map((k, kindex) => {
-            this.cities.push({label: k.areaName, value: k.areaName});
-          });
-        });
-      }
-    );
     // 表格内容
     this.areaDates = [
       {
@@ -126,6 +111,27 @@ export class AreaComponent implements OnInit {
         ]
       },
     ];
+  }
+
+  public getDate(): void {
+    this.areaService.getArea({page: '1', nums: '5'} , {}).subscribe(
+      (value) => {
+        console.log(value.data.contents);
+        value.data.contents.map((val) => {
+          console.log(val);
+          this.areaDates.push(
+            {data: {name: val.areaName}}
+          );
+        });
+       /* value.data.contents.map((j, index) => {
+          /!*this.province.push({label: j.areaName, value: j.areaName});
+          j.admionistrativeAreaList.map((k, kindex) => {
+            this.cities.push({label: k.areaName, value: k.areaName});
+          });*!/
+        });*/
+      }
+    );
+
   }
   // 弹窗显示与隐藏
   public showDialog(): void {
