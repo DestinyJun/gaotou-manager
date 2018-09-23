@@ -34,7 +34,7 @@ export class AreaComponent implements OnInit {
       {label: '松桃', value: '松桃'},
     ];
     this.cols = [
-      { field: 'name', header: 'Name' },
+      { field: 'name', header: 'name' },
     ];
     // 表格内容
     this.areaDates = [
@@ -117,11 +117,21 @@ export class AreaComponent implements OnInit {
     this.areaService.getArea({page: '1', nums: '5'} , {}).subscribe(
       (value) => {
         console.log(value.data.contents);
+        let a = '';
+        let b = [];
+        let c = [];
         value.data.contents.map((val) => {
-          console.log(val);
-          this.areaDates.push(
+          a = '';
+          b = [];
+          c = [];
+          a = val.areaName;
+          console.log(a);
+          val.administrativeAreaTree.map((v1, index) => {
+            console.log(v1);
+          });
+         /* this.areaDates.push(
             {data: {name: val.areaName}}
-          );
+          );*/
         });
        /* value.data.contents.map((j, index) => {
           /!*this.province.push({label: j.areaName, value: j.areaName});
