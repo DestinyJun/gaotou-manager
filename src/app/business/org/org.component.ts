@@ -113,9 +113,9 @@ export class OrgComponent implements OnInit {
     this.orgService.getArea({page: '1', nums: '5'} , {}).subscribe(
       (value) => {
         value.data.contents.map((val) => {
-          this.areaDates.push(
+          /*this.areaDates.push(
             {data: {name: val.areaName}}
-          );
+          );*/
         });
         /* value.data.contents.map((j, index) => {
            /!*this.province.push({label: j.areaName, value: j.areaName});

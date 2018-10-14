@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SelectItem, TreeNode } from 'primeng/api';
 import { AreaService } from '../../common/services/area.service';
+import {a} from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-area',
@@ -10,7 +11,7 @@ import { AreaService } from '../../common/services/area.service';
 
 export class AreaComponent implements OnInit {
  // table显示相关
-  public areaDates: TreeNode[];
+  public areaDates: Array<TreeNode> = new Array();
   public cols: any[];
   public province = [];
   public cities = [];
@@ -34,111 +35,112 @@ export class AreaComponent implements OnInit {
       {label: '松桃', value: '松桃'},
     ];
     this.cols = [
-      { field: 'name', header: 'name' },
+      { field: 'areaName', header: '区域名称' },
+      { field: 'idt', header: '开通时间' },
+      { field: 'areaCode', header: '区域编号'},
     ];
     // 表格内容
-    this.areaDates = [
+    /*this.areaDates = [
       {
-        'data': {
-          'name': '贵州',
+        data: {
+          areaName: '贵州',
+          idt: '2018-06-29 23:48:23',
+          areaCode: '50024',
         },
-        'children': [
+        children: [
           {
-            'data': {
-              'name': '贵阳',
+            data: {
+              areaName: '贵阳',
+              idt: '2018-06-29 23:48:23',
+              areaCode: '50024',
             },
-            'children': [
+            children: [
               {
-                'data': {
-                  'name': '南明区',
+                data: {
+                  areaName: '南明区',
+                  idt: '2018-06-29 23:48:23',
+                  areaCode: '50024',
                 }
               },
               {
-                'data': {
-                  'name': '云岩区',
+                data: {
+                  areaName: '云岩区',
+                  idt: '2018-06-29 23:48:23',
+                  areaCode: '50024',
                 }
               }
             ]
           },
           {
-            'data': {
-              'name': '铜仁',
+            data: {
+              areaName: '铜仁',
+              idt: '2018-06-29 23:48:23',
+              areaCode: '50024',
             },
-            'children': [
+            children: [
               {
-                'data': {
-                  'name': '江口',
+                data: {
+                  areaName: '江口',
+                  idt: '2018-06-29 23:48:23',
+                  areaCode: '50024',
                 }
               }
             ]
           }
         ]
       },
-      {
-        'data': {
-          'name': '四川',
-        },
-        'children': [
-          {
-            'data': {
-              'name': '绵阳',
-            },
-            'children': [
-              {
-                'data': {
-                  'name': '风格县',
-                }
-              },
-              {
-                'data': {
-                  'name': '**区',
-                }
-              }
-            ]
-          },
-          {
-            'data': {
-              'name': '成都',
-            },
-            'children': [
-              {
-                'data': {
-                  'name': '发顺丰县',
-                }
-              }
-            ]
-          }
-        ]
-      },
-    ];
+    ];*/
   }
 
   public getDate(): void {
+    // 获取生效的服务区
     this.areaService.getArea({page: '1', nums: '5'} , {}).subscribe(
       (value) => {
-        console.log(value.data.contents);
-        let a = '';
-        let b = [];
-        let c = [];
+        let areaDataArray = [];
+        let areaData = {};
         value.data.contents.map((val) => {
-          a = '';
-          b = [];
-          c = [];
-          a = val.areaName;
-          console.log(a);
-          val.administrativeAreaTree.map((v1, index) => {
-            console.log(v1);
+          areaData = {
+            data: {
+              areaCode: '520000',
+              areaName: '贵州省',
+              enabled: true,
+              id: 2,
+              idt: '2018-09-15 15:52:33',
+              level: 1,
+              parentId: 0,
+              pids: '0',
+              udt: '2018-07-18 00:18:30'
+            },
+            children: []
+          };
+          val.administrativeAreaTree.map((vala) => {
+            const a1 = {};
+            for (const props in vala) {
+             if (vala) {
+               if (props !== 'administrativeAreaTree') {
+                a1[props] = vala[props];
+               }
+             }
+           }
+            areaData.children.push({data: a1, children: []});
+            vala.administrativeAreaTree.map((valb, index) => {
+              const a2 = {};
+              for (const props in valb) {
+                if (valb) {
+                  if (props !== 'administrativeAreaTree') {
+                    a2[props] = valb[props];
+                  }
+                }
+              }
+              console.log(a2);
+              areaData.children[index].children.push({data: a2, children: []});
+            });
           });
-         /* this.areaDates.push(
-            {data: {name: val.areaName}}
-          );*/
         });
-       /* value.data.contents.map((j, index) => {
-          /!*this.province.push({label: j.areaName, value: j.areaName});
-          j.admionistrativeAreaList.map((k, kindex) => {
-            this.cities.push({label: k.areaName, value: k.areaName});
-          });*!/
-        });*/
+        if (areaData) {
+          areaDataArray.push(areaData);
+          this.areaDates = areaDataArray;
+        }
       }
     );
 

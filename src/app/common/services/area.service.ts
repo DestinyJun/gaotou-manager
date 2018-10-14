@@ -14,7 +14,7 @@ export class AreaService {
   }
   // 查询所有固定行政区域
   public getFixationArea(num, body): Observable<any> {
-    return this.http.post(`http://120.78.137.182:8808/highway-management/administrativeArea/queryByPaging/${num.page}/${num.nums}`, body);
+    return this.http.post(`http://120.78.137.182:8808/highway-management/administrativeArea/queryAll`, body);
   }
 
 }

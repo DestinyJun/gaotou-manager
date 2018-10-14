@@ -13,31 +13,7 @@
       </div>
     </div>
   </div>
-  <!--增加按钮弹窗内容-->
-  <p-dialog header="区域管理" [(visible)]="display" [modal]="true" [responsive]="true" [width]="500" [minWidth]="200" [minY]="70"
-            [maximizable]="true" [baseZIndex]="10000">
-    <div style="height: 300px;padding-top: 20px" >
-      <div class="select">
-        <span>请选择省：</span>
-        <p-dropdown [options]="province" [(ngModel)]="selectedCar1" [style]="{'width':'200px'}" editable="true" placeholder="请选择开通的省..." (onChange)="provinceChange($event)"></p-dropdown>
-      </div>
-      <div class="select">
-        <span>请选择市：</span>
-        <p-dropdown [options]="cities" [(ngModel)]="selectedCar2" [style]="{'width':'200px'}" editable="true" placeholder="请选择开通的市..." (onChange)="citiesChange($event)"></p-dropdown>
-      </div>
-    <!--  <div class="select">
-        <span>请选择县/区：</span>
-        <p-dropdown [options]="country" [(ngModel)]="selectedCar3" [style]="{'width':'200px'}" editable="true" placeholder="请选择开通的县..." (onChange)="countryChange($event)"></p-dropdown>
-      </div>-->
-    </div>
-
-    <p-footer>
-      <button type="button" pButton icon="pi pi-check" (click)="display=false;addData()" label="确认"></button>
-      <button type="button" pButton icon="pi pi-close" (click)="display=false" label="取消" class="ui-button-secondary"></button>
-    </p-footer>
-  </p-dialog>
  <!--表格-->
-  <h3 class="first">Basic</h3>
   <p-treeTable [value]="areaDates" [columns]="cols" [paginator]="true" [rows]="10">
     <ng-template pTemplate="header" let-columns>
       <tr>
@@ -56,4 +32,27 @@
     </ng-template>
   </p-treeTable>
 </div>
+<!--增加按钮弹窗内容-->
+<p-dialog header="区域管理" [(visible)]="display" [modal]="true" [responsive]="true" [width]="500" [minWidth]="200" [minY]="70"
+          [maximizable]="true" [baseZIndex]="10000">
+  <div style="height: 300px;padding-top: 20px" >
+    <div class="select">
+      <span>请选择省：</span>
+      <p-dropdown [options]="province" [(ngModel)]="selectedCar1" [style]="{'width':'200px'}" editable="true" placeholder="请选择开通的省..." (onChange)="provinceChange($event)"></p-dropdown>
+    </div>
+    <div class="select">
+      <span>请选择市：</span>
+      <p-dropdown [options]="cities" [(ngModel)]="selectedCar2" [style]="{'width':'200px'}" editable="true" placeholder="请选择开通的市..." (onChange)="citiesChange($event)"></p-dropdown>
+    </div>
+    <div class="select">
+      <span>请选择县/区：</span>
+      <p-dropdown [options]="country" [(ngModel)]="selectedCar3" [style]="{'width':'200px'}" editable="true" placeholder="请选择开通的县..." (onChange)="countryChange($event)"></p-dropdown>
+    </div>
+  </div>
+
+  <p-footer>
+    <button type="button" pButton icon="pi pi-check" (click)="display=false;addData()" label="确认"></button>
+    <button type="button" pButton icon="pi pi-close" (click)="display=false" label="取消" class="ui-button-secondary"></button>
+  </p-footer>
+</p-dialog>
 
