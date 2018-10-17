@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { SelectItem, TreeNode } from 'primeng/api';
+import { TreeNode } from 'primeng/api';
 import { AreaService } from '../../common/services/area.service';
-import {a} from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-area',
@@ -11,7 +10,7 @@ import {a} from '@angular/core/src/render3';
 
 export class AreaComponent implements OnInit {
  // table显示相关
-  public areaDates: Array<TreeNode> = new Array();
+  public areaDates: any;
   public cols: any[];
   public province = [];
   public cities = [];
@@ -21,7 +20,8 @@ export class AreaComponent implements OnInit {
   public selectedCar1: string;
   public selectedCar2: string;
   public selectedCar3: string;
-
+  // 调试
+public selectedCars3: any;
   constructor(
     private areaService: AreaService
   ) { }
@@ -96,8 +96,9 @@ export class AreaComponent implements OnInit {
     // 获取生效的服务区
     this.areaService.getArea({page: '1', nums: '5'} , {}).subscribe(
       (value) => {
-        let areaDataArray = [];
-        let areaData = {};
+        console.log(value);
+        const areaDataArray = [];
+        let areaData: any;
         value.data.contents.map((val) => {
           areaData = {
             data: {
@@ -132,7 +133,6 @@ export class AreaComponent implements OnInit {
                   }
                 }
               }
-              console.log(a2);
               areaData.children[index].children.push({data: a2, children: []});
             });
           });
