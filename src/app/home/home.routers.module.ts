@@ -15,7 +15,10 @@ const homeRoutes: Routes = [
       {path: 'serarea', loadChildren: 'app/business/serarea/serarea.module#SerareaModule'},
       {path: 'store', loadChildren: 'app/business/store/store.module#StoreModule'},
       {path: 'intercept', loadChildren: 'app/business/intercept/intercept.module#InterceptModule'},
+      {path: 'wifi', loadChildren: 'app/business/wifi/wifi.module#WifiModule'},
       {path: 'videom', loadChildren: 'app/business/videom/videom.module#VideomModule'},
+      {path: 'videomg', loadChildren: 'app/business/video-group/video-group.module#VideoGroupModule'},
+      {path: 'apply', loadChildren: 'app/business/apply/apply.module#ApplyModule'},
       {path: 'cash', loadChildren: 'app/business/cash/cash.module#CashModule'},
       {path: 'system', loadChildren: 'app/business/system/system.module#SystemModule'},
     ]

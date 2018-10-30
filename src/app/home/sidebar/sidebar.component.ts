@@ -41,7 +41,10 @@ export class SidebarComponent implements OnInit {
     ] , true),
     new NavList('门店管理', 'store', 'fa fa-address-card-o', false, [] , true),
     new NavList('卡口管理', 'intercept', 'fa fa-desktop', false, [] , true),
+    new NavList('WIFI管理', 'wifi', 'fa fa-desktop', false, [] , true),
     new NavList('视频管理', 'videom', 'fa fa-desktop', false, [] , true),
+    new NavList('视频组管理', 'videomg', 'fa fa-desktop', false, [] , true),
+    new NavList('应用访问控制 ', 'apply', 'fa fa-desktop', false, [] , true),
     new NavList('收银机配置', 'cash', 'fa fa-cog', false, [] , true),
     new NavList('系统配置', 'system', 'fa fa-cog', false, [] , true),
   ];
