@@ -1,13 +1,11 @@
 <app-s-loation locationTitle="区域管理"></app-s-loation>
 <h1 class="text-center">区域管理</h1>
-<!--顶部提醒窗口-->
-<p-messages [(value)]="msgs" [closable]="true" [style]="{'position':'fixed','top': '0','margin-top': '0','width': '100vw'}"></p-messages>
 <!--按钮-->
 <div class="btn-manner">
   <button class="btn btn-primary" (click)="addClick()">增加</button>
-  <button class="btn btn-danger" type="button" (click)="deleteFirm()">删除</button>
-  <button class="btn btn-info" (click)="revampClick()">修改</button>
-  <button class="btn btn-warning" (click)="checkClick()">查看</button>
+  <!--<button class="btn btn-danger" type="button" (click)="deleteFirm()">删除</button>-->
+  <!--<button class="btn btn-info" (click)="revampClick()">修改</button>-->
+  <!--<button class="btn btn-warning" (click)="checkClick()">查看</button>-->
   <div style="float: right">
     <div class="ui-inputgroup">
       <button label="Search"  type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" (click)="searchClick()">
@@ -17,8 +15,10 @@
     </div>
   </div>
 </div>
+<!--顶部提醒窗口-->
+<p-messages [(value)]="msgs" [closable]="true" [style]="{'position':'fixed','top': '0','margin-top': '0','width': '100vw'}"></p-messages>
 <!--数据-->
-<p-table [columns]="cols" [value]="cars" [(selection)]="selectedCars3" (onRowSelect)="onRowSelect($event)" [metaKeySelection]="true">
+<p-table [columns]="cols" [value]="areaList" [(selection)]="selectedCars3" (onRowSelect)="onRowSelect($event)" [metaKeySelection]="true">
   <ng-template pTemplate="header" let-columns>
     <tr>
       <th style="width: 3em">
@@ -41,130 +41,53 @@
   </ng-template>
 </p-table>
 <!--增加弹框-->
-<p-dialog header="增加信息" [(visible)]="addDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="300">
+<p-dialog header="增加信息" [(visible)]="addDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="600">
   <div class="ui-g ui-fluid">
-    <div class="ui-g-12">
+    <div class="ui-g-6">
       <div class="ui-g-4">
-        <label for="addvin">Vin</label>
+        <label for="addAreaName">区域名称</label>
       </div>
       <div class="ui-g-8">
-        <input pInputText id="addvin" [(ngModel)]="addCar.vin" />
+        <input pInputText id="addAreaName" [(ngModel)]="addArea.areaName" />
       </div>
     </div>
-    <div class="ui-g-12">
+    <div class="ui-g-6">
       <div class="ui-g-4">
-        <label for="addyear">Year</label>
+        <label for="addAreaCode">区域编码</label>
       </div>
       <div class="ui-g-8">
-        <input pInputText id="addyear" [(ngModel)]="addCar.year" />
+        <input pInputText id="addAreaCode" [(ngModel)]="addArea.areaCode" />
       </div>
     </div>
-    <div class="ui-g-12">
+    <!--<div class="ui-g-6">
       <div class="ui-g-4">
-        <label for="addbrand">Brand</label>
+        <label for="addLevel">区域级别</label>
       </div>
       <div class="ui-g-8">
-        <input pInputText id="addbrand" [(ngModel)]="addCar.brand" />
+        <input type="number" pInputText id="addLevel" [(ngModel)]="addArea.level" />
       </div>
-    </div>
-    <div class="ui-g-12">
+    </div>-->
+    <div class="ui-g-6">
       <div class="ui-g-4">
-        <label for="addcolor">Color</label>
+        <label for="addParentId">上级区域</label>
       </div>
       <div class="ui-g-8">
-        <input pInputText id="addcolor" [(ngModel)]="addCar.color" />
+        <input type="number" pInputText id="addParentId" [(ngModel)]="addArea.parentId" />
       </div>
     </div>
+   <!-- <div class="ui-g-6">
+      <div class="ui-g-4">
+        <label for="addPids">目录层级</label>
+      </div>
+      <div class="ui-g-8">
+        <input pInputText id="addPids" [(ngModel)]="addArea.pids" />
+      </div>
+    </div>-->
   </div>
   <p-footer>
     <div class="ui-dialog-buttonpane ui-helper-clearfix">
       <button class="btn btn-success" type="button" (click)="addsSave()">保存</button>
       <button class="btn btn-warning" type="button" (click)="addDialog=false">取消</button>
-    </div>
-  </p-footer>
-</p-dialog>
-<!--修改弹框-->
-<p-dialog header="修改信息" [(visible)]="revampDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="300">
-  <div class="ui-g ui-fluid" *ngIf="car1">
-    <div class="ui-g-12">
-      <div class="ui-g-4">
-        <label for="vin">Vin</label>
-      </div>
-      <div class="ui-g-8">
-        <input pInputText id="vin" [(ngModel)]="car1.vin" />
-      </div>
-    </div>
-    <div class="ui-g-12">
-      <div class="ui-g-4">
-        <label for="year">Year</label>
-      </div>
-      <div class="ui-g-8">
-        <input pInputText id="year" [(ngModel)]="car1.year" />
-      </div>
-    </div>
-    <div class="ui-g-12">
-      <div class="ui-g-4">
-        <label for="brand">Brand</label>
-      </div>
-      <div class="ui-g-8">
-        <input pInputText id="brand" [(ngModel)]="car1.brand" />
-      </div>
-    </div>
-    <div class="ui-g-12">
-      <div class="ui-g-4">
-        <label for="color">Color</label>
-      </div>
-      <div class="ui-g-8">
-        <input pInputText id="color" [(ngModel)]="car1.color" />
-      </div>
-    </div>
-  </div>
-  <p-footer>
-    <div class="ui-dialog-buttonpane ui-helper-clearfix">
-      <button class="btn btn-success" type="button" (click)="revampSave()">保存</button>
-      <button class="btn btn-warning" type="button" (click)="revampDialog=false">取消</button>
-    </div>
-  </p-footer>
-</p-dialog>
-<!--详情弹窗-->
-<p-dialog header="查看详情" [(visible)]="detailsDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="300">
-  <div class="ui-g ui-fluid" *ngIf="car1">
-    <div class="ui-g-12">
-      <div class="ui-g-4">
-        <label for="vin">Vin</label>
-      </div>
-      <div class="ui-g-8">
-        <span>{{car1.vin}}</span>
-      </div>
-    </div>
-    <div class="ui-g-12">
-      <div class="ui-g-4">
-        <label for="year">Year</label>
-      </div>
-      <div class="ui-g-8">
-        <span>{{car1.year}}</span>
-      </div>
-    </div>
-    <div class="ui-g-12">
-      <div class="ui-g-4">
-        <label for="brand">Brand</label>
-      </div>
-      <div class="ui-g-8">
-        <span>{{car1.brand}}</span>
-      </div>
-    </div>
-    <div class="ui-g-12">
-      <div class="ui-g-4">
-        <label for="color">Color</label>
-      </div>
-      <div class="ui-g-8">
-        <span>{{car1.color}}</span>
-      </div>
-    </div>
-  </div>
-  <p-footer>
-    <div class="ui-dialog-buttonpane ui-helper-clearfix">
-      <button class="btn btn-danger" type="button" (click)="detailsDialog=false">关闭</button>
     </div>
   </p-footer>
 </p-dialog>

@@ -13,8 +13,8 @@ export class AreaService {
     return this.http.post(`http://120.78.137.182:8808/highway-management/administrativeArea/queryByPaging/${num.page}/${num.nums}`, body);
   }
   // 增加接口
-  public addList(): Observable<any> {
-    return this.http.post('http://localhost/gaotouService/adds.php', '');
+  public addList(params): Observable<any> {
+    return this.http.post('http://120.78.137.182:8808/highway-management/administrativeArea/add', params);
   }
   // 增加删除
   public deleteList(): Observable<any> {
