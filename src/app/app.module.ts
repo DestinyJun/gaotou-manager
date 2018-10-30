@@ -4,11 +4,9 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppRouterModule} from './app.router.module';
 import {AppComponent } from './app.component';
 import {HttpClientModule} from '@angular/common/http';
-import {ReactiveFormsModule} from '@angular/forms';
 import {GlobalService} from './common/services/global.service';
-import {ReqService} from './common/services/req.service';
 import {HashLocationStrategy, LocationStrategy} from '@angular/common';
-import {LoginGuard} from './common/guard/login.guard';
+import {ProgressSpinnerModule} from 'primeng/primeng';
 
 @NgModule({
   imports: [
@@ -16,15 +14,13 @@ import {LoginGuard} from './common/guard/login.guard';
     BrowserAnimationsModule,
     AppRouterModule,
     HttpClientModule,
-    ReactiveFormsModule,
+    ProgressSpinnerModule
   ],
   declarations: [
     AppComponent,
   ],
   providers: [
     GlobalService,
-    ReqService,
-    LoginGuard,
     {provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
 })

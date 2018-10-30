@@ -1,5 +1,4 @@
-import {Component} from '@angular/core';
-import {ReqService} from './common/services/req.service';
+import {Component, OnInit} from '@angular/core';
 import {GlobalService} from './common/services/global.service';
 
 @Component({
@@ -7,12 +6,16 @@ import {GlobalService} from './common/services/global.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-
+export class AppComponent implements OnInit {
+  public display: boolean;
   constructor(
-    private req: ReqService,
-    public localSessionStorage: GlobalService
-  ) {
+    private globalService: GlobalService
+  ) {}
+  ngOnInit() {
+    this.globalService.eventSubject.subscribe(
+      (value) => {
+        this.display = value.display;
+      }
+    );
   }
-
 }

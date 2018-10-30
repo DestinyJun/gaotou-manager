@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {NavList, NavListChild} from '../../common/services/global.service';
 import {Router} from '@angular/router';
+import {NavList, NavListChild} from '../../common/model/home-model';
 
 @Component({
   selector: 'app-sidebar',

@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
 
 //  登陆
   public onSubmit() {
-    // this.route.navigate(['/home/main']);
+    this.route.navigate(['/home/main']);
     if (this.myFromModule.valid) {
       console.log(this.myFromModule.value);
       this.myFromModule.reset({
