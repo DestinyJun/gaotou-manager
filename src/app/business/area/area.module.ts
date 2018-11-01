@@ -5,7 +5,15 @@ import {AreaRoutersModule} from './area.routers.module';
 import {TableModule} from 'primeng/table';
 import {ButtonModule} from 'primeng/button';
 import {SharedModule} from '../../common/shared.module';
-import {ConfirmationService, ConfirmDialogModule, DialogModule, MessageModule, MessageService, MessagesModule} from 'primeng/primeng';
+import {
+  ConfirmationService,
+  ConfirmDialogModule,
+  DialogModule,
+  MessageModule,
+  MessageService,
+  MessagesModule, RadioButtonModule, ScrollPanelModule,
+  TreeModule
+} from 'primeng/primeng';
 import {AreaService} from '../../common/services/area.service';
 import {FormsModule} from '@angular/forms';
 
@@ -21,7 +29,10 @@ import {FormsModule} from '@angular/forms';
     DialogModule,
     MessagesModule,
     MessageModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    TreeModule,
+    ScrollPanelModule,
+    RadioButtonModule
   ],
   declarations: [AreaComponent],
   providers: [AreaService, MessageService, ConfirmationService]

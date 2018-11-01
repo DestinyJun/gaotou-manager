@@ -3,7 +3,7 @@
 <!--按钮-->
 <div class="btn-manner">
   <button class="btn btn-primary" (click)="addClick()">增加</button>
-  <!--<button class="btn btn-danger" type="button" (click)="deleteFirm()">删除</button>-->
+  <button class="btn btn-danger" type="button" (click)="deleteFirm()">删除</button>
   <!--<button class="btn btn-info" (click)="revampClick()">修改</button>-->
   <!--<button class="btn btn-warning" (click)="checkClick()">查看</button>-->
   <div style="float: right">
@@ -18,7 +18,7 @@
 <!--顶部提醒窗口-->
 <p-messages [(value)]="msgs" [closable]="true" [style]="{'position':'fixed','top': '0','margin-top': '0','width': '100vw'}"></p-messages>
 <!--数据-->
-<p-table [columns]="cols" [value]="areaList" [(selection)]="selectedCars3" (onRowSelect)="onRowSelect($event)" [metaKeySelection]="true">
+<p-table [columns]="cols" [value]="areaList" [(selection)]="selectAreaList" (onRowSelect)="onRowSelect($event)" [metaKeySelection]="true">
   <ng-template pTemplate="header" let-columns>
     <tr>
       <th style="width: 3em">
@@ -43,46 +43,33 @@
 <!--增加弹框-->
 <p-dialog header="增加信息" [(visible)]="addDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="600">
   <div class="ui-g ui-fluid">
-    <div class="ui-g-6">
+    <div class="ui-g-12">
       <div class="ui-g-4">
         <label for="addAreaName">区域名称</label>
       </div>
       <div class="ui-g-8">
-        <input pInputText id="addAreaName" [(ngModel)]="addArea.areaName" />
+        <input pInputText id="addAreaName" (click)="areaClick()" [(ngModel)]="addArea.areaName" />
       </div>
     </div>
-    <div class="ui-g-6">
+    <div class="ui-g-12">
       <div class="ui-g-4">
         <label for="addAreaCode">区域编码</label>
       </div>
       <div class="ui-g-8">
-        <input pInputText id="addAreaCode" [(ngModel)]="addArea.areaCode" />
+        <input disabled pInputText id="addAreaCode" [(ngModel)]="addArea.areaCode" />
       </div>
     </div>
-    <!--<div class="ui-g-6">
-      <div class="ui-g-4">
-        <label for="addLevel">区域级别</label>
-      </div>
-      <div class="ui-g-8">
-        <input type="number" pInputText id="addLevel" [(ngModel)]="addArea.level" />
-      </div>
-    </div>-->
-    <div class="ui-g-6">
-      <div class="ui-g-4">
-        <label for="addParentId">上级区域</label>
-      </div>
-      <div class="ui-g-8">
-        <input type="number" pInputText id="addParentId" [(ngModel)]="addArea.parentId" />
-      </div>
+    <div class="ui-g-12">
+    <div class="ui-g-4">
+      <label>区域类型</label>
     </div>
-   <!-- <div class="ui-g-6">
-      <div class="ui-g-4">
-        <label for="addPids">目录层级</label>
-      </div>
-      <div class="ui-g-8">
-        <input pInputText id="addPids" [(ngModel)]="addArea.pids" />
-      </div>
-    </div>-->
+    <div class="ui-g-8">
+      <p-radioButton name="group1" value="0" label="国家" [(ngModel)]="addArea.level" inputId="opt1"></p-radioButton>
+      <p-radioButton name="group1" value="1" label="省份直辖市" [(ngModel)]="addArea.level" inputId="opt2"></p-radioButton>
+      <p-radioButton name="group1" value="2" label="地级市" [(ngModel)]="addArea.level" inputId="opt3"></p-radioButton>
+    </div>
+  </div>
+
   </div>
   <p-footer>
     <div class="ui-dialog-buttonpane ui-helper-clearfix">
@@ -90,6 +77,28 @@
       <button class="btn btn-warning" type="button" (click)="addDialog=false">取消</button>
     </div>
   </p-footer>
+</p-dialog>
+<!--区域弹框-->
+<p-dialog header="区域编码" [(visible)]="areaDialog" [responsive]="true" showEffect="fade" [maximizable]="true" [baseZIndex]="10000" [modal]="true" [width]="300" [height]="400">
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12">
+      <p-scrollPanel [style]="{width: '100%', height: '300px'}">
+        <p-tree
+          [value]="areaTrees"
+          selectionMode="single"
+          [(selection)]="areaTree"
+          (onNodeSelect)="nodeSelect($event)"
+          (onNodeUnselect)="nodeUnselect($event)">
+        </p-tree>
+      </p-scrollPanel>
+    </div>
+  </div>
+  <!--<p-footer>
+    <div class="ui-dialog-buttonpane ui-helper-clearfix">
+      <button class="btn btn-success" type="button" (click)="selectAreaClick()">确定</button>
+      <button class="btn btn-warning" type="button" (click)="areaDialog=false">取消</button>
+    </div>
+  </p-footer>-->
 </p-dialog>
 <!--确认弹窗-->
 <p-confirmDialog acceptLabel="确认" rejectLabel="取消"></p-confirmDialog>
