@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AreaComponent } from './area.component';
 import {AreaRoutersModule} from './area.routers.module';
-import {TableModule} from 'primeng/table';
 import {ButtonModule} from 'primeng/button';
 import {SharedModule} from '../../common/shared.module';
 import {
@@ -12,7 +11,7 @@ import {
   MessageModule,
   MessageService,
   MessagesModule, RadioButtonModule, ScrollPanelModule,
-  TreeModule
+  TreeModule, TreeTableModule
 } from 'primeng/primeng';
 import {AreaService} from '../../common/services/area.service';
 import {FormsModule} from '@angular/forms';
@@ -21,7 +20,7 @@ import {FormsModule} from '@angular/forms';
   imports: [
     CommonModule,
     AreaRoutersModule,
-    TableModule,
+    TreeTableModule,
     ButtonModule,
     FormsModule,
     SharedModule,

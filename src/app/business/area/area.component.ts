@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AreaService } from '../../common/services/area.service';
 import {ConfirmationService, Message, MessageService} from 'primeng/api';
 import {GlobalService} from '../../common/services/global.service';
-import {AddArea, AreaList, Car, TreeNode} from '../../common/model/area-model';
+import {AddArea, AreaList, TreeNode} from '../../common/model/area-model';
 @Component({
   selector: 'app-area',
   templateUrl: './area.component.html',
@@ -14,13 +14,13 @@ export class AreaComponent implements OnInit {
   public cities = []; // 市
   public country = []; // 县
   // 树结构相关
-  public areaTrees: TreeNode[];
-  public areaTree: TreeNode;
+  // public areaTrees: TreeNode[];
+  // public areaTree: TreeNode;
   // 数据相关
   public addDialog: boolean; // 增加弹窗
   public areaDialog: boolean; // 区域弹窗
-  public addArea: AddArea = new AddArea (); // 增加字段
   public areaList: AreaList[]; // 整个table数据
+  public addArea: AddArea = new AddArea (); // 增加字段
   public cols: any[]; // 表头
   public msgs: Message[] = []; // 消息弹窗
   public selectAreaItem: any; // 接收选中的值
@@ -38,28 +38,23 @@ export class AreaComponent implements OnInit {
     this.cols = [
       {field: 'areaName', header: '区域名称'},
       {field: 'areaCode', header: '区域编码'},
-      {field: 'parentId', header: '上级区域'},
       {field: 'level', header: '区域级别'},
       {field: 'idt', header: '添加时间'},
     ];
   }
+  // 获取生效的服务区
   public getDate(): void {
-    // 获取生效的服务区
-    this.areaService.searchList({page: '1', nums: '20'} , {}).subscribe(
+    this.areaService.searchList({page: '1', nums: '100'} , {}).subscribe(
       (value) => {
-        console.log(value);
-        this.areaList =  value.data.contents;
-        this.areaList.map((val, index) => {
-          val.level = this.areaService.levelEnu[val.level];
-        });
+        this.areaList = this.initializeTree(value.data.contents);
       }
     );
 
   }
   // 选中后赋值
-  public onRowSelect(event): void {
-    this.selectAreaItem = this.cloneCar(event.data);
-    console.log(this.selectAreaItem);
+  public onNodeSelect(event): void {
+    console.log(event.node.data);
+    // this.selectAreaItem = this.cloneCar(event.data);
   }
   // 遍历修改后的数据，并把它赋值给car1
   public cloneCar(c: any): any {
@@ -254,14 +249,13 @@ export class AreaComponent implements OnInit {
   public areaClick(): void {
     this.areaDialog = true;
     this.areaService.getAllList().subscribe(
-      (val) => {
-        console.log(val.data);
-        this.areaTrees = this.initializeTree(val.data);
+      (value) => {
+        // this.addInitializeTree(value.data);
       }
     );
   }
   public nodeSelect(event) {
-    this.initializeTree(event.node);
+    // this.initializeTree1(event.node);
     this.areaDialog = false;
     for (const prop in event.node) {
       if (event.node) {
@@ -271,13 +265,35 @@ export class AreaComponent implements OnInit {
         this.addArea.enabled = event.node.enabled;
         this.addArea.id = event.node.id;
       }
-    };
+    }
     console.log(this.addArea.id);
   }
-  public nodeUnselect(event) {
-    this.messageService.add({severity: 'info', summary: 'Node Unselected', detail: event.node.label});
-  }
+  // 递归调用重组数据结构
   public initializeTree(data): any {
+    const oneChild = [];
+    for (let i = 0; i < data.length; i++) {
+      const childnode =  new AreaList();
+      childnode.data = {
+        areaName: data[i].areaName,
+        areaCode: data[i].areaCode,
+        id: data[i].id,
+        idt: data[i].idt,
+        udt: data[i].udt,
+        level: this.areaService.levelEnu[data[i].level],
+        parentId: data[i].parentId,
+        pids: data[i].pids,
+      };
+      if (data[i].administrativeAreaTree === null) {
+        childnode.children = [];
+      } else {
+        childnode.children = this.initializeTree(data[i].administrativeAreaTree);
+      }
+      oneChild.push(childnode);
+    }
+    return oneChild;
+  }
+ /* public addInitializeTree(data): any {
+    console.log(data);
     const oneChild = [];
     for (let i = 0; i < data.length; i++) {
       const childnode =  new TreeNode();
@@ -295,8 +311,8 @@ export class AreaComponent implements OnInit {
       oneChild.push(childnode);
     }
     return oneChild;
-  }
-  public initializeArea(data): any {
+  }*/
+  /*public initializeArea1(data): any {
     console.log(data);
     const oneChild = [];
     for (let i = 0; i < data.length; i++) {
@@ -315,5 +331,5 @@ export class AreaComponent implements OnInit {
     }
     console.log(oneChild);
     return oneChild;
-  }
+  }*/
 }

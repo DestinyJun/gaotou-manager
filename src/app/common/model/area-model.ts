@@ -1,24 +1,6 @@
-export class TreeNode {
-  id?: number;
-  label?: string;
-  areaCode?: string;
+export class AreaList {
   data?: any;
-  children?: TreeNode[];
-  cityType?: any;
-  enabled?: boolean;
-  parentId?: number;
-  icon?: any;
-  expandedIcon?: any;
-  collapsedIcon?: any;
-  leaf?: boolean;
-  expanded?: boolean;
-  type?: string;
-  parent?: TreeNode;
-  partialSelected?: boolean;
-  styleClass?: string;
-  draggable?: boolean;
-  droppable?: boolean;
-  selectable?: boolean;
+  children?: AreaList[];
 }
 
 export class Car {
@@ -38,7 +20,8 @@ export class AddArea {
   pids?: string;
   status?: boolean;
 }
-export class AreaList {
+/*export class AreaList {
+  data?: any;
   areaName?: string;
   areaCode?: string;
   enabled?: boolean;
@@ -49,6 +32,6 @@ export class AreaList {
   parentId?: number;
   pids?: string;
   status?: boolean;
-  administrativeAreaUnifilarDTO?: AddArea[];
-}
+  children?: AreaList[];
+}*/
 

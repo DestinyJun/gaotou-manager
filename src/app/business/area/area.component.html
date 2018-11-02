@@ -18,28 +18,24 @@
 <!--顶部提醒窗口-->
 <p-messages [(value)]="msgs" [closable]="true" [style]="{'position':'fixed','top': '0','margin-top': '0','width': '100vw'}"></p-messages>
 <!--数据-->
-<p-table [columns]="cols" [value]="areaList" [(selection)]="selectAreaList" (onRowSelect)="onRowSelect($event)" [metaKeySelection]="true">
+<p-treeTable [value]="areaList" [columns]="cols" selectionMode="multiple" [(selection)]="selectAreaList" (onNodeSelect)="onNodeSelect($event)" [metaKeySelection]="true">
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th style="width: 3em">
-        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-      </th>
       <th *ngFor="let col of columns">
         {{col.header}}
       </th>
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-rowData let-columns="columns">
-    <tr [pSelectableRow]="rowData">
-      <td>
-        <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
-      </td>
-      <td *ngFor="let col of columns">
+  <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+    <tr>
+      <td *ngFor="let col of columns; let i = index">
+        <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+        <p-treeTableCheckbox [value]="rowNode" *ngIf="i == 0"></p-treeTableCheckbox>
         {{rowData[col.field]}}
       </td>
     </tr>
   </ng-template>
-</p-table>
+</p-treeTable>
 <!--增加弹框-->
 <p-dialog header="增加信息" [(visible)]="addDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="600">
   <div class="ui-g ui-fluid">
