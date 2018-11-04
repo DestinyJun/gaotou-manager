@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import { AreaComponent } from './area.component';
 import {AreaRoutersModule} from './area.routers.module';
 import {ButtonModule} from 'primeng/button';
@@ -34,6 +34,6 @@ import {FormsModule} from '@angular/forms';
     RadioButtonModule
   ],
   declarations: [AreaComponent],
-  providers: [AreaService, MessageService, ConfirmationService]
+  providers: [AreaService, MessageService, ConfirmationService, DatePipe]
 })
 export class AreaModule { }

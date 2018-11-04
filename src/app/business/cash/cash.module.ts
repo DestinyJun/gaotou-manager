@@ -5,7 +5,15 @@ import {CashRoutersModule} from './cash.routers.module';
 import {SharedModule} from '../../common/shared.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TableModule} from 'primeng/table';
-import {CheckboxModule, DialogModule} from 'primeng/primeng';
+import {
+  ConfirmationService,
+  ConfirmDialogModule,
+  DialogModule,
+  MessageModule,
+  MessageService,
+  MessagesModule
+} from 'primeng/primeng';
+import { CashService } from '../../common/services/cash.service';
 
 @NgModule({
   imports: [
@@ -15,9 +23,12 @@ import {CheckboxModule, DialogModule} from 'primeng/primeng';
     FormsModule,
     ReactiveFormsModule,
     TableModule,
-    CheckboxModule,
     DialogModule,
+    ConfirmDialogModule,
+    MessagesModule,
+    MessageModule,
   ],
-  declarations: [CashComponent]
+  declarations: [CashComponent],
+  providers: [CashService, MessageService, ConfirmationService]
 })
 export class CashModule { }

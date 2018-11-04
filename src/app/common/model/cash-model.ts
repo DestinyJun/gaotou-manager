@@ -1,4 +1,6 @@
-export class Cash {
-  id?: number;
-  cashCode: string;
+export class Car {
+  vin;
+  year;
+  brand;
+  color;
 }

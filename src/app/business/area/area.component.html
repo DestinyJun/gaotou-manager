@@ -1,3 +1,4 @@
+<p-messages [(value)]="msgs" [closable]="true" [style]="{'position':'fixed','top': '100','margin-top': '0','width': '100vw'}"></p-messages>
 <app-s-loation locationTitle="区域管理"></app-s-loation>
 <h1 class="text-center">区域管理</h1>
 <!--按钮-->
@@ -17,8 +18,8 @@
 </div>
 <!--顶部提醒窗口-->
 <p-messages [(value)]="msgs" [closable]="true" [style]="{'position':'fixed','top': '0','margin-top': '0','width': '100vw'}"></p-messages>
-<!--数据-->
-<p-treeTable [value]="areaList" [columns]="cols" selectionMode="multiple" [(selection)]="selectAreaList" (onNodeSelect)="onNodeSelect($event)" [metaKeySelection]="true">
+<!--table数据-->
+<p-treeTable [value]="areaList" [columns]="cols" selectionMode="multiple" [(selection)]="selectAreaList" (onNodeSelect)="onNodeSelect($event)">
   <ng-template pTemplate="header" let-columns>
     <tr>
       <th *ngFor="let col of columns">
@@ -27,10 +28,9 @@
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
-    <tr>
+    <tr [ttSelectableRow]="rowNode">
       <td *ngFor="let col of columns; let i = index">
         <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
-        <p-treeTableCheckbox [value]="rowNode" *ngIf="i == 0"></p-treeTableCheckbox>
         {{rowData[col.field]}}
       </td>
     </tr>
@@ -44,7 +44,7 @@
         <label for="addAreaName">区域名称</label>
       </div>
       <div class="ui-g-8">
-        <input pInputText id="addAreaName" (click)="areaClick()" [(ngModel)]="addArea.areaName" />
+        <input pInputText id="addAreaName" (click)="treeAreaClick()" [(ngModel)]="addAreaItem.areaName" />
       </div>
     </div>
     <div class="ui-g-12">
@@ -52,7 +52,7 @@
         <label for="addAreaCode">区域编码</label>
       </div>
       <div class="ui-g-8">
-        <input disabled pInputText id="addAreaCode" [(ngModel)]="addArea.areaCode" />
+        <input disabled pInputText id="addAreaCode" [(ngModel)]="addAreaItem.areaCode" />
       </div>
     </div>
     <div class="ui-g-12">
@@ -60,9 +60,9 @@
       <label>区域类型</label>
     </div>
     <div class="ui-g-8">
-      <p-radioButton name="group1" value="0" label="国家" [(ngModel)]="addArea.level" inputId="opt1"></p-radioButton>
-      <p-radioButton name="group1" value="1" label="省份直辖市" [(ngModel)]="addArea.level" inputId="opt2"></p-radioButton>
-      <p-radioButton name="group1" value="2" label="地级市" [(ngModel)]="addArea.level" inputId="opt3"></p-radioButton>
+      <p-radioButton name="group1" value="0" label="国家" [(ngModel)]="addAreaItem.level" inputId="opt1"></p-radioButton>
+      <p-radioButton name="group1" value="1" label="省份直辖市" [(ngModel)]="addAreaItem.level" inputId="opt2"></p-radioButton>
+      <p-radioButton name="group1" value="2" label="地级市" [(ngModel)]="addAreaItem.level" inputId="opt3"></p-radioButton>
     </div>
   </div>
 
@@ -78,13 +78,14 @@
 <p-dialog header="区域编码" [(visible)]="areaDialog" [responsive]="true" showEffect="fade" [maximizable]="true" [baseZIndex]="10000" [modal]="true" [width]="300" [height]="400">
   <div class="ui-g ui-fluid">
     <div class="ui-g-12">
+      <!--(onNodeUnselect)="nodeUnselect($event)"-->
       <p-scrollPanel [style]="{width: '100%', height: '300px'}">
         <p-tree
-          [value]="areaTrees"
+          [value]="addAreaTrees"
           selectionMode="single"
-          [(selection)]="areaTree"
-          (onNodeSelect)="nodeSelect($event)"
-          (onNodeUnselect)="nodeUnselect($event)">
+          [(selection)]="addAreaTree"
+          (onNodeSelect)="treeOnNodeSelect($event)"
+        >
         </p-tree>
       </p-scrollPanel>
     </div>
