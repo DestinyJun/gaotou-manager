@@ -11,7 +11,7 @@ import {
   DialogModule,
   MessageModule,
   MessageService,
-  MessagesModule
+  MessagesModule, ScrollPanelModule, TreeModule
 } from 'primeng/primeng';
 import { CashService } from '../../common/services/cash.service';
 
@@ -22,11 +22,13 @@ import { CashService } from '../../common/services/cash.service';
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
+    TreeModule,
     TableModule,
     DialogModule,
     ConfirmDialogModule,
     MessagesModule,
     MessageModule,
+    ScrollPanelModule,
   ],
   declarations: [CashComponent],
   providers: [CashService, MessageService, ConfirmationService]

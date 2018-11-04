@@ -9,13 +9,18 @@ export class CashService {
     private http: HttpClient
   ) { }
   // 分页查询
+  public searchAreaList(num): Observable<any> {
+    return this.http.post(
+      `http://120.78.137.182:8808/highway-management/administrativeArea/queryTreeByPaging/${num.page}/${num.nums}`, {});
+  }
+  // 分页查询
   public searchList(num): Observable<any> {
     return this.http.post(
       `http://120.78.137.182:8808/highway-management/cashRegister/queryByPaging/${num.page}/${num.nums}`, {});
   }
   // 增加接口
   public addList(): Observable<any> {
-    return this.http.post('http://localhost/gaotouService/adds.php', '');
+    return this.http.post('http://120.78.137.182:8808/highway-management/cashRegister/add', '');
   }
   // 增加删除
   public deleteList(): Observable<any> {

@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {CashService} from '../../common/services/cash.service';
 import {GlobalService} from '../../common/services/global.service';
 import {ConfirmationService, Message, MessageService} from 'primeng/api';
-import {Car} from '../../common/model/cash-model';
+import {Car, Cash, TreeNode} from '../../common/model/cash-model';
+import {AddTreeArea, AddTreeItem} from '../../common/model/area-model';
 
 @Component({
   selector: 'app-cash',
@@ -11,16 +12,26 @@ import {Car} from '../../common/model/cash-model';
 })
 export class CashComponent implements OnInit {
   public addDialog: boolean; // 增加弹窗
-  public addCar: Car = new Car();
+  public addCash: Cash = new Cash();
   public revampDialog: boolean; // 修改弹窗
   public detailsDialog: boolean; // 详情弹窗
   public searchField: string;
-  public cars: Car[]; // 整个table数据
+  public cashs: Cash[]; // 整个table数据
   public cols: any[]; // 表头
-  public car1: any; // 接收选中的值
+  public cash: any; // 接收选中的值
   public selectedCars3: Car[]; // 多选接受变量
-  public msgs: Message[] = []; // 消息弹窗
   public cleanTimer: any; // 清除时钟
+  // 树结构
+  public filesTree2: TreeNode[];
+  public selectedFile: TreeNode;
+  // 添加及树结构相关
+  public addAreaItem: AddTreeItem = new AddTreeItem (); // 增加字段
+  public addAreaTrees: AddTreeArea[];
+  public addAreaTree: AddTreeArea;
+  public addAreaTreeSelect = [];
+  // 提示弹窗相关
+  public areaDialog: boolean; // 区域弹窗
+  public msgs: Message[] = []; // 消息弹窗
   constructor(
     private cashService: CashService,
     private messageService: MessageService,
@@ -30,29 +41,24 @@ export class CashComponent implements OnInit {
 
   ngOnInit() {
     this.cols = [
-      {field: 'vin', header: 'Vin'},
-      {field: 'year', header: 'Year'},
-      {field: 'brand', header: 'Brand'},
-      {field: 'color', header: 'Color'}
-    ];
-    this.cars = [
-      {vin: 'dsad231ff', year: '2012', brand: 'VW', color: 'Orange'},
-      {vin: 'gwregre345', year: '2011', brand: 'Audi', color: 'Black'},
-      {vin: 'h354htr', year: '2005', brand: 'Renault', color: 'Gray'},
-      {vin: 'j6w54qgh', year: '2003', brand: 'BMW', color: 'Blue'},
+      {field: 'administrativeAreaId', header: '区划ID'},
+      {field: 'serviceAreaId', header: '服务区ID'},
+      {field: 'storeId', header: '店铺ID'},
+      {field: 'cashRegisterCode', header: '收银机编号'},
+      {field: 'idt', header: '添加时间'}
     ];
     this.updateCashDate();
   }
   public updateCashDate(): void {
     this.cashService.searchList({page: 1, nums: 100}).subscribe(
       (value) => {
-        console.log(value);
+        this.cashs = value.data.contents;
       }
     );
   }
   // 选中后赋值
   public onRowSelect(event): void {
-    this.car1 = this.cloneCar(event.data);
+    this.cash = this.cloneCar(event.data);
   }
   // 遍历修改后的数据，并把它赋值给car1
   public cloneCar(c: any): any {
@@ -80,9 +86,9 @@ export class CashComponent implements OnInit {
             if (value.state) {
               setTimeout(() => {
                 this.globalService.eventSubject.next({display: false});
-                const carsSave = [...this.cars];
-                carsSave.push(this.addCar);
-                this.cars = carsSave;
+                const carsSave = [...this.cashs];
+                carsSave.push(this.cashs);
+                this.cashs = carsSave;
                 if (this.cleanTimer) {
                   clearTimeout(this.cleanTimer);
                 }
@@ -163,9 +169,9 @@ export class CashComponent implements OnInit {
             if (value.state) {
               setTimeout(() => {
                 this.globalService.eventSubject.next({display: false});
-                const carsSave = [...this.cars];
-                carsSave[this.cars.indexOf(this.selectedCars3[0])] = this.car1;
-                this.cars = carsSave;
+                const carsSave = [...this.cashs];
+                carsSave[this.cashs.indexOf(this.selectedCars3[0])] = this.cash;
+                this.cashs = carsSave;
                 if (this.cleanTimer) {
                   clearTimeout(this.cleanTimer);
                 }
@@ -233,8 +239,8 @@ export class CashComponent implements OnInit {
                 setTimeout(() => {
                   this.globalService.eventSubject.next({display: false});
                   this.selectedCars3.map((val, inx) => {
-                    const index = this.cars.indexOf(val);
-                    this.cars = this.cars.filter((val1, i) => i !== index);
+                    const index = this.cashs.indexOf(val);
+                    this.cashs = this.cashs.filter((val1, i) => i !== index);
                   });
                   if (this.cleanTimer) {
                     clearTimeout(this.cleanTimer);
@@ -354,5 +360,45 @@ export class CashComponent implements OnInit {
     } else if (this.selectedCars3.length === 1) {
       this.detailsDialog = true;
     }
+  }
+  // 树结构
+  public treeAreaClick(): void {
+    this.areaDialog = true;
+    this.cashService.searchAreaList({page: 1, nums: 100}).subscribe(
+      (val) => {
+        this.addAreaTrees = this.initializeTree(val.data.contents);
+      }
+    );
+  }
+  public treeOnNodeSelect(event) {
+    this.areaDialog = false;
+    this.addAreaTreeSelect.push(event.node);
+    this.addAreaItem = this.initializeTree(this.addAreaTreeSelect)[0];
+  }
+  public nodeSelect(event) {
+    console.log(event.node);
+    this.messageService.add({severity: 'info', summary: 'Node Selected', detail: event.node.label});
+  }
+  public nodeUnselect(event) {
+    this.messageService.add({severity: 'info', summary: 'Node Unselected', detail: event.node.label});
+  }
+  public initializeTree(data): any {
+    const oneChild = [];
+    for (let i = 0; i < data.length; i++) {
+      const childnode =  new TreeNode();
+      childnode.label = data[i].areaName;
+      childnode.id = data[i].id;
+      childnode.areaCode = data[i].areaCode;
+      childnode.parentId = data[i].parentId;
+      childnode.enabled = data[i].enabled;
+      childnode.cityType = data[i].cityType;
+      if (childnode === null) {
+        childnode.children = [];
+      } else {
+        childnode.children = this.initializeTree(data[i].administrativeAreaTree);
+      }
+      oneChild.push(childnode);
+    }
+    return oneChild;
   }
 }
