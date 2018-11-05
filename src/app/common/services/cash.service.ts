@@ -8,10 +8,15 @@ export class CashService {
   constructor(
     private http: HttpClient
   ) { }
-  // 分页查询
+  // 激活区域分页查询
   public searchAreaList(num): Observable<any> {
     return this.http.post(
       `http://120.78.137.182:8808/highway-management/administrativeArea/queryTreeByPaging/${num.page}/${num.nums}`, {});
+  }
+  // 所属服务区查询
+  public searchServiceAreaList(id): Observable<any> {
+    return this.http.get(
+      `highway-management/common/config/getServiceAreaByAdministrativeAreaId/${id}`, {});
   }
   // 分页查询
   public searchList(num): Observable<any> {

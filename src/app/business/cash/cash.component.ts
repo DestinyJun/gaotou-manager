@@ -11,15 +11,14 @@ import {AddTreeArea, AddTreeItem} from '../../common/model/area-model';
   styleUrls: ['./cash.component.css']
 })
 export class CashComponent implements OnInit {
-  public addDialog: boolean; // 增加弹窗
-  public addCash: Cash = new Cash();
-  public revampDialog: boolean; // 修改弹窗
-  public detailsDialog: boolean; // 详情弹窗
-  public searchField: string;
   public cashs: Cash[]; // 整个table数据
   public cols: any[]; // 表头
   public cash: any; // 接收选中的值
   public selectedCars3: Car[]; // 多选接受变量
+
+  public addDialog: boolean; // 增加弹窗
+  public addCash: Cash = new Cash();
+
   public cleanTimer: any; // 清除时钟
   // 树结构
   public filesTree2: TreeNode[];
@@ -27,7 +26,7 @@ export class CashComponent implements OnInit {
   // 添加及树结构相关
   public addAreaItem: AddTreeItem = new AddTreeItem (); // 增加字段
   public addAreaTrees: AddTreeArea[];
-  public addAreaTree: AddTreeArea;
+  public addAreaTree: AddTreeArea = new AddTreeArea();
   public addAreaTreeSelect = [];
   // 提示弹窗相关
   public areaDialog: boolean; // 区域弹窗
@@ -87,7 +86,7 @@ export class CashComponent implements OnInit {
               setTimeout(() => {
                 this.globalService.eventSubject.next({display: false});
                 const carsSave = [...this.cashs];
-                carsSave.push(this.cashs);
+                // carsSave.push(this.cashs);
                 this.cashs = carsSave;
                 if (this.cleanTimer) {
                   clearTimeout(this.cleanTimer);
@@ -131,7 +130,7 @@ export class CashComponent implements OnInit {
       reject: () => {}
     });
   }
-  // 修改、保存修改
+ /* // 修改、保存修改
   public revampClick() {
     if (this.selectedCars3 === undefined || this.selectedCars3.length === 0) {
       if (this.cleanTimer) {
@@ -296,7 +295,7 @@ export class CashComponent implements OnInit {
     this.cashService.searchList({'name': '文君', 'age': '18'}).subscribe(
       (value) => {
         console.log(value);
-        /*setTimeout(() => {
+        /!*setTimeout(() => {
           this.globalService.eventSubject.next({display: false});
           if (value.state) {
             if (this.cleanTimer) {
@@ -318,7 +317,7 @@ export class CashComponent implements OnInit {
               this.msgs = [];
             }, 3000);
           }
-        }, 3000);*/
+        }, 3000);*!/
       },
       (error) => {
         console.log(error);
@@ -360,7 +359,7 @@ export class CashComponent implements OnInit {
     } else if (this.selectedCars3.length === 1) {
       this.detailsDialog = true;
     }
-  }
+  }*/
   // 树结构
   public treeAreaClick(): void {
     this.areaDialog = true;
@@ -371,16 +370,22 @@ export class CashComponent implements OnInit {
     );
   }
   public treeOnNodeSelect(event) {
-    this.areaDialog = false;
-    this.addAreaTreeSelect.push(event.node);
-    this.addAreaItem = this.initializeTree(this.addAreaTreeSelect)[0];
+    // this.areaDialog = false;
+    // this.addAreaTreeSelect.push(event.node);
+    // console.log(this.addAreaTree);
   }
-  public nodeSelect(event) {
-    console.log(event.node);
-    this.messageService.add({severity: 'info', summary: 'Node Selected', detail: event.node.label});
-  }
-  public nodeUnselect(event) {
-    this.messageService.add({severity: 'info', summary: 'Node Unselected', detail: event.node.label});
+  // 确认选择的区域
+  public treeSelectAreaClick(): void {
+    const a = parseFloat(this.addAreaTree.level);
+    if (a >= 2 ) {
+      this.areaDialog = false;
+    } else {
+      this.msgs = [];
+      this.msgs.push({severity: 'error', summary: '操作错误', detail: '请选择市'});
+      this.cleanTimer = setTimeout(() => {
+        this.msgs = [];
+      }, 3000);
+    }
   }
   public initializeTree(data): any {
     const oneChild = [];
@@ -392,6 +397,7 @@ export class CashComponent implements OnInit {
       childnode.parentId = data[i].parentId;
       childnode.enabled = data[i].enabled;
       childnode.cityType = data[i].cityType;
+      childnode.level = data[i].level;
       if (childnode === null) {
         childnode.children = [];
       } else {

@@ -20,7 +20,7 @@ export class TreeNode {
   id?: number;
   label?: string;
   areaCode?: string;
-  level?: string;
+  level?: number;
   enabled?: boolean;
   parentId?: number;
   children?: TreeNode[];

@@ -1,13 +1,16 @@
 <app-s-loation locationTitle="收银机管理"></app-s-loation>
+<!--提示信息-->
 <p-messages [(value)]="msgs" [closable]="true" [style]="{'position':'fixed','top': '0','margin-top': '0','width': '100vw','z-index':'9999'}"></p-messages>
+<!--确认弹窗-->
+<p-confirmDialog acceptLabel="确认" rejectLabel="取消"></p-confirmDialog>
 <div class="video-manage">
   <h4 class="text-center">收银机管理</h4>
   <!--按钮-->
   <div class="btn-manner">
     <button class="btn btn-primary" (click)="addClick()">增加</button>
-    <button class="btn btn-danger" type="button" (click)="deleteFirm()">删除</button>
+    <!--<button class="btn btn-danger" type="button" (click)="deleteFirm()">删除</button>
     <button class="btn btn-info" (click)="revampClick()">修改</button>
-    <button class="btn btn-warning" (click)="checkClick()">查看</button>
+    <button class="btn btn-warning" (click)="checkClick()">查看</button>-->
     <div style="float: right">
       <div class="ui-inputgroup">
         <button label="Search"  type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" (click)="searchClick()">
@@ -44,10 +47,10 @@
       <div class="ui-g ui-fluid">
         <div class="ui-g-6">
           <div class="ui-g-4">
-            <label for="addvin">所属区划：</label>
+            <label for="addAreaName">所属区划：</label>
           </div>
           <div class="ui-g-8">
-            <input pInputText id="addAreaName" (click)="treeAreaClick()" [(ngModel)]="addAreaItem.areaName" />
+            <input pInputText id="addAreaName" (click)="treeAreaClick()" [(ngModel)]="addAreaTree.label" />
           </div>
         </div>
         <div class="ui-g-6">
@@ -55,7 +58,7 @@
             <label for="addyear">所属服务区：</label>
           </div>
           <div class="ui-g-8">
-            <input pInputText id="addyear" />
+            <input pInputText id="addyear" [(ngModel)]="addAreaTree.label"/>
           </div>
         </div>
         <div class="ui-g-6">
@@ -63,7 +66,7 @@
             <label for="addbrand">上下行：</label>
           </div>
           <div class="ui-g-8">
-            <input pInputText id="addbrand"/>
+            <input pInputText id="addbrand" [(ngModel)]="addAreaTree.label"/>
           </div>
         </div>
         <div class="ui-g-6">
@@ -71,7 +74,7 @@
             <label for="addcolor">店铺ID：</label>
           </div>
           <div class="ui-g-8">
-            <input pInputText id="addcolor"/>
+            <input pInputText id="addcolor" [(ngModel)]="addAreaTree.label"/>
           </div>
         </div>
         <div class="ui-g-6">
@@ -90,7 +93,7 @@
         </div>
       </p-footer>
     </p-dialog>
-    <!--修改弹框-->
+    <!--&lt;!&ndash;修改弹框&ndash;&gt;
     <p-dialog header="修改信息" [(visible)]="revampDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="300">
       <div class="ui-g ui-fluid" *ngIf="car1">
         <div class="ui-g-12">
@@ -133,7 +136,7 @@
         </div>
       </p-footer>
     </p-dialog>
-    <!--详情弹窗-->
+    &lt;!&ndash;详情弹窗&ndash;&gt;
     <p-dialog header="查看详情" [(visible)]="detailsDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="300">
       <div class="ui-g ui-fluid" *ngIf="car1">
         <div class="ui-g-12">
@@ -174,9 +177,7 @@
           <button class="btn btn-danger" type="button" (click)="detailsDialog=false">关闭</button>
         </div>
       </p-footer>
-    </p-dialog>
-    <!--确认弹窗-->
-    <p-confirmDialog acceptLabel="确认" rejectLabel="取消"></p-confirmDialog>
+    </p-dialog>-->
     <!--区域弹框-->
     <p-dialog header="区域编码" [(visible)]="areaDialog" [responsive]="true" showEffect="fade" [maximizable]="true" [baseZIndex]="10000" [modal]="true" [width]="300" [height]="400">
       <div class="ui-g ui-fluid">
@@ -193,12 +194,12 @@
           </p-scrollPanel>
         </div>
       </div>
-      <!--<p-footer>
+      <p-footer>
         <div class="ui-dialog-buttonpane ui-helper-clearfix">
-          <button class="btn btn-success" type="button" (click)="selectAreaClick()">确定</button>
+          <button class="btn btn-success" type="button" (click)="treeSelectAreaClick()">确定</button>
           <button class="btn btn-warning" type="button" (click)="areaDialog=false">取消</button>
         </div>
-      </p-footer>-->
+      </p-footer>
     </p-dialog>
   </div>
 </div>
