@@ -5,7 +5,16 @@ import {InterceptRoutersModule} from './intercept.routers.module';
 import {SharedModule} from '../../common/shared.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TableModule} from 'primeng/table';
-import {CheckboxModule, DialogModule} from 'primeng/primeng';
+import {
+  CheckboxModule,
+  ConfirmationService,
+  ConfirmDialogModule,
+  DialogModule,
+  MessageModule,
+  MessageService,
+  MessagesModule, ProgressSpinnerModule
+} from 'primeng/primeng';
+import { InterceptService } from '../../common/services/intercept.service';
 
 @NgModule({
   imports: [
@@ -17,7 +26,16 @@ import {CheckboxModule, DialogModule} from 'primeng/primeng';
     TableModule,
     CheckboxModule,
     DialogModule,
+    TableModule,
+    FormsModule,
+    ReactiveFormsModule,
+    DialogModule,
+    MessagesModule,
+    MessageModule,
+    ConfirmDialogModule,
+    ProgressSpinnerModule
   ],
-  declarations: [InterceptComponent]
+  declarations: [InterceptComponent],
+  providers: [InterceptService, ConfirmationService, MessageService]
 })
 export class InterceptModule { }

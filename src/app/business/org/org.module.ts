@@ -3,9 +3,17 @@ import { CommonModule } from '@angular/common';
 import { OrgComponent } from './org.component';
 import {OrgRoutersModule} from './org.routers.module';
 import {SharedModule} from '../../common/shared.module';
-import {ButtonModule, ConfirmDialogModule, DialogModule, DropdownModule, TreeTableModule} from 'primeng/primeng';
+import {
+  ButtonModule, ConfirmationService,
+  ConfirmDialogModule,
+  DialogModule,
+  DropdownModule,
+  MessageModule, MessageService,
+  MessagesModule, ProgressSpinnerModule,
+  TreeTableModule
+} from 'primeng/primeng';
 import {TableModule} from 'primeng/table';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { OrgService } from '../../common/services/org.service';
 
 @NgModule({
@@ -20,10 +28,18 @@ import { OrgService } from '../../common/services/org.service';
     TableModule,
     ButtonModule,
     FormsModule,
+    TableModule,
+    FormsModule,
+    ReactiveFormsModule,
+    DialogModule,
+    MessagesModule,
+    MessageModule,
+    ConfirmDialogModule,
+    ProgressSpinnerModule
 
 
   ],
   declarations: [OrgComponent],
-  providers: [OrgService]
+  providers: [OrgService, MessageService, ConfirmationService]
 })
 export class OrgModule { }

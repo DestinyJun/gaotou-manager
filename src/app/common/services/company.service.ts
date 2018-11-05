@@ -1,14 +1,28 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class CompanyService {
+  // public headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
+  public headers = new HttpHeaders({'Content-Type': 'application/json'});
 
-  constructor(
-    private http: HttpClient
-  ) { }
-  public getCompanyData(num, body): Observable<any> {
-    return this.http.post(`http://120.78.137.182:8808/highway-management/organization/queryByPaging/${num.page}/${num.nums}`, body);
-}
+  constructor(private http: HttpClient) { }
+  // 增加接口
+  public addList(): Observable<any> {
+    return this.http.post('http://localhost/gaotouService/adds.php', '');
+  }
+  // 增加删除
+  public deleteList(): Observable<any> {
+    return this.http.post('http://localhost/gaotouService/deletes.php', '');
+  }
+  // 修改接口
+  public modifyList(): Observable<any> {
+    return this.http.post('http://localhost/gaotouService/modify.php', '');
+  }
+  // 查询接口
+  public searchList(params): Observable<any> {
+    console.log(params);
+    return this.http.post('http://localhost/gaotouService/search.php', params, {headers: this.headers});
+  }
 }

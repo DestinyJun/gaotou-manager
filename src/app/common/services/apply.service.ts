@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 
-
 @Injectable()
-export class UserService {
+export class ApplyService {
   // public headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
   public headers = new HttpHeaders({'Content-Type': 'application/json'});
 
@@ -26,4 +25,5 @@ export class UserService {
     console.log(params);
     return this.http.post('http://localhost/gaotouService/search.php', params, {headers: this.headers});
   }
+
 }

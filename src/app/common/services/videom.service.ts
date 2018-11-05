@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
-
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 @Injectable()
-export class UserService {
+export class VideomService {
   // public headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
   public headers = new HttpHeaders({'Content-Type': 'application/json'});
 
