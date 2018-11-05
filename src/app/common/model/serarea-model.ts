@@ -1,15 +1,12 @@
-export class SerArea {
-  id?: number;
-  SetTime: string;
-  floorArea: string;
-  serviceTime: string;
-  serviceManager: string;
-  cleanerNum: number;
-  securityer: number;
+export class Serarea {
+  vin;
+  year;
+  brand;
+  color;
 }
-export class Field {
-  id?: number;
-  fieldName: string;
-  fieldCoding: string;
-  uploadTime: string;
+  export class Field {
+    vin;
+    year;
+    brand;
+    color;
 }

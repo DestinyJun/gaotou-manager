@@ -1,4 +1,4 @@
-export class Intercept {
+export class System {
   vin;
   year;
   brand;

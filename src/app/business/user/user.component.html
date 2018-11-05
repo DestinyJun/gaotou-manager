@@ -1,96 +1,173 @@
 <app-s-loation locationTitle="用户管理"></app-s-loation>
 <div class="user-manage">
   <h1 class="text-center">用户管理</h1>
-  <app-s-button (clickEvent)="addPersonWindow()"></app-s-button>
-  <p-table [value]="persons" [columns]="cols">
+  <p-messages [(value)]="msgs" [closable]="true" [style]="{'position':'fixed','top': '0','margin-top': '0','width': '100vw'}"></p-messages>
+  <h3>表格增删该查修改交互demo</h3>
+  <!--按钮-->
+  <div class="btn-manner">
+    <button class="btn btn-primary" (click)="addClick()">增加</button>
+    <button class="btn btn-danger" type="button" (click)="deleteFirm()">删除</button>
+    <button class="btn btn-info" (click)="revampClick()">修改</button>
+    <button class="btn btn-warning" (click)="checkClick()">查看</button>
+    <div style="float: right">
+      <div class="ui-inputgroup">
+        <button label="Search"  type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" (click)="searchClick()">
+          <span class="ui-button-text ui-clickable">搜索 </span>
+        </button>
+        <input placeholder="请输入关键字..." type="text" [(ngModel)]="searchField" (keydown)="searchKeydown($event)" class="ui-inputtext ui-corner-all ui-state-default ui-widget">
+      </div>
+    </div>
+  </div>
+  <!--数据-->
+  <p-table [columns]="cols" [value]="cars" [(selection)]="selectedCars3" (onRowSelect)="onRowSelect($event)" [metaKeySelection]="true">
     <ng-template pTemplate="header" let-columns>
       <tr>
+        <th style="width: 3em">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
         <th *ngFor="let col of columns">
-          <p-checkbox name="group1" [(ngModel)]="selectedCities" inputId="quanxian" *ngIf="col.field === 'checkbox'"></p-checkbox>
           {{col.header}}
         </th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-car>
-      <tr>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr [pSelectableRow]="rowData">
         <td>
-          <p-checkbox name="group1" [(ngModel)]="selectedCities" inputId="ny"></p-checkbox>
+          <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
         </td>
-        <td>{{car.id}}</td>
-        <td>{{car.name}}</td>
-        <td>{{car.position}}</td>
-        <td>{{car.phone}}</td>
-        <td>{{car.email}}</td>
-        <td>{{car.department}}</td>
-        <td>{{car.remark}}</td>
+        <td *ngFor="let col of columns">
+          {{rowData[col.field]}}
+        </td>
       </tr>
     </ng-template>
   </p-table>
-</div>
-<p-dialog header="添加用户" [(visible)]="display" [modal]="true"
-          [responsive]="true"  [width]="1000" [minY]="70"
-          [maximizable]="true" [baseZIndex]="10000">
-  <form [formGroup]="userForm" (ngSubmit)="addUser()" class="form-horizontal" role="form" novalidate>
-    <div class="form-group" [ngClass]="{'has-error': formErrors.name }">
-      <label class="col-sm-3 control-label">姓名</label>
-      <div class="col-sm-8">
-        <input formControlName="name" type="text" class="form-control" placeholder="请输入姓名">
-        <div *ngIf="formErrors.name" class="text-danger">
-          {{ formErrors.name }}
+  <!--增加弹框-->
+  <p-dialog header="增加信息" [(visible)]="addDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="300">
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-12">
+        <div class="ui-g-4">
+          <label for="addvin">Vin</label>
+        </div>
+        <div class="ui-g-8">
+          <input pInputText id="addvin" [(ngModel)]="addCar.vin" />
+        </div>
+      </div>
+      <div class="ui-g-12">
+        <div class="ui-g-4">
+          <label for="addyear">Year</label>
+        </div>
+        <div class="ui-g-8">
+          <input pInputText id="addyear" [(ngModel)]="addCar.year" />
+        </div>
+      </div>
+      <div class="ui-g-12">
+        <div class="ui-g-4">
+          <label for="addbrand">Brand</label>
+        </div>
+        <div class="ui-g-8">
+          <input pInputText id="addbrand" [(ngModel)]="addCar.brand" />
+        </div>
+      </div>
+      <div class="ui-g-12">
+        <div class="ui-g-4">
+          <label for="addcolor">Color</label>
+        </div>
+        <div class="ui-g-8">
+          <input pInputText id="addcolor" [(ngModel)]="addCar.color" />
         </div>
       </div>
     </div>
-    <div class="form-group" [ngClass]="{'has-error': formErrors.position }">
-      <label class="col-sm-3 control-label">职位</label>
-      <div class="col-sm-8">
-        <input formControlName="position" type="text" class="form-control" placeholder="职位">
-        <div *ngIf="formErrors.position" class="text-danger">
-          {{ formErrors.position }}
+    <p-footer>
+      <div class="ui-dialog-buttonpane ui-helper-clearfix">
+        <button class="btn btn-success" type="button" (click)="addsSave()">保存</button>
+        <button class="btn btn-warning" type="button" (click)="addDialog=false">取消</button>
+      </div>
+    </p-footer>
+  </p-dialog>
+  <!--修改弹框-->
+  <p-dialog header="修改信息" [(visible)]="revampDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="300">
+    <div class="ui-g ui-fluid" *ngIf="car1">
+      <div class="ui-g-12">
+        <div class="ui-g-4">
+          <label for="vin">Vin</label>
+        </div>
+        <div class="ui-g-8">
+          <input pInputText id="vin" [(ngModel)]="car1.vin" />
+        </div>
+      </div>
+      <div class="ui-g-12">
+        <div class="ui-g-4">
+          <label for="year">Year</label>
+        </div>
+        <div class="ui-g-8">
+          <input pInputText id="year" [(ngModel)]="car1.year" />
+        </div>
+      </div>
+      <div class="ui-g-12">
+        <div class="ui-g-4">
+          <label for="brand">Brand</label>
+        </div>
+        <div class="ui-g-8">
+          <input pInputText id="brand" [(ngModel)]="car1.brand" />
+        </div>
+      </div>
+      <div class="ui-g-12">
+        <div class="ui-g-4">
+          <label for="color">Color</label>
+        </div>
+        <div class="ui-g-8">
+          <input pInputText id="color" [(ngModel)]="car1.color" />
         </div>
       </div>
     </div>
-    <div class="form-group" [ngClass]="{'has-error': formErrors.phone }">
-      <label class="col-sm-3 control-label">电话</label>
-      <div class="col-sm-8">
-        <input formControlName="phone" reverse=true type="text" class="form-control" placeholder="请输入电话">
-        <div *ngIf="formErrors.phone" class="text-danger">
-          {{ formErrors.phone }}
+    <p-footer>
+      <div class="ui-dialog-buttonpane ui-helper-clearfix">
+        <button class="btn btn-success" type="button" (click)="revampSave()">保存</button>
+        <button class="btn btn-warning" type="button" (click)="revampDialog=false">取消</button>
+      </div>
+    </p-footer>
+  </p-dialog>
+  <!--详情弹窗-->
+  <p-dialog header="查看详情" [(visible)]="detailsDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="300">
+    <div class="ui-g ui-fluid" *ngIf="car1">
+      <div class="ui-g-12">
+        <div class="ui-g-4">
+          <label for="vin">Vin</label>
+        </div>
+        <div class="ui-g-8">
+          <span>{{car1.vin}}</span>
+        </div>
+      </div>
+      <div class="ui-g-12">
+        <div class="ui-g-4">
+          <label for="year">Year</label>
+        </div>
+        <div class="ui-g-8">
+          <span>{{car1.year}}</span>
+        </div>
+      </div>
+      <div class="ui-g-12">
+        <div class="ui-g-4">
+          <label for="brand">Brand</label>
+        </div>
+        <div class="ui-g-8">
+          <span>{{car1.brand}}</span>
+        </div>
+      </div>
+      <div class="ui-g-12">
+        <div class="ui-g-4">
+          <label for="color">Color</label>
+        </div>
+        <div class="ui-g-8">
+          <span>{{car1.color}}</span>
         </div>
       </div>
     </div>
-    <div class="form-group" [ngClass]="{'has-error': formErrors.email }">
-      <label class="col-sm-3 control-label">邮箱</label>
-      <div class="col-sm-8">
-        <input formControlName="email" type="email" class="form-control" placeholder="请输入邮箱">
-        <div *ngIf="formErrors.email" class="text-danger">
-          {{ formErrors.email }}
-        </div>
+    <p-footer>
+      <div class="ui-dialog-buttonpane ui-helper-clearfix">
+        <button class="btn btn-danger" type="button" (click)="detailsDialog=false">关闭</button>
       </div>
-    </div>
-    <div class="form-group" [ngClass]="{'has-error': formErrors.department }">
-      <label class="col-sm-3 control-label">请输入部门</label>
-      <div class="col-sm-8">
-        <input formControlName="department"  type="text" class="form-control" placeholder="请输入部门">
-        <div *ngIf="formErrors.department" class="text-danger">
-          {{ formErrors.department }}
-        </div>
-      </div>
-    </div>
-    <div class="form-group" [ngClass]="{'has-error': formErrors.remark }">
-      <label class="col-sm-3 control-label">备注</label>
-      <div class="col-sm-8">
-        <input formControlName="remark" type="text" class="form-control" placeholder="请输入备注">
-        <div *ngIf="formErrors.remark" class="text-danger">
-          {{ formErrors.remark }}
-        </div>
-      </div>
-    </div>
-    <div *ngIf="formErrors.formError" class="col-sm-offset-3 col-sm-8 alert alert-danger">{{ formErrors.formError }}</div>
-  </form>
-  <p-footer>
-    <button type="submit" class="btn btn-primary" (click)="addUser()" >确定</button>
-    <button type="button"  class="btn btn-danger" (click)="display=false">取消</button>
-  </p-footer>
-</p-dialog>
-
-
+    </p-footer>
+  </p-dialog>
+  <!--确认弹窗-->
+  <p-confirmDialog acceptLabel="确认" rejectLabel="取消"></p-confirmDialog>

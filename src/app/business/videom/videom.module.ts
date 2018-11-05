@@ -5,7 +5,15 @@ import {VideomRoutersModule} from './videom.routers.module';
 import {SharedModule} from '../../common/shared.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TableModule} from 'primeng/table';
-import {CheckboxModule, DialogModule} from 'primeng/primeng';
+import {
+  CheckboxModule,
+  ConfirmationService,
+  ConfirmDialogModule,
+  DialogModule, MessageModule,
+  MessageService, MessagesModule,
+  ProgressSpinnerModule
+} from 'primeng/primeng';
+import { VideomService } from '../../common/services/videom.service';
 
 @NgModule({
   imports: [
@@ -17,7 +25,16 @@ import {CheckboxModule, DialogModule} from 'primeng/primeng';
     TableModule,
     CheckboxModule,
     DialogModule,
+    TableModule,
+    FormsModule,
+    ReactiveFormsModule,
+    DialogModule,
+    MessagesModule,
+    MessageModule,
+    ConfirmDialogModule,
+    ProgressSpinnerModule
   ],
-  declarations: [VideomComponent]
+  declarations: [VideomComponent],
+  providers: [VideomService, MessageService, ConfirmationService]
 })
 export class VideomModule { }

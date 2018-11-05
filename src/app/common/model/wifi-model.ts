@@ -1,4 +1,4 @@
-export class Intercept {
+export class Wifi {
   vin;
   year;
   brand;

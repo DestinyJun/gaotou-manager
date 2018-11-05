@@ -1,4 +1,4 @@
-export class Intercept {
+export class Apply {
   vin;
   year;
   brand;

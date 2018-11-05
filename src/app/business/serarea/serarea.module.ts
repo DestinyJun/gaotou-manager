@@ -6,7 +6,15 @@ import {SharedModule} from '../../common/shared.module';
 import { SerareaSernumComponent } from './serarea-sernum/serarea-sernum.component';
 import { SerareaFieldsComponent } from './serarea-fields/serarea-fields.component';
 import {TableModule} from 'primeng/table';
-import {CheckboxModule, DialogModule} from 'primeng/primeng';
+import {
+  CheckboxModule, ConfirmationService,
+  ConfirmDialogModule,
+  DialogModule,
+  MessageModule,
+  MessageService,
+  MessagesModule,
+  ProgressSpinnerModule
+} from 'primeng/primeng';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { SerareaService } from '../../common/services/serarea.service';
 
@@ -20,8 +28,16 @@ import { SerareaService } from '../../common/services/serarea.service';
     TableModule,
     CheckboxModule,
     DialogModule,
+    TableModule,
+    FormsModule,
+    ReactiveFormsModule,
+    DialogModule,
+    MessagesModule,
+    MessageModule,
+    ConfirmDialogModule,
+    ProgressSpinnerModule
   ],
   declarations: [SerareaComponent, SerareaSernumComponent, SerareaFieldsComponent],
-  providers: [SerareaService]
+  providers: [SerareaService, MessageService, ConfirmationService]
 })
 export class SerareaModule { }

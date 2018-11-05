@@ -6,8 +6,17 @@ import {CompanyRoutersModule} from './company.routers.module';
 import {SharedModule} from '../../common/shared.module';
 import {TableModule} from 'primeng/table';
 import {ButtonModule} from 'primeng/button';
-import {FormsModule} from '@angular/forms';
-import {ConfirmDialogModule, DialogModule, DropdownModule, TreeTableModule} from 'primeng/primeng';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {
+  ConfirmationService,
+  ConfirmDialogModule,
+  DialogModule,
+  DropdownModule,
+  MessageModule, MessageService,
+  MessagesModule,
+  ProgressSpinnerModule,
+  TreeTableModule
+} from 'primeng/primeng';
 
 @NgModule({
   imports: [
@@ -15,14 +24,15 @@ import {ConfirmDialogModule, DialogModule, DropdownModule, TreeTableModule} from
     CompanyRoutersModule,
     SharedModule,
     TableModule,
-    ButtonModule,
     FormsModule,
-    ConfirmDialogModule,
+    ReactiveFormsModule,
     DialogModule,
-    DropdownModule,
-    TreeTableModule,
+    MessagesModule,
+    MessageModule,
+    ConfirmDialogModule,
+    ProgressSpinnerModule
   ],
   declarations: [CompanyComponent],
-  providers: [CompanyService]
+  providers: [CompanyService,MessageService,ConfirmationService]
 })
 export class CompanyModule { }
