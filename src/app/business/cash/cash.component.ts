@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {CashService} from '../../common/services/cash.service';
 import {GlobalService} from '../../common/services/global.service';
 import {ConfirmationService, Message, MessageService} from 'primeng/api';
-import {Car, Cash, TreeNode} from '../../common/model/cash-model';
-import {AddTreeArea, AddTreeItem} from '../../common/model/area-model';
+import {AddCash, Cash, SelectItem, TreeNode} from '../../common/model/cash-model';
+import {AddTreeArea} from '../../common/model/area-model';
 
 @Component({
   selector: 'app-cash',
@@ -11,25 +11,25 @@ import {AddTreeArea, AddTreeItem} from '../../common/model/area-model';
   styleUrls: ['./cash.component.css']
 })
 export class CashComponent implements OnInit {
+  // table显示相关
   public cashs: Cash[]; // 整个table数据
   public cols: any[]; // 表头
   public cash: any; // 接收选中的值
-  public selectedCars3: Car[]; // 多选接受变量
-
-  public addDialog: boolean; // 增加弹窗
-  public addCash: Cash = new Cash();
-
+  public selectedCashs: Cash[]; // 多个选择收银设备
+  // 增加相关
+  public addDialog: boolean; // 增加弹窗显示控制
+  public addCash: AddCash = new AddCash();
+  public areaDialog: boolean; // 区域树弹窗
+  public addAreaTrees: AddTreeArea[]; // 区域树结构
+  public addAreaTree: AddTreeArea = new AddTreeArea(); // 区域树选择
+  public servicesAreaDialog: boolean; // 服务区树弹窗
+  public addServicesAreaTrees: AddTreeArea[]; // 服务区列表
+  public highsdData: SelectItem[]; // 上下行选择数据
+  public storeList: AddTreeArea[]; // 店铺列表
+  // 修改相关
+  public revampDialog: boolean; // 修改弹窗显示控制
+  // 其他提示弹窗相关
   public cleanTimer: any; // 清除时钟
-  // 树结构
-  public filesTree2: TreeNode[];
-  public selectedFile: TreeNode;
-  // 添加及树结构相关
-  public addAreaItem: AddTreeItem = new AddTreeItem (); // 增加字段
-  public addAreaTrees: AddTreeArea[];
-  public addAreaTree: AddTreeArea = new AddTreeArea();
-  public addAreaTreeSelect = [];
-  // 提示弹窗相关
-  public areaDialog: boolean; // 区域弹窗
   public msgs: Message[] = []; // 消息弹窗
   constructor(
     private cashService: CashService,
@@ -57,6 +57,7 @@ export class CashComponent implements OnInit {
   }
   // 选中后赋值
   public onRowSelect(event): void {
+    console.log(event.data);
     this.cash = this.cloneCar(event.data);
   }
   // 遍历修改后的数据，并把它赋值给car1
@@ -69,10 +70,8 @@ export class CashComponent implements OnInit {
     }
     return car;
   }
-  // 增加、保存增加
-  public addClick(): void {
-    this.addDialog = true;
-  }
+
+  // 增加
   public addsSave(): void {
     this.confirmationService.confirm({
       message: `确定要增加吗？`,
@@ -80,24 +79,20 @@ export class CashComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.globalService.eventSubject.next({display: true});
-        this.cashService.addList().subscribe(
+        this.cashService.addItem(this.addCash).subscribe(
           (value) => {
-            if (value.state) {
-              setTimeout(() => {
-                this.globalService.eventSubject.next({display: false});
-                const carsSave = [...this.cashs];
-                // carsSave.push(this.cashs);
-                this.cashs = carsSave;
-                if (this.cleanTimer) {
-                  clearTimeout(this.cleanTimer);
-                }
+            if (value.status === '200') {
+              this.globalService.eventSubject.next({display: false});
+              if (this.cleanTimer) {
+                clearTimeout(this.cleanTimer);
+              }
+              this.msgs = [];
+              this.msgs.push({severity: 'success', summary: '增加提醒', detail: value.message});
+              this.updateCashDate();
+              this.cleanTimer = setTimeout(() => {
                 this.msgs = [];
-                this.msgs.push({severity: 'success', summary: '增加提醒', detail: value.msg});
-                this.cleanTimer = setTimeout(() => {
-                  this.msgs = [];
-                }, 3000);
-                this.addDialog = false;
               }, 3000);
+              this.addDialog = false;
             } else {
               setTimeout(() => {
                 this.globalService.eventSubject.next({display: false});
@@ -113,6 +108,7 @@ export class CashComponent implements OnInit {
             }
           },
           (err) => {
+            console.log(err);
             setTimeout(() => {
               this.globalService.eventSubject.next({display: false});
               if (this.cleanTimer) {
@@ -130,9 +126,9 @@ export class CashComponent implements OnInit {
       reject: () => {}
     });
   }
- /* // 修改、保存修改
+  // 修改、保存修改
   public revampClick() {
-    if (this.selectedCars3 === undefined || this.selectedCars3.length === 0) {
+    if (this.selectedCashs === undefined || this.selectedCashs.length === 0) {
       if (this.cleanTimer) {
         clearTimeout(this.cleanTimer);
       }
@@ -142,7 +138,7 @@ export class CashComponent implements OnInit {
         this.msgs = [];
       }, 3000);
       this.revampDialog = false;
-    } else if (this.selectedCars3.length > 1) {
+    } else if (this.selectedCashs.length > 1) {
       if (this.cleanTimer) {
         clearTimeout(this.cleanTimer);
       }
@@ -151,7 +147,7 @@ export class CashComponent implements OnInit {
       }, 3000);
       this.msgs.push({severity: 'error', summary: '操作错误', detail: '修改只能选择一项'});
       this.revampDialog = false;
-    } else if (this.selectedCars3.length === 1) {
+    } else if (this.selectedCashs.length === 1) {
       this.revampDialog = true;
     }
 
@@ -169,7 +165,7 @@ export class CashComponent implements OnInit {
               setTimeout(() => {
                 this.globalService.eventSubject.next({display: false});
                 const carsSave = [...this.cashs];
-                carsSave[this.cashs.indexOf(this.selectedCars3[0])] = this.cash;
+                carsSave[this.cashs.indexOf(this.selectedCashs[0])] = this.cash;
                 this.cashs = carsSave;
                 if (this.cleanTimer) {
                   clearTimeout(this.cleanTimer);
@@ -179,7 +175,7 @@ export class CashComponent implements OnInit {
                 this.cleanTimer = setTimeout(() => {
                   this.msgs = [];
                 }, 3000);
-                this.selectedCars3 = undefined;
+                this.selectedCashs = undefined;
                 this.revampDialog = false;
               }, 3000);
             } else {
@@ -216,7 +212,7 @@ export class CashComponent implements OnInit {
   }
   // 删除
   public deleteFirm(): void {
-    if (this.selectedCars3 === undefined || this.selectedCars3.length === 0) {
+    if (this.selectedCashs === undefined || this.selectedCashs.length === 0) {
       if (this.cleanTimer) {
         clearTimeout(this.cleanTimer);
       }
@@ -227,65 +223,121 @@ export class CashComponent implements OnInit {
       }, 3000);
     } else {
       this.confirmationService.confirm({
-        message: `确定要删除这${this.selectedCars3.length}项吗？`,
+        message: `确定要删除这${this.selectedCashs.length}项吗？`,
         header: '删除提醒',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
           this.globalService.eventSubject.next({display: true});
-          this.cashService.deleteList().subscribe(
-            (value) => {
-              if (value.state) {
-                setTimeout(() => {
-                  this.globalService.eventSubject.next({display: false});
-                  this.selectedCars3.map((val, inx) => {
-                    const index = this.cashs.indexOf(val);
-                    this.cashs = this.cashs.filter((val1, i) => i !== index);
-                  });
-                  if (this.cleanTimer) {
-                    clearTimeout(this.cleanTimer);
-                  }
-                  this.msgs = [];
-                  this.selectedCars3 = undefined;
-                  this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.msg});
-                  this.cleanTimer = setTimeout(() => {
+          if (this.selectedCashs.length === 1) {
+            this.cashService.deleteItem(this.selectedCashs[0].id).subscribe(
+              (value) => {
+                if (value.status === '200') {
+                  setTimeout(() => {
+                    this.globalService.eventSubject.next({display: false});
+                    this.selectedCashs.map((val, inx) => {
+                      const index = this.cashs.indexOf(val);
+                      this.cashs = this.cashs.filter((val1, i) => i !== index);
+                    });
+                    if (this.cleanTimer) {
+                      clearTimeout(this.cleanTimer);
+                    }
                     this.msgs = [];
+                    this.selectedCashs = undefined;
+                    this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.message});
+                    this.cleanTimer = setTimeout(() => {
+                      this.msgs = [];
+                    }, 3000);
+                    this.updateCashDate();
                   }, 3000);
-                }, 3000);
-              } else {
-                setTimeout(() => {
-                  this.globalService.eventSubject.next({display: false});
-                  if (this.cleanTimer) {
-                    clearTimeout(this.cleanTimer);
-                  }
-                  this.msgs = [];
-                  this.msgs.push({severity: 'error', summary: '删除提醒', detail: '服务器处理失败'});
-                  this.cleanTimer = setTimeout(() => {
+                } else {
+                  setTimeout(() => {
+                    this.globalService.eventSubject.next({display: false});
+                    if (this.cleanTimer) {
+                      clearTimeout(this.cleanTimer);
+                    }
                     this.msgs = [];
+                    this.msgs.push({severity: 'error', summary: '删除提醒', detail: '服务器处理失败'});
+                    this.cleanTimer = setTimeout(() => {
+                      this.msgs = [];
+                    }, 3000);
                   }, 3000);
-                }, 3000);
-              }
-            },
-            (err) => {
-              setTimeout(() => {
-                this.globalService.eventSubject.next({display: false});
-                if (this.cleanTimer) {
-                  clearTimeout(this.cleanTimer);
                 }
-                this.msgs = [];
-                this.msgs.push({severity: 'error', summary: '删除提醒', detail: '连接服务器失败'});
-                this.cleanTimer = setTimeout(() => {
+              },
+              (err) => {
+                setTimeout(() => {
+                  this.globalService.eventSubject.next({display: false});
+                  if (this.cleanTimer) {
+                    clearTimeout(this.cleanTimer);
+                  }
                   this.msgs = [];
-                }, 3000);
-              });
+                  this.msgs.push({severity: 'error', summary: '删除提醒', detail: '连接服务器失败'});
+                  this.cleanTimer = setTimeout(() => {
+                    this.msgs = [];
+                  }, 3000);
+                });
+              }
+            );
+          } else {
+            const ids = [];
+            for (let i = 0; i < this.selectedCashs.length; i ++) {
+              ids.push(this.selectedCashs[i].id);
             }
-          );
+            this.cashService.deleteList(ids).subscribe(
+              (value) => {
+                if (value.status === '200') {
+                  setTimeout(() => {
+                    this.globalService.eventSubject.next({display: false});
+                    this.selectedCashs.map((val, inx) => {
+                      const index = this.cashs.indexOf(val);
+                      this.cashs = this.cashs.filter((val1, i) => i !== index);
+                    });
+                    if (this.cleanTimer) {
+                      clearTimeout(this.cleanTimer);
+                    }
+                    this.msgs = [];
+                    this.selectedCashs = undefined;
+                    this.updateCashDate();
+                    this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.message});
+                    this.cleanTimer = setTimeout(() => {
+                      this.msgs = [];
+                    }, 3000);
+                  }, 3000);
+                } else {
+                  setTimeout(() => {
+                    this.globalService.eventSubject.next({display: false});
+                    if (this.cleanTimer) {
+                      clearTimeout(this.cleanTimer);
+                    }
+                    this.msgs = [];
+                    this.msgs.push({severity: 'error', summary: '删除提醒', detail: '服务器处理失败'});
+                    this.cleanTimer = setTimeout(() => {
+                      this.msgs = [];
+                    }, 3000);
+                  }, 3000);
+                }
+              },
+              (err) => {
+                setTimeout(() => {
+                  this.globalService.eventSubject.next({display: false});
+                  if (this.cleanTimer) {
+                    clearTimeout(this.cleanTimer);
+                  }
+                  this.msgs = [];
+                  this.msgs.push({severity: 'error', summary: '删除提醒', detail: '连接服务器失败'});
+                  this.cleanTimer = setTimeout(() => {
+                    this.msgs = [];
+                  }, 3000);
+                });
+              }
+            );
+          }
         },
         reject: () => {}
       });
     }
   }
   // 搜索
-  public searchKeydown(e): void {
+  /*public searchKeydown(e): void {
     if (e.keyCode === 13) {
       this.searchClick();
     }
@@ -334,9 +386,9 @@ export class CashComponent implements OnInit {
         }, 3000);
       }
     );
-  }
+  }*/
   // 查看详情
-  public checkClick(): void {
+  /*public checkClick(): void {
     if (this.selectedCars3 === undefined || this.selectedCars3.length === 0) {
       if (this.cleanTimer) {
         clearTimeout(this.cleanTimer);
@@ -360,8 +412,8 @@ export class CashComponent implements OnInit {
       this.detailsDialog = true;
     }
   }*/
-  // 树结构
-  public treeAreaClick(): void {
+  // 选择区域
+  public AreaTreeClick(): void {
     this.areaDialog = true;
     this.cashService.searchAreaList({page: 1, nums: 100}).subscribe(
       (val) => {
@@ -374,11 +426,21 @@ export class CashComponent implements OnInit {
     // this.addAreaTreeSelect.push(event.node);
     // console.log(this.addAreaTree);
   }
-  // 确认选择的区域
   public treeSelectAreaClick(): void {
     const a = parseFloat(this.addAreaTree.level);
     if (a >= 2 ) {
+      this.addCash.province.administrativeAreaId = this.addAreaTree.id;
+      this.addCash.province.administrativeAreaName = this.addAreaTree.label;
+      this.addCash.province.level = this.addAreaTree.level;
+      this.addCash.city.administrativeAreaId = this.addAreaTree.parent.id;
+      this.addCash.city.administrativeAreaName = this.addAreaTree.parent.label;
+      this.addCash.city.level = this.addAreaTree.parent.level;
       this.areaDialog = false;
+      this.cashService.searchServiceAreaList(this.addAreaTree.id).subscribe(
+        value => {
+          this.addServicesAreaTrees = this.initializeServiceArea(value.data);
+        }
+      );
     } else {
       this.msgs = [];
       this.msgs.push({severity: 'error', summary: '操作错误', detail: '请选择市'});
@@ -387,6 +449,39 @@ export class CashComponent implements OnInit {
       }, 3000);
     }
   }
+  // 选择服务区
+  public serviceChange(e): void {
+    this.servicesAreaDialog = false;
+    this.addCash.serviceArea.serviceAreaId = e.value.id;
+    this.addCash.serviceArea.serviceName = e.value.name;
+    this.cashService.searchHighDirection(e.value.id).subscribe(
+      (value) => {
+        console.log(value);
+        this.highsdData = this.initializeServiceAreaDirec(value.data);
+      }
+    );
+  }
+  // 选择上下行
+  public directionChange(e): void {
+    this.addCash.saOrientation.destination = e.value.destination;
+    this.addCash.saOrientation.flag = e.value.flag;
+    this.addCash.saOrientation.flagName = e.value.flagName;
+    this.addCash.saOrientation.orientaionId = e.value.orientaionId;
+    this.addCash.saOrientation.source = e.value.source;
+    this.cashService.searchStoreItem(e.value.orientaionId).subscribe(
+      (value) => {
+        console.log(value.data);
+        this.storeList = this.initializeStore(value.data);
+      }
+    );
+  }
+  // 选择店铺
+  public storeChange(e): void {
+    this.addCash.store.categoryCode = e.value.categoryCode;
+    this.addCash.store.storeId = e.value.id;
+    this.addCash.store.storeName = e.value.name;
+  }
+  // 数据格式化
   public initializeTree(data): any {
     const oneChild = [];
     for (let i = 0; i < data.length; i++) {
@@ -403,6 +498,43 @@ export class CashComponent implements OnInit {
       } else {
         childnode.children = this.initializeTree(data[i].administrativeAreaTree);
       }
+      oneChild.push(childnode);
+    }
+    return oneChild;
+  }
+  public initializeServiceArea(data): any {
+    const oneChild = [];
+    for (let i = 0; i < data.length; i++) {
+      const childnode =  new SelectItem();
+      childnode.name = data[i].name;
+      childnode.id = data[i].id;
+      childnode.administrativeAreaId = data[i].administrativeAreaId;
+      oneChild.push(childnode);
+    }
+    return oneChild;
+  }
+  public initializeServiceAreaDirec(data): any {
+    const oneChild = [];
+    for (let i = 0; i < data.length; i++) {
+      const childnode =  new SelectItem();
+      childnode.name = data[i].flagName + '：' + data[i].source + '—>' + data[i].destination;
+      childnode.code = data[i].flag;
+      childnode.destination = data[i].id;
+      childnode.flag = data[i].flag;
+      childnode.flagName = data[i].flagName;
+      childnode.orientaionId = data[i].id;
+      childnode.source = data[i].source;
+      oneChild.push(childnode);
+    }
+    return oneChild;
+  }
+  public initializeStore(data): any {
+    const oneChild = [];
+    for (let i = 0; i < data.length; i++) {
+      const childnode =  new SelectItem();
+      childnode.name = data[i].storeName;
+      childnode.id = data[i].id;
+      childnode.categoryCode = data[i].categoryCode;
       oneChild.push(childnode);
     }
     return oneChild;

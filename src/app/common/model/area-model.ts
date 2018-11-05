@@ -26,7 +26,7 @@ export class AddTreeItem {
   id?: number;
   areaName?: string;
   areaCode?: string;
-  level?: number;
+  level?: string;
   enabled?: boolean;
   parentId?: number;
   children?: AddTreeArea[];

@@ -8,7 +8,7 @@ import {TableModule} from 'primeng/table';
 import {
   ConfirmationService,
   ConfirmDialogModule,
-  DialogModule,
+  DialogModule, DropdownModule,
   MessageModule,
   MessageService,
   MessagesModule, ScrollPanelModule, TreeModule
@@ -29,6 +29,7 @@ import { CashService } from '../../common/services/cash.service';
     MessagesModule,
     MessageModule,
     ScrollPanelModule,
+    DropdownModule
   ],
   declarations: [CashComponent],
   providers: [CashService, MessageService, ConfirmationService]

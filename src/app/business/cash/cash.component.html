@@ -7,20 +7,20 @@
   <h4 class="text-center">收银机管理</h4>
   <!--按钮-->
   <div class="btn-manner">
-    <button class="btn btn-primary" (click)="addClick()">增加</button>
-    <!--<button class="btn btn-danger" type="button" (click)="deleteFirm()">删除</button>
+    <button class="btn btn-primary" (click)="addDialog = true">增加</button>
+    <button class="btn btn-danger" type="button" (click)="deleteFirm()">删除</button>
     <button class="btn btn-info" (click)="revampClick()">修改</button>
-    <button class="btn btn-warning" (click)="checkClick()">查看</button>-->
-    <div style="float: right">
+    <!--<button class="btn btn-warning" (click)="checkClick()">查看</button>-->
+    <!--<div style="float: right">
       <div class="ui-inputgroup">
         <button label="Search"  type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" (click)="searchClick()">
           <span class="ui-button-text ui-clickable">搜索 </span>
         </button>
         <input placeholder="请输入关键字..." type="text" [(ngModel)]="searchField" (keydown)="searchKeydown($event)" class="ui-inputtext ui-corner-all ui-state-default ui-widget">
       </div>
-    </div>
+    </div>-->
     <!--数据-->
-    <p-table [columns]="cols" [value]="cashs" [(selection)]="selectedCars3" (onRowSelect)="onRowSelect($event)" [metaKeySelection]="true">
+    <p-table [columns]="cols" [value]="cashs" [(selection)]="selectedCashs" (onRowSelect)="onRowSelect($event)" [metaKeySelection]="true">
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th style="width: 3em">
@@ -50,31 +50,31 @@
             <label for="addAreaName">所属区划：</label>
           </div>
           <div class="ui-g-8">
-            <input pInputText id="addAreaName" (click)="treeAreaClick()" [(ngModel)]="addAreaTree.label" />
+            <input pInputText id="addAreaName" (click)="AreaTreeClick()" [(ngModel)]="addAreaTree.label" />
           </div>
         </div>
         <div class="ui-g-6">
           <div class="ui-g-4">
-            <label for="addyear">所属服务区：</label>
+            <label for="">所属服务区：</label>
           </div>
           <div class="ui-g-8">
-            <input pInputText id="addyear" [(ngModel)]="addAreaTree.label"/>
+            <p-dropdown [options]="addServicesAreaTrees" (onChange)="serviceChange($event)" [style]="{'width':'182px'}" scrollHeight="120px" optionLabel="name" placeholder="请选择服务区..."></p-dropdown>
           </div>
         </div>
         <div class="ui-g-6">
           <div class="ui-g-4">
-            <label for="addbrand">上下行：</label>
+            <label for="">上下行：</label>
           </div>
           <div class="ui-g-8">
-            <input pInputText id="addbrand" [(ngModel)]="addAreaTree.label"/>
+            <p-dropdown [options]="highsdData" (onChange)="directionChange($event)" [style]="{'width':'182px'}" scrollHeight="72px" optionLabel="name" placeholder="请选择高速方向..."></p-dropdown>
           </div>
         </div>
         <div class="ui-g-6">
           <div class="ui-g-4">
-            <label for="addcolor">店铺ID：</label>
+            <label for="addcolor">所属店铺：</label>
           </div>
           <div class="ui-g-8">
-            <input pInputText id="addcolor" [(ngModel)]="addAreaTree.label"/>
+            <p-dropdown [options]="storeList" (onChange)="storeChange($event)" [style]="{'width':'182px'}" scrollHeight="72px" optionLabel="name" placeholder="请选择店铺..."></p-dropdown>
           </div>
         </div>
         <div class="ui-g-6">
@@ -82,7 +82,7 @@
             <label for="addcolor">收银机编号：</label>
           </div>
           <div class="ui-g-8">
-            <input pInputText id="addcolor"/>
+            <input pInputText id="addcolor" [(ngModel)]="addCash.cashRegisterCode"/>
           </div>
         </div>
       </div>
@@ -93,39 +93,47 @@
         </div>
       </p-footer>
     </p-dialog>
-    <!--&lt;!&ndash;修改弹框&ndash;&gt;
-    <p-dialog header="修改信息" [(visible)]="revampDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="300">
-      <div class="ui-g ui-fluid" *ngIf="car1">
-        <div class="ui-g-12">
+    <!--修改弹框-->
+    <p-dialog header="修改信息" [(visible)]="revampDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="800">
+      <div class="ui-g ui-fluid">
+        <div class="ui-g-6">
           <div class="ui-g-4">
-            <label for="vin">Vin</label>
+            <label for="addAreaName">所属区划：</label>
           </div>
           <div class="ui-g-8">
-            <input pInputText id="vin" [(ngModel)]="car1.vin" />
+            <input pInputText id="addAreaName" (click)="AreaTreeClick()" [(ngModel)]="addAreaTree.label" />
           </div>
         </div>
-        <div class="ui-g-12">
+        <div class="ui-g-6">
           <div class="ui-g-4">
-            <label for="year">Year</label>
+            <label for="">所属服务区：</label>
           </div>
           <div class="ui-g-8">
-            <input pInputText id="year" [(ngModel)]="car1.year" />
+            <p-dropdown [options]="addServicesAreaTrees" (onChange)="serviceChange($event)" [style]="{'width':'182px'}" scrollHeight="120px" optionLabel="name" placeholder="请选择服务区..."></p-dropdown>
           </div>
         </div>
-        <div class="ui-g-12">
+        <div class="ui-g-6">
           <div class="ui-g-4">
-            <label for="brand">Brand</label>
+            <label for="">上下行：</label>
           </div>
           <div class="ui-g-8">
-            <input pInputText id="brand" [(ngModel)]="car1.brand" />
+            <p-dropdown [options]="highsdData" (onChange)="directionChange($event)" [style]="{'width':'182px'}" scrollHeight="72px" optionLabel="name" placeholder="请选择高速方向..."></p-dropdown>
           </div>
         </div>
-        <div class="ui-g-12">
+        <div class="ui-g-6">
           <div class="ui-g-4">
-            <label for="color">Color</label>
+            <label for="addcolor">所属店铺：</label>
           </div>
           <div class="ui-g-8">
-            <input pInputText id="color" [(ngModel)]="car1.color" />
+            <p-dropdown [options]="storeList" (onChange)="storeChange($event)" [style]="{'width':'182px'}" scrollHeight="72px" optionLabel="name" placeholder="请选择店铺..."></p-dropdown>
+          </div>
+        </div>
+        <div class="ui-g-6">
+          <div class="ui-g-4">
+            <label for="addcolor">收银机编号：</label>
+          </div>
+          <div class="ui-g-8">
+            <input pInputText id="addcolor" [(ngModel)]="addCash.cashRegisterCode"/>
           </div>
         </div>
       </div>
@@ -136,8 +144,31 @@
         </div>
       </p-footer>
     </p-dialog>
-    &lt;!&ndash;详情弹窗&ndash;&gt;
-    <p-dialog header="查看详情" [(visible)]="detailsDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="300">
+    <!--区域弹框-->
+    <p-dialog header="请选择区域" [(visible)]="areaDialog" [responsive]="true" showEffect="fade" [maximizable]="true" [baseZIndex]="10000" [modal]="true" [width]="300" [height]="400">
+      <div class="ui-g ui-fluid">
+        <div class="ui-g-12">
+          <!--(onNodeUnselect)="nodeUnselect($event)"-->
+          <p-scrollPanel [style]="{width: '100%', height: '300px'}">
+            <p-tree
+              [value]="addAreaTrees"
+              selectionMode="single"
+              [(selection)]="addAreaTree"
+              (onNodeSelect)="treeOnNodeSelect($event)"
+            >
+            </p-tree>
+          </p-scrollPanel>
+        </div>
+      </div>
+      <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+          <button class="btn btn-success" type="button" (click)="treeSelectAreaClick()">确定</button>
+          <button class="btn btn-warning" type="button" (click)="areaDialog=false">取消</button>
+        </div>
+      </p-footer>
+    </p-dialog>
+    <!--详情弹窗-->
+    <!--<p-dialog header="查看详情" [(visible)]="detailsDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="300">
       <div class="ui-g ui-fluid" *ngIf="car1">
         <div class="ui-g-12">
           <div class="ui-g-4">
@@ -178,29 +209,6 @@
         </div>
       </p-footer>
     </p-dialog>-->
-    <!--区域弹框-->
-    <p-dialog header="区域编码" [(visible)]="areaDialog" [responsive]="true" showEffect="fade" [maximizable]="true" [baseZIndex]="10000" [modal]="true" [width]="300" [height]="400">
-      <div class="ui-g ui-fluid">
-        <div class="ui-g-12">
-          <!--(onNodeUnselect)="nodeUnselect($event)"-->
-          <p-scrollPanel [style]="{width: '100%', height: '300px'}">
-            <p-tree
-              [value]="addAreaTrees"
-              selectionMode="single"
-              [(selection)]="addAreaTree"
-              (onNodeSelect)="treeOnNodeSelect($event)"
-            >
-            </p-tree>
-          </p-scrollPanel>
-        </div>
-      </div>
-      <p-footer>
-        <div class="ui-dialog-buttonpane ui-helper-clearfix">
-          <button class="btn btn-success" type="button" (click)="treeSelectAreaClick()">确定</button>
-          <button class="btn btn-warning" type="button" (click)="areaDialog=false">取消</button>
-        </div>
-      </p-footer>
-    </p-dialog>
   </div>
 </div>
 
