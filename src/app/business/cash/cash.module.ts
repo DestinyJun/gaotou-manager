@@ -4,16 +4,19 @@ import { CashComponent } from './cash.component';
 import {CashRoutersModule} from './cash.routers.module';
 import {SharedModule} from '../../common/shared.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {TableModule} from 'primeng/table';
+import { CashService } from '../../common/services/cash.service';
+import {MessageModule} from 'primeng/message';
 import {
   ConfirmationService,
   ConfirmDialogModule,
-  DialogModule, DropdownModule,
-  MessageModule,
-  MessageService,
-  MessagesModule, ScrollPanelModule, TreeModule
+  DialogModule,
+  DropdownModule, MessageService,
+  MessagesModule,
+  ProgressSpinnerModule,
+  ScrollPanelModule,
+  TreeModule
 } from 'primeng/primeng';
-import { CashService } from '../../common/services/cash.service';
+import {TableModule} from 'primeng/table';
 
 @NgModule({
   imports: [
@@ -22,12 +25,13 @@ import { CashService } from '../../common/services/cash.service';
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
+    MessageModule,
+    ConfirmDialogModule,
+    ProgressSpinnerModule,
     TreeModule,
     TableModule,
     DialogModule,
-    ConfirmDialogModule,
     MessagesModule,
-    MessageModule,
     ScrollPanelModule,
     DropdownModule
   ],

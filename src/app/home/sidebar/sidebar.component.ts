@@ -46,6 +46,7 @@ export class SidebarComponent implements OnInit {
     new NavList('视频组管理', 'videomg', 'fa fa-desktop', false, [] , true),
     new NavList('应用访问控制 ', 'apply', 'fa fa-desktop', false, [] , true),
     new NavList('收银机配置', 'cash', 'fa fa-cog', false, [] , true),
+    new NavList('字典管理', 'dict', 'fa fa-cog', false, [] , true),
     new NavList('系统配置', 'system', 'fa fa-cog', false, [] , true),
   ];
   public slidinghight: number;

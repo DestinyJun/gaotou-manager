@@ -15,7 +15,7 @@ export class SerareaFieldsComponent implements OnInit {
     this.uploadFieldDate();
   }
   public uploadFieldDate(): void {
-    this.serFileds = [
+    /*this.serFileds = [
       {id: 1, fieldName: '服务区名称', fieldCoding: 'serviceName', uploadTime: '2018-08-26 13:06'},
       {id: 17, fieldName: '服务区所属', fieldCoding: 'serviceAdress', uploadTime: '2018-08-26 13:06'},
       {id: 18, fieldName: '始建时间', fieldCoding: 'SetTime', uploadTime: '2018-08-26 13:06'},
@@ -32,7 +32,7 @@ export class SerareaFieldsComponent implements OnInit {
       {id: 14, fieldName: '上次交水费时间', fieldCoding: 'payWaterTime', uploadTime: '2018-08-26 13:06'},
       {id: 15, fieldName: '服务区管理人员', fieldCoding: 'serviceManager', uploadTime: '2018-08-26 13:06'},
       {id: 16, fieldName: '管理人电话', fieldCoding: 'serviceManagerPhoone', uploadTime: '2018-08-26 13:06'},
-    ];
+    ];*/
   }
   public addSerFieldWindow(): void {}
 }

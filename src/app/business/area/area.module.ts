@@ -19,12 +19,12 @@ import {FormsModule} from '@angular/forms';
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     AreaRoutersModule,
+
     TreeTableModule,
     ButtonModule,
-    FormsModule,
     SharedModule,
-    DialogModule,
     DialogModule,
     MessagesModule,
     MessageModule,

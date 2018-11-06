@@ -4,12 +4,12 @@ import { OrgComponent } from './org.component';
 import {OrgRoutersModule} from './org.routers.module';
 import {SharedModule} from '../../common/shared.module';
 import {
-  ButtonModule, ConfirmationService,
+  ConfirmationService,
   ConfirmDialogModule,
   DialogModule,
   DropdownModule,
   MessageModule, MessageService,
-  MessagesModule, ProgressSpinnerModule,
+  MessagesModule, ProgressSpinnerModule, RadioButtonModule, ScrollPanelModule, TreeModule,
   TreeTableModule
 } from 'primeng/primeng';
 import {TableModule} from 'primeng/table';
@@ -21,23 +21,20 @@ import { OrgService } from '../../common/services/org.service';
     CommonModule,
     OrgRoutersModule,
     SharedModule,
-    ConfirmDialogModule,
-    DialogModule,
-    DropdownModule,
-    TreeTableModule,
-    TableModule,
-    ButtonModule,
-    FormsModule,
-    TableModule,
     FormsModule,
     ReactiveFormsModule,
-    DialogModule,
-    MessagesModule,
-    MessageModule,
+
+    TreeTableModule,
     ConfirmDialogModule,
-    ProgressSpinnerModule
-
-
+    ProgressSpinnerModule,
+    TreeModule,
+    TableModule,
+    DialogModule,
+    MessageModule,
+    MessagesModule,
+    ScrollPanelModule,
+    DropdownModule,
+    RadioButtonModule
   ],
   declarations: [OrgComponent],
   providers: [OrgService, MessageService, ConfirmationService]

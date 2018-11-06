@@ -515,16 +515,18 @@ export class CashComponent implements OnInit {
   }
   public initializeServiceAreaDirec(data): any {
     const oneChild = [];
-    for (let i = 0; i < data.length; i++) {
-      const childnode =  new SelectItem();
-      childnode.name = data[i].flagName + '：' + data[i].source + '—>' + data[i].destination;
-      childnode.code = data[i].flag;
-      childnode.destination = data[i].id;
-      childnode.flag = data[i].flag;
-      childnode.flagName = data[i].flagName;
-      childnode.orientaionId = data[i].id;
-      childnode.source = data[i].source;
-      oneChild.push(childnode);
+    if (data) {
+      for (let i = 0; i < data.length; i++) {
+        const childnode =  new SelectItem();
+        childnode.name = data[i].flagName + '：' + data[i].source + '—>' + data[i].destination;
+        childnode.code = data[i].flag;
+        childnode.destination = data[i].id;
+        childnode.flag = data[i].flag;
+        childnode.flagName = data[i].flagName;
+        childnode.orientaionId = data[i].id;
+        childnode.source = data[i].source;
+        oneChild.push(childnode);
+      }
     }
     return oneChild;
   }

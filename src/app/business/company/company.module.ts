@@ -4,35 +4,37 @@ import { CompanyService } from '../../common/services/company.service';
 import { CompanyComponent } from './company.component';
 import {CompanyRoutersModule} from './company.routers.module';
 import {SharedModule} from '../../common/shared.module';
-import {TableModule} from 'primeng/table';
-import {ButtonModule} from 'primeng/button';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {
   ConfirmationService,
   ConfirmDialogModule,
   DialogModule,
-  DropdownModule,
+  DropdownModule, InputTextareaModule,
   MessageModule, MessageService,
   MessagesModule,
-  ProgressSpinnerModule,
-  TreeTableModule
+  ProgressSpinnerModule, ScrollPanelModule,
+  TreeModule
 } from 'primeng/primeng';
-
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {TableModule} from 'primeng/table';
 @NgModule({
   imports: [
     CommonModule,
     CompanyRoutersModule,
     SharedModule,
-    TableModule,
     FormsModule,
     ReactiveFormsModule,
-    DialogModule,
-    MessagesModule,
     MessageModule,
     ConfirmDialogModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    TreeModule,
+    TableModule,
+    DialogModule,
+    MessagesModule,
+    ScrollPanelModule,
+    DropdownModule,
+    InputTextareaModule
   ],
   declarations: [CompanyComponent],
-  providers: [CompanyService,MessageService,ConfirmationService]
+  providers: [CompanyService, MessageService, ConfirmationService]
 })
 export class CompanyModule { }

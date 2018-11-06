@@ -4,7 +4,7 @@ export class Serarea {
   brand;
   color;
 }
-  export class Field {
+export class Field {
     vin;
     year;
     brand;
