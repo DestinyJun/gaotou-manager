@@ -1,16 +1,22 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { UserComponent } from './user.component';
 import {UserRoutersModule} from './user.routers.module';
 import {TableModule} from 'primeng/table';
 import {SharedModule} from '../../common/shared.module';
-import {CheckboxModule} from 'primeng/checkbox';
 import {DialogModule} from 'primeng/dialog';
-import {SystemService} from '../../common/services/system.service';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {UserService} from '../../common/services/user.service';
-import {ConfirmDialogModule, MessageModule, MessagesModule, ProgressSpinnerModule} from 'primeng/primeng';
+import {
+  CalendarModule,
+  ConfirmDialogModule,
+  DropdownModule,
+  MessageModule,
+  MessagesModule,
+  ProgressSpinnerModule,
+  RadioButtonModule, ScrollPanelModule, TreeModule, TreeTableModule
+} from 'primeng/primeng';
 
 
 @NgModule({
@@ -20,19 +26,20 @@ import {ConfirmDialogModule, MessageModule, MessagesModule, ProgressSpinnerModul
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    TableModule,
-    CheckboxModule,
-    DialogModule,
-    TableModule,
-    FormsModule,
-    ReactiveFormsModule,
-    DialogModule,
-    MessagesModule,
-    MessageModule,
+    TreeTableModule,
     ConfirmDialogModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    TreeModule,
+    TableModule,
+    DialogModule,
+    MessageModule,
+    MessagesModule,
+    ScrollPanelModule,
+    DropdownModule,
+    RadioButtonModule,
+    CalendarModule
   ],
   declarations: [UserComponent],
-  providers: [UserService, MessageService, ConfirmationService]
+  providers: [UserService, MessageService, ConfirmationService, DatePipe]
 })
 export class UserModule { }

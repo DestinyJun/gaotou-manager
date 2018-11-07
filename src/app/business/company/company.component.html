@@ -8,14 +8,12 @@
   <!--按钮-->
   <div class="btn-manner">
     <button class="btn btn-primary" (click)="addDialog = true">增加</button>
+    <button class="btn btn-danger" type="button" (click)="deleteFirm()">删除</button>
   </div>
   <!--数据-->
-  <p-table [columns]="cols" [value]="companies" [(selection)]="selectedcompanies" (onRowSelect)="onRowSelect($event)" [metaKeySelection]="true">
+  <p-table [columns]="cols" [value]="companies" selectionMode="multiple" [(selection)]="selectedcompanies" (onRowSelect)="onRowSelect($event)">
     <ng-template pTemplate="header" let-columns>
       <tr>
-        <th style="width: 3em">
-          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-        </th>
         <th *ngFor="let col of columns">
           {{col.header}}
         </th>
@@ -23,9 +21,6 @@
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-columns="columns">
       <tr [pSelectableRow]="rowData">
-        <td>
-          <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
-        </td>
         <td *ngFor="let col of columns">
           {{rowData[col.field]}}
         </td>
@@ -49,6 +44,15 @@
         </div>
         <div class="ui-g-8">
           <input pInputText id="addpostcode" [(ngModel)]="addCompany.postcode" />
+        </div>
+      </div>
+      <div class="ui-g-6">
+        <div class="ui-g-4">
+          <label for="addfoundDate">成立日期：</label>
+        </div>
+        <div class="ui-g-8">
+          <!--<input pInputText type="number" id="addfoundDate" [(ngModel)]="addCompany.foundDate" />-->
+          <p-calendar id="addfoundDate" [style]="{'width': '80%'}" (onSelect)="timeOnSelect($event)" placeholder="请点击选择时间......" [monthNavigator]="true" [yearNavigator]="true" yearRange="1980:2030" dateFormat="yy-mm-dd"></p-calendar>
         </div>
       </div>
       <div class="ui-g-6">
@@ -93,18 +97,10 @@
       </div>
       <div class="ui-g-6">
         <div class="ui-g-4">
-          <label for="addname">公司地址：</label>
+          <label for="addname">公司名称：</label>
         </div>
         <div class="ui-g-8">
           <input pInputText id="addname" [(ngModel)]="addCompany.name" />
-        </div>
-      </div>
-      <div class="ui-g-6">
-        <div class="ui-g-4">
-          <label for="addfoundDate">成立日期：</label>
-        </div>
-        <div class="ui-g-8">
-          <input pInputText type="number" id="addfoundDate" [(ngModel)]="addCompany.foundDate" />
         </div>
       </div>
       <div class="ui-g-6">
@@ -152,7 +148,7 @@
           <label for="addintroduction">公司简介：</label>
         </div>
         <div class="ui-g-9">
-          <textarea id="addintroduction" rows="5" cols="30" pInputTextarea></textarea>
+          <textarea id="addintroduction" [(ngModel)]="addCompany.introduction" rows="5" cols="30" pInputTextarea></textarea>
         </div>
       </div>
     </div>

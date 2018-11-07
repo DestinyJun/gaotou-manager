@@ -38,3 +38,16 @@ export class AddTreeArea {
   draggable?: boolean;
   droppable?: boolean;
 }
+export class SelectItem {
+  label?: string;
+  value: any;
+  styleClass?: string;
+  icon?: string;
+  title?: string;
+  disabled?: boolean;
+  name?: string;
+  id?: number;
+  pid?: any;
+  pids?: any;
+}
+

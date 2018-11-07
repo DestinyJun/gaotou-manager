@@ -4,6 +4,7 @@ import { OrgComponent } from './org.component';
 import {OrgRoutersModule} from './org.routers.module';
 import {SharedModule} from '../../common/shared.module';
 import {
+  CalendarModule,
   ConfirmationService,
   ConfirmDialogModule,
   DialogModule,
@@ -34,7 +35,8 @@ import { OrgService } from '../../common/services/org.service';
     MessagesModule,
     ScrollPanelModule,
     DropdownModule,
-    RadioButtonModule
+    RadioButtonModule,
+    CalendarModule
   ],
   declarations: [OrgComponent],
   providers: [OrgService, MessageService, ConfirmationService]

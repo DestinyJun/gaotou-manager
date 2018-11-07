@@ -32,7 +32,7 @@ export class AddCompany {
   legalPerson?: string; // 法人
   address?: string; // 公司地址
   name?: string; // 公司名称
-  foundDate?: number; // 成立日期
+  foundDate?: any; // 成立日期
   fax?: string; // 传真
   telNumber?: string; // 单位电话
   email?: string; // 邮箱

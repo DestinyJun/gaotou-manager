@@ -1,9 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {User} from '../../common/model/user-model';
+import {AddUser, User} from '../../common/model/user-model';
 import {UserService} from '../../common/services/user.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ConfirmationService, Message, MessageService} from 'primeng/api';
 import {GlobalService} from '../../common/services/global.service';
+import {SelectItem} from '../../common/model/shared-model';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-user',
@@ -11,81 +13,77 @@ import {GlobalService} from '../../common/services/global.service';
   styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit {
-  public addDialog: boolean; // 增加弹窗
-  public addCar: User = new User();
-  public revampDialog: boolean; // 修改弹窗
-  public detailsDialog: boolean; // 详情弹窗
-  public searchField: string;
-  public cars: User[]; // 整个table数据
+  // table显示相关
+  public users: User[]; // 整个table数据
   public cols: any[]; // 表头
-  public car1: any; // 接收选中的值
-  public selectedCars3: User[]; // 多选接受变量
-  public msgs: Message[] = []; // 消息弹窗
+  public cash: any; // 接收选中的值
+  public selectedUsers: User[]; // 多个选择
+  // 增加相关
+  public addDialog: boolean; // 增加弹窗显示控制
+  public addUser: AddUser = new AddUser(); // 添加参数字段
+  public addCompanySelect: SelectItem[]; // 公司列表
+  public addOrgSelect: SelectItem[]; // 部门列表
+  // 其他提示弹窗相关
   public cleanTimer: any; // 清除时钟
+  public msgs: Message[] = []; // 消息弹窗
   constructor(
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private userService: UserService,
-    private globalService: GlobalService
+    private globalService: GlobalService,
+    private datePipe: DatePipe,
   ) {}
 
   ngOnInit() {
     this.cols = [
-      {field: 'vin', header: 'Vin'},
-      {field: 'year', header: 'Year'},
-      {field: 'brand', header: 'Brand'},
-      {field: 'color', header: 'Color'}
+      {field: 'realName', header: '姓名'},
+      {field: 'telNumber', header: '电话'},
+      {field: 'gender', header: '性别'},
+      {field: 'dutyName', header: '职务'},
+      {field: 'idt', header: '添加时间'}
     ];
-    this.cars = [
-      {vin: 'dsad231ff', year: '2012', brand: 'VW', color: 'Orange'},
-      {vin: 'gwregre345', year: '2011', brand: 'Audi', color: 'Black'},
-      {vin: 'h354htr', year: '2005', brand: 'Renault', color: 'Gray'},
-      {vin: 'j6w54qgh', year: '2003', brand: 'BMW', color: 'Blue'},
-    ];
+  this.updateUserDate();
+  }
+  public updateUserDate(): void {
+    this.userService.searchList({page: 1, nums: 1000}).subscribe(
+      (value) => {
+        console.log(value);
+        this.users = value.data.contents;
+      }
+    );
+    this.userService.searchCompanyList({page: 1, nums: 100}).subscribe(
+      (val) => {
+        this.addCompanySelect = this.initializeSelectCompany(val.data.contents);
+      }
+    );
   }
   // 选中后赋值
   public onRowSelect(event): void {
-    this.car1 = this.cloneCar(event.data);
+    // console.log(event);
   }
-  // 遍历修改后的数据，并把它赋值给car1
-  public cloneCar(c: any): any {
-    const car = {};
-    for (const prop in c) {
-      if (c) {
-        car[prop] = c[prop];
-      }
-    }
-    return car;
-  }
-  // 增加、保存增加
-  public addClick(): void {
-    this.addDialog = true;
-  }
+  // 增加
   public addsSave(): void {
+    console.log(this.addUser);
     this.confirmationService.confirm({
       message: `确定要增加吗？`,
       header: '增加提醒',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.globalService.eventSubject.next({display: true});
-        this.userService.addList().subscribe(
+        this.userService.addItem(this.addUser).subscribe(
           (value) => {
-            if (value.state) {
-              setTimeout(() => {
-                this.globalService.eventSubject.next({display: false});
-                const carsSave = [...this.cars];
-                carsSave.push(this.addCar);
-                this.cars = carsSave;
-                if (this.cleanTimer) {
-                  clearTimeout(this.cleanTimer);
-                }
+            if (value.status === '200') {
+              this.globalService.eventSubject.next({display: false});
+              if (this.cleanTimer) {
+                clearTimeout(this.cleanTimer);
+              }
+              this.msgs = [];
+              this.msgs.push({severity: 'success', summary: '增加提醒', detail: value.message});
+              this.updateUserDate();
+              this.cleanTimer = setTimeout(() => {
                 this.msgs = [];
-                this.msgs.push({severity: 'success', summary: '增加提醒', detail: value.msg});
-                this.cleanTimer = setTimeout(() => {
-                  this.msgs = [];
-                }, 3000);
-                this.addDialog = false;
               }, 3000);
+              this.addDialog = false;
             } else {
               setTimeout(() => {
                 this.globalService.eventSubject.next({display: false});
@@ -101,6 +99,7 @@ export class UserComponent implements OnInit {
             }
           },
           (err) => {
+            console.log(err);
             setTimeout(() => {
               this.globalService.eventSubject.next({display: false});
               if (this.cleanTimer) {
@@ -118,234 +117,46 @@ export class UserComponent implements OnInit {
       reject: () => {}
     });
   }
-  // 修改、保存修改
-  public revampClick() {
-    if (this.selectedCars3 === undefined || this.selectedCars3.length === 0) {
-      if (this.cleanTimer) {
-        clearTimeout(this.cleanTimer);
-      }
-      this.msgs = [];
-      this.msgs.push({severity: 'error', summary: '操作错误', detail: '请选择需要修改的项'});
-      this.cleanTimer = setTimeout(() => {
-        this.msgs = [];
-      }, 3000);
-      this.revampDialog = false;
-    } else if (this.selectedCars3.length > 1) {
-      if (this.cleanTimer) {
-        clearTimeout(this.cleanTimer);
-      }
-      this.cleanTimer = setTimeout(() => {
-        this.msgs = [];
-      }, 3000);
-      this.msgs.push({severity: 'error', summary: '操作错误', detail: '修改只能选择一项'});
-      this.revampDialog = false;
-    } else if (this.selectedCars3.length === 1) {
-      this.revampDialog = true;
-    }
-
+  public timeOnSelect(e): void {
+    this.addUser.birthday = this.datePipe.transform(e, 'yyyy-MM-dd');
   }
-  public revampSave(): void {
-    this.confirmationService.confirm({
-      message: `确定要修改吗？`,
-      header: '修改提醒',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.globalService.eventSubject.next({display: true});
-        this.userService.modifyList().subscribe(
-          (value) => {
-            if (value.state) {
-              setTimeout(() => {
-                this.globalService.eventSubject.next({display: false});
-                const carsSave = [...this.cars];
-                carsSave[this.cars.indexOf(this.selectedCars3[0])] = this.car1;
-                this.cars = carsSave;
-                if (this.cleanTimer) {
-                  clearTimeout(this.cleanTimer);
-                }
-                this.msgs = [];
-                this.msgs.push({severity: 'success', summary: '修改提醒', detail: value.msg});
-                this.cleanTimer = setTimeout(() => {
-                  this.msgs = [];
-                }, 3000);
-                this.selectedCars3 = undefined;
-                this.revampDialog = false;
-              }, 3000);
-            } else {
-              setTimeout(() => {
-                this.globalService.eventSubject.next({display: false});
-                if (this.cleanTimer) {
-                  clearTimeout(this.cleanTimer);
-                }
-                this.msgs = [];
-                this.msgs.push({severity: 'error', summary: '修改提醒', detail: '服务器处理失败'});
-                this.cleanTimer = setTimeout(() => {
-                  this.msgs = [];
-                }, 3000);
-              }, 3000);
-            }
-          },
-          (err) => {
-            setTimeout(() => {
-              this.globalService.eventSubject.next({display: false});
-              if (this.cleanTimer) {
-                clearTimeout(this.cleanTimer);
-              }
-              this.msgs = [];
-              this.msgs.push({severity: 'error', summary: '修改提醒', detail: '连接服务器失败'});
-              this.cleanTimer = setTimeout(() => {
-                this.msgs = [];
-              }, 3000);
-            }, 3000);
-          }
-        );
-      },
-      reject: () => {}
-    });
-  }
-  // 删除
-  public deleteFirm(): void {
-    if (this.selectedCars3 === undefined || this.selectedCars3.length === 0) {
-      if (this.cleanTimer) {
-        clearTimeout(this.cleanTimer);
-      }
-      this.msgs = [];
-      this.msgs.push({severity: 'error', summary: '操作错误', detail: '请选择需要删除的项'});
-      this.cleanTimer = setTimeout(() => {
-        this.msgs = [];
-      }, 3000);
-    } else {
-      this.confirmationService.confirm({
-        message: `确定要删除这${this.selectedCars3.length}项吗？`,
-        header: '删除提醒',
-        icon: 'pi pi-exclamation-triangle',
-        accept: () => {
-          this.globalService.eventSubject.next({display: true});
-          this.userService.deleteList().subscribe(
-            (value) => {
-              if (value.state) {
-                setTimeout(() => {
-                  this.globalService.eventSubject.next({display: false});
-                  this.selectedCars3.map((val, inx) => {
-                    const index = this.cars.indexOf(val);
-                    this.cars = this.cars.filter((val1, i) => i !== index);
-                  });
-                  if (this.cleanTimer) {
-                    clearTimeout(this.cleanTimer);
-                  }
-                  this.msgs = [];
-                  this.selectedCars3 = undefined;
-                  this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.msg});
-                  this.cleanTimer = setTimeout(() => {
-                    this.msgs = [];
-                  }, 3000);
-                }, 3000);
-              } else {
-                setTimeout(() => {
-                  this.globalService.eventSubject.next({display: false});
-                  if (this.cleanTimer) {
-                    clearTimeout(this.cleanTimer);
-                  }
-                  this.msgs = [];
-                  this.msgs.push({severity: 'error', summary: '删除提醒', detail: '服务器处理失败'});
-                  this.cleanTimer = setTimeout(() => {
-                    this.msgs = [];
-                  }, 3000);
-                }, 3000);
-              }
-            },
-            (err) => {
-              setTimeout(() => {
-                this.globalService.eventSubject.next({display: false});
-                if (this.cleanTimer) {
-                  clearTimeout(this.cleanTimer);
-                }
-                this.msgs = [];
-                this.msgs.push({severity: 'error', summary: '删除提醒', detail: '连接服务器失败'});
-                this.cleanTimer = setTimeout(() => {
-                  this.msgs = [];
-                }, 3000);
-              });
-            }
-          );
-        },
-        reject: () => {}
-      });
-    }
-  }
-  // 搜索
-  public searchKeydown(e): void {
-    if (e.keyCode === 13) {
-      this.searchClick();
-    }
-  }
-  public searchClick(): void {
-    this.globalService.eventSubject.next({display: true});
-    this.userService.searchList({'name': '文君', 'age': '18'}).subscribe(
+  // 选择公司
+  public companyChange(e): void {
+    this.addUser.organizationName = e.value.name;
+    this.addUser.organizationId = e.value.id;
+    this.userService.searchCompanyIdDepList(e.value.id).subscribe(
       (value) => {
-        console.log(value);
-        /*setTimeout(() => {
-          this.globalService.eventSubject.next({display: false});
-          if (value.state) {
-            if (this.cleanTimer) {
-              clearTimeout(this.cleanTimer);
-            }
-            this.msgs = [];
-            this.msgs.push({severity: 'success', summary: '搜索提醒', detail: '搜索成功'});
-            this.cleanTimer = setTimeout(() => {
-              this.msgs = [];
-            }, 3000);
-            this.cars = value.data;
-          } else {
-            if (this.cleanTimer) {
-              clearTimeout(this.cleanTimer);
-            }
-            this.msgs = [];
-            this.msgs.push({severity: 'error', summary: '搜索提醒', detail: '无数据'});
-            this.cleanTimer = setTimeout(() => {
-              this.msgs = [];
-            }, 3000);
-          }
-        }, 3000);*/
-      },
-      (error) => {
-        console.log(error);
-        setTimeout(() => {
-          this.globalService.eventSubject.next({display: false});
-          if (this.cleanTimer) {
-            clearTimeout(this.cleanTimer);
-          }
-          this.msgs = [];
-          this.msgs.push({severity: 'error', summary: '查询失败', detail: '连接服务器失败'});
-          this.cleanTimer = setTimeout(() => {
-            this.msgs = [];
-          }, 3000);
-        }, 3000);
+        console.log(value.data);
+        this.addOrgSelect = this.initializeSelectOrg(value.data);
       }
     );
   }
-  // 查看详情
-  public checkClick(): void {
-    if (this.selectedCars3 === undefined || this.selectedCars3.length === 0) {
-      if (this.cleanTimer) {
-        clearTimeout(this.cleanTimer);
-      }
-      this.msgs = [];
-      this.msgs.push({severity: 'error', summary: '操作错误', detail: '请选择需要查看的项'});
-      this.cleanTimer = setTimeout(() => {
-        this.msgs = [];
-      }, 3000);
-      this.revampDialog = false;
-    } else if (this.selectedCars3.length > 1) {
-      if (this.cleanTimer) {
-        clearTimeout(this.cleanTimer);
-      }
-      this.cleanTimer = setTimeout(() => {
-        this.msgs = [];
-      }, 3000);
-      this.msgs.push({severity: 'error', summary: '操作错误', detail: '查看详情只能选择一项'});
-      this.revampDialog = false;
-    } else if (this.selectedCars3.length === 1) {
-      this.detailsDialog = true;
+  // 选择部门
+  public orgsChange(e): void {
+    this.addUser.deptId = e.value.id;
+    this.addUser.deptName = e.value.name;
+  }
+  // 数据格式化
+  public initializeSelectCompany(data): any {
+    const oneChild = [];
+    for (let i = 0; i < data.length; i++) {
+      const childnode =  new SelectItem();
+      childnode.name = data[i].name;
+      childnode.id = data[i].id;
+      oneChild.push(childnode);
     }
+    return oneChild;
+  }
+  public initializeSelectOrg(data): any {
+    const oneChild = [];
+    for (let i = 0; i < data.length; i++) {
+      const childnode =  new SelectItem();
+      childnode.name = data[i].deptName;
+      childnode.id = data[i].id;
+      childnode.pid = data[i].pid;
+      childnode.pids = data[i].pids;
+      oneChild.push(childnode);
+    }
+    return oneChild;
   }
 }

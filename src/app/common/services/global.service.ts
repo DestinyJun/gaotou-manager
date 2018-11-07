@@ -4,6 +4,7 @@ import {Subject} from 'rxjs/Subject';
 @Injectable()
 export class GlobalService {
   public eventSubject: Subject<any> = new Subject<any>(); // 控制全局加载动画
+  public urls = `http://120.78.137.182:8888/highway-management`;
   // sessionStorage临时存储
   public sessionStorage: any;
   constructor() {

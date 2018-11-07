@@ -14,11 +14,13 @@ import {
   ProgressSpinnerModule
 } from 'primeng/primeng';
 import { VideoGroupService } from '../../common/services/video-group.service';
+import {SharedModule} from '../../common/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     VideoGroupRoutersModule,
+    SharedModule,
     TableModule,
     FormsModule,
     ReactiveFormsModule,

@@ -16,16 +16,16 @@ export class OrgList {
 }
 
 export class AddOrg {
-  deptCategory?: boolean; // 是不是服务区
   organizationName?: string; // 所属公司
   organizationId?: number; // 所属公司得id
+  pid?: number; // 上级部门
+  pids?: string; // 上级部门
   deptCode?: string; // 部门编号
   deptName?: string; // 部门名称
-  description?: string;
+  deptCategory?: any; // 是不是服务区
   fax?: string; // 部门传真
-  pid?: number;
-  pids?: string;
   telNumber?: string; // 部门电话
+  description?: string;
 }
 
 export class AddTreeItem {

@@ -5,6 +5,7 @@ import {ConfirmationService, Message, MessageService} from 'primeng/api';
 import {GlobalService} from '../../common/services/global.service';
 import {AddCompany, Company} from '../../common/model/company.model';
 import {AddTreeArea, TreeNode} from '../../common/model/shared-model';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-company',
@@ -30,7 +31,8 @@ export class CompanyComponent implements OnInit {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private companyService: CompanyService,
-    private globalService: GlobalService
+    private globalService: GlobalService,
+    private datePipe: DatePipe,
 ) { }
 
   ngOnInit() {
@@ -110,6 +112,135 @@ export class CompanyComponent implements OnInit {
       },
       reject: () => {}
     });
+  }
+  public timeOnSelect(e): void {
+    this.addCompany.foundDate = this.datePipe.transform(e, 'yyyy-MM-dd');
+  }
+  // 删除
+  public deleteFirm(): void {
+    if (this.selectedcompanies === undefined || this.selectedcompanies.length === 0) {
+      if (this.cleanTimer) {
+        clearTimeout(this.cleanTimer);
+      }
+      this.msgs = [];
+      this.msgs.push({severity: 'error', summary: '操作错误', detail: '请选择需要删除的项'});
+      this.cleanTimer = setTimeout(() => {
+        this.msgs = [];
+      }, 3000);
+    } else {
+      this.confirmationService.confirm({
+        message: `确定要删除这${this.selectedcompanies.length}项吗？`,
+        header: '删除提醒',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.globalService.eventSubject.next({display: true});
+          if (this.selectedcompanies.length === 1) {
+            this.companyService.deleteItem(this.selectedcompanies[0].id).subscribe(
+              (value) => {
+                if (value.status === '200') {
+                  setTimeout(() => {
+                    this.globalService.eventSubject.next({display: false});
+                   /* this.selectedcompanies.map((val, inx) => {
+                      const index = this.cashs.indexOf(val);
+                      this.cashs = this.cashs.filter((val1, i) => i !== index);
+                    });*/
+                    if (this.cleanTimer) {
+                      clearTimeout(this.cleanTimer);
+                    }
+                    this.msgs = [];
+                    this.selectedcompanies = undefined;
+                    this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.message});
+                    this.cleanTimer = setTimeout(() => {
+                      this.msgs = [];
+                    }, 3000);
+                    this.updateCompanyDate();
+                  }, 3000);
+                } else {
+                  setTimeout(() => {
+                    this.globalService.eventSubject.next({display: false});
+                    if (this.cleanTimer) {
+                      clearTimeout(this.cleanTimer);
+                    }
+                    this.msgs = [];
+                    this.msgs.push({severity: 'error', summary: '删除提醒', detail: '服务器处理失败'});
+                    this.cleanTimer = setTimeout(() => {
+                      this.msgs = [];
+                    }, 3000);
+                  }, 3000);
+                }
+              },
+              (err) => {
+                setTimeout(() => {
+                  this.globalService.eventSubject.next({display: false});
+                  if (this.cleanTimer) {
+                    clearTimeout(this.cleanTimer);
+                  }
+                  this.msgs = [];
+                  this.msgs.push({severity: 'error', summary: '删除提醒', detail: '连接服务器失败'});
+                  this.cleanTimer = setTimeout(() => {
+                    this.msgs = [];
+                  }, 3000);
+                });
+              }
+            );
+          } else {
+            const ids = [];
+            for (let i = 0; i < this.selectedcompanies.length; i ++) {
+              ids.push(this.selectedcompanies[i].id);
+            }
+            this.companyService.deleteList(ids).subscribe(
+              (value) => {
+                if (value.status === '200') {
+                  setTimeout(() => {
+                    this.globalService.eventSubject.next({display: false});
+                   /* this.selectedcompanies.map((val, inx) => {
+                      const index = this.cashs.indexOf(val);
+                      this.cashs = this.cashs.filter((val1, i) => i !== index);
+                    });*/
+                    if (this.cleanTimer) {
+                      clearTimeout(this.cleanTimer);
+                    }
+                    this.msgs = [];
+                    this.selectedcompanies = undefined;
+                    this.updateCompanyDate();
+                    this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.message});
+                    this.cleanTimer = setTimeout(() => {
+                      this.msgs = [];
+                    }, 3000);
+                  }, 3000);
+                } else {
+                  setTimeout(() => {
+                    this.globalService.eventSubject.next({display: false});
+                    if (this.cleanTimer) {
+                      clearTimeout(this.cleanTimer);
+                    }
+                    this.msgs = [];
+                    this.msgs.push({severity: 'error', summary: '删除提醒', detail: '服务器处理失败'});
+                    this.cleanTimer = setTimeout(() => {
+                      this.msgs = [];
+                    }, 3000);
+                  }, 3000);
+                }
+              },
+              (err) => {
+                setTimeout(() => {
+                  this.globalService.eventSubject.next({display: false});
+                  if (this.cleanTimer) {
+                    clearTimeout(this.cleanTimer);
+                  }
+                  this.msgs = [];
+                  this.msgs.push({severity: 'error', summary: '删除提醒', detail: '连接服务器失败'});
+                  this.cleanTimer = setTimeout(() => {
+                    this.msgs = [];
+                  }, 3000);
+                });
+              }
+            );
+          }
+        },
+        reject: () => {}
+      });
+    }
   }
   // 选择区域
   public AreaTreeClick(): void {

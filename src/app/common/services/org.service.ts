@@ -29,4 +29,12 @@ export class OrgService {
     return this.http.post(
       `http://120.78.137.182:8808/highway-management/department/queryByPaging/${num.page}/${num.nums}`, {});
   }
+  // 查询所有公司
+  public searchCompanyList(num): Observable<any> {
+    return this.http.post(`http://120.78.137.182:8808/highway-management/organization/queryByPaging/${num.page}/${num.nums}`, {});
+  }
+  // 根据公司id查询部门
+  public searchCompanyIdDepList(id): Observable<any> {
+    return this.http.get(`http://120.78.137.182:8808/highway-management/department/queryTreeByOrganizationId/${id}`);
+  }
 }

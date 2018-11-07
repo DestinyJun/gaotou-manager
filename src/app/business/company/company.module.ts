@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import { CompanyService } from '../../common/services/company.service';
 import { CompanyComponent } from './company.component';
 import {CompanyRoutersModule} from './company.routers.module';
 import {SharedModule} from '../../common/shared.module';
 import {
+  CalendarModule,
   ConfirmationService,
   ConfirmDialogModule,
   DialogModule,
@@ -32,9 +33,10 @@ import {TableModule} from 'primeng/table';
     MessagesModule,
     ScrollPanelModule,
     DropdownModule,
-    InputTextareaModule
+    InputTextareaModule,
+    CalendarModule
   ],
   declarations: [CompanyComponent],
-  providers: [CompanyService, MessageService, ConfirmationService]
+  providers: [CompanyService, MessageService, ConfirmationService, DatePipe]
 })
 export class CompanyModule { }
