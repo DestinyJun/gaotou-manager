@@ -39,15 +39,46 @@ export class AddTreeArea {
   droppable?: boolean;
 }
 export class SelectItem {
-  label?: string;
-  value: any;
+  id?: number;
+  name?: string;
+  code: any;
   styleClass?: string;
   icon?: string;
   title?: string;
   disabled?: boolean;
-  name?: string;
-  id?: number;
-  pid?: any;
-  pids?: any;
+  administrativeAreaId?: number;
+  destination?: string;
+  flag?: string;
+  flagName?: string;
+  orientaionId?: number;
+  source?: string;
+  categoryCode?: string;
+}
+
+// 添加泛型
+// 省
+export class AddProvince {
+  administrativeAreaId?: number;
+  administrativeAreaName?: string;
+  level?: string;
+}
+// 市
+export class AddCity {
+  administrativeAreaId?: number;
+  administrativeAreaName?: string;
+  level?: string;
+}
+// 服务区
+export class AddServiceArea {
+  serviceAreaId?: number;
+  serviceName?: string;
+}
+// 上下行
+export class AddSaOrientation {
+  destination?: string;
+  flag?: string;
+  flagName?: string;
+  orientaionId?: number;
+  source?: string;
 }
 

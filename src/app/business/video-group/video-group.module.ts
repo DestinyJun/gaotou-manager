@@ -7,11 +7,11 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DialogModule} from 'primeng/dialog';
 import {
   ConfirmationService,
-  ConfirmDialogModule,
+  ConfirmDialogModule, DropdownModule,
   MessageModule,
   MessageService,
   MessagesModule,
-  ProgressSpinnerModule
+  ProgressSpinnerModule, RadioButtonModule, ScrollPanelModule, TreeModule, TreeTableModule
 } from 'primeng/primeng';
 import { VideoGroupService } from '../../common/services/video-group.service';
 import {SharedModule} from '../../common/shared.module';
@@ -21,17 +21,21 @@ import {SharedModule} from '../../common/shared.module';
     CommonModule,
     VideoGroupRoutersModule,
     SharedModule,
-    TableModule,
     FormsModule,
     ReactiveFormsModule,
-    DialogModule,
-    MessagesModule,
-    MessageModule,
+    TreeTableModule,
     ConfirmDialogModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    TreeModule,
+    TableModule,
+    DialogModule,
+    MessageModule,
+    MessagesModule,
+    ScrollPanelModule,
+    DropdownModule,
+    RadioButtonModule
   ],
   declarations: [VideoGroupComponent],
   providers: [VideoGroupService, MessageService, ConfirmationService]
-  
 })
 export class VideoGroupModule { }

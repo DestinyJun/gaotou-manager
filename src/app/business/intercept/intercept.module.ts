@@ -1,18 +1,19 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import { InterceptComponent } from './intercept.component';
 import {InterceptRoutersModule} from './intercept.routers.module';
 import {SharedModule} from '../../common/shared.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TableModule} from 'primeng/table';
 import {
+  CalendarModule,
   CheckboxModule,
   ConfirmationService,
   ConfirmDialogModule,
-  DialogModule,
+  DialogModule, DropdownModule,
   MessageModule,
   MessageService,
-  MessagesModule, ProgressSpinnerModule
+  MessagesModule, ProgressSpinnerModule, RadioButtonModule, ScrollPanelModule, TreeModule, TreeTableModule
 } from 'primeng/primeng';
 import { InterceptService } from '../../common/services/intercept.service';
 
@@ -23,19 +24,20 @@ import { InterceptService } from '../../common/services/intercept.service';
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
-    TableModule,
-    CheckboxModule,
-    DialogModule,
-    TableModule,
-    FormsModule,
-    ReactiveFormsModule,
-    DialogModule,
-    MessagesModule,
-    MessageModule,
+    TreeTableModule,
     ConfirmDialogModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    TreeModule,
+    TableModule,
+    DialogModule,
+    MessageModule,
+    MessagesModule,
+    ScrollPanelModule,
+    DropdownModule,
+    RadioButtonModule,
+    CalendarModule
   ],
   declarations: [InterceptComponent],
-  providers: [InterceptService, ConfirmationService, MessageService]
+  providers: [InterceptService, ConfirmationService, MessageService, DatePipe]
 })
 export class InterceptModule { }

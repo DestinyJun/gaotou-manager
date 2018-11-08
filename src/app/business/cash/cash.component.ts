@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {CashService} from '../../common/services/cash.service';
 import {GlobalService} from '../../common/services/global.service';
 import {ConfirmationService, Message, MessageService} from 'primeng/api';
-import {AddCash, Cash, SelectItem, TreeNode} from '../../common/model/cash-model';
-import {AddTreeArea} from '../../common/model/area-model';
+import {AddCash, Cash, TreeNode} from '../../common/model/cash-model';
+import {AddTreeArea, SelectItem} from '../../common/model/shared-model';
 
 @Component({
   selector: 'app-cash',

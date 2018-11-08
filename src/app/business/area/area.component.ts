@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { AreaService } from '../../common/services/area.service';
 import {ConfirmationService, Message, MessageService} from 'primeng/api';
 import {GlobalService} from '../../common/services/global.service';
-import {AddTreeArea, AddTreeItem, AreaList} from '../../common/model/area-model';
+import {AreaList} from '../../common/model/area-model';
 import {DatePipe} from '@angular/common';
+import {AddTreeArea} from '../../common/model/shared-model';
+import {AddTreeItem} from '../../common/model/org-model';
 @Component({
   selector: 'app-area',
   templateUrl: './area.component.html',
@@ -264,6 +266,7 @@ export class AreaComponent implements OnInit {
   }
   public treeOnNodeSelect(event) {
     this.areaDialog = false;
+    this.addAreaTreeSelect = [];
     this.addAreaTreeSelect.push(event.node);
     this.addAreaItem = this.addInitializeTree1(this.addAreaTreeSelect)[0];
   }

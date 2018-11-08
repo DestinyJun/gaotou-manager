@@ -1,18 +1,19 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import { StoreComponent } from './store.component';
 import {StoreRoutersModule} from './store.routers.module';
 import {SharedModule} from '../../common/shared.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TableModule} from 'primeng/table';
 import {
+  CalendarModule,
   CheckboxModule, ConfirmationService,
   ConfirmDialogModule,
-  DialogModule,
+  DialogModule, DropdownModule,
   MessageModule,
   MessageService,
   MessagesModule,
-  ProgressSpinnerModule
+  ProgressSpinnerModule, RadioButtonModule, ScrollPanelModule, TreeModule, TreeTableModule
 } from 'primeng/primeng';
 import { StoreService } from '../../common/services/store.service';
 
@@ -23,19 +24,20 @@ import { StoreService } from '../../common/services/store.service';
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
-    TableModule,
-    CheckboxModule,
-    DialogModule,
-    TableModule,
-    FormsModule,
-    ReactiveFormsModule,
-    DialogModule,
-    MessagesModule,
-    MessageModule,
+    TreeTableModule,
     ConfirmDialogModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    TreeModule,
+    TableModule,
+    DialogModule,
+    MessageModule,
+    MessagesModule,
+    ScrollPanelModule,
+    DropdownModule,
+    RadioButtonModule,
+    CalendarModule
   ],
   declarations: [StoreComponent],
-  providers: [StoreService, MessageService, ConfirmationService]
+  providers: [StoreService, MessageService, ConfirmationService, DatePipe]
 })
 export class StoreModule { }

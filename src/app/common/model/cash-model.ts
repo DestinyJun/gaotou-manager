@@ -60,7 +60,7 @@ export class HighSpeedDirection {
 }
 
 // 下拉菜单泛型
-export class SelectItem {
+/*export class SelectItem {
   id?: number;
   name?: string;
   code: any;
@@ -75,7 +75,7 @@ export class SelectItem {
   orientaionId?: number;
   source?: string;
   categoryCode?: string;
-}
+}*/
 // 区域树泛型
 export class TreeNode {
   id?: number;

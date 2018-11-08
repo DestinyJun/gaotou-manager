@@ -9,9 +9,9 @@ import {
   CheckboxModule,
   ConfirmationService,
   ConfirmDialogModule,
-  DialogModule, MessageModule,
+  DialogModule, DropdownModule, MessageModule,
   MessageService, MessagesModule,
-  ProgressSpinnerModule
+  ProgressSpinnerModule, RadioButtonModule, ScrollPanelModule, TreeModule, TreeTableModule
 } from 'primeng/primeng';
 import { VideomService } from '../../common/services/videom.service';
 
@@ -22,17 +22,17 @@ import { VideomService } from '../../common/services/videom.service';
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
-    TableModule,
-    CheckboxModule,
-    DialogModule,
-    TableModule,
-    FormsModule,
-    ReactiveFormsModule,
-    DialogModule,
-    MessagesModule,
-    MessageModule,
+    TreeTableModule,
     ConfirmDialogModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    TreeModule,
+    TableModule,
+    DialogModule,
+    MessageModule,
+    MessagesModule,
+    ScrollPanelModule,
+    DropdownModule,
+    RadioButtonModule
   ],
   declarations: [VideomComponent],
   providers: [VideomService, MessageService, ConfirmationService]

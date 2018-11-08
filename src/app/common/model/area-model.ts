@@ -3,7 +3,7 @@ export class AreaList {
   children?: AreaList[];
 }
 
-export class AddTreeArea {
+/*export class AddTreeArea {
   id?: number;
   label?: string;
   areaCode?: string;
@@ -21,26 +21,26 @@ export class AddTreeArea {
   styleClass?: string;
   draggable?: boolean;
   droppable?: boolean;
-}
-export class AddTreeItem {
+}*/
+/*export class AddTreeItem {
   id?: number;
   areaName?: string;
   areaCode?: string;
   level?: string;
   enabled?: boolean;
   parentId?: number;
-  children?: AddTreeArea[];
+  children?: AddTreeItem[];
   pids?: string;
   cityType?: string;
   idt?: string;
   status?: boolean;
-  parent?: AddTreeArea;
+  parent?: AddTreeItem;
   icon?: any;
   expandedIcon?: any;
   collapsedIcon?: any;
   styleClass?: string;
   draggable?: boolean;
   droppable?: boolean;
-}
+}*/
 
 

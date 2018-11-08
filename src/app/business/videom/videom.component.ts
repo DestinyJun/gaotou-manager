@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import {Videom} from '../../common/model/videom-model';
+import {Component, OnInit } from '@angular/core';
 import {ConfirmationService, Message, MessageService} from 'primeng/api';
 import {GlobalService} from '../../common/services/global.service';
 import {VideomService} from '../../common/services/videom.service';
+import {AddVideo, Video} from '../../common/model/videom-model';
+import {AddTreeArea, SelectItem, TreeNode} from '../../common/model/shared-model';
 
 @Component({
   selector: 'app-videom',
@@ -10,18 +11,24 @@ import {VideomService} from '../../common/services/videom.service';
   styleUrls: ['./videom.component.css']
 })
 export class VideomComponent implements OnInit {
-  public addDialog: boolean; // 增加弹窗
-  public addCar: Videom = new Videom();
-  public revampDialog: boolean; // 修改弹窗
-  public detailsDialog: boolean; // 详情弹窗
-  public searchField: string;
-  public cars: Videom[]; // 整个table数据
+  // table显示相关
+  public videos: Video[]; // 整个table数据
   public cols: any[]; // 表头
-  public car1: any; // 接收选中的值
-  public selectedCars3: Videom[]; // 多选接受变量
-  public msgs: Message[] = []; // 消息弹窗
+  public video: any; // 接收选中的值
+  public selectedvideos: Video[]; // 多个选择收银设备
+  // 增加相关
+  public addDialog: boolean; // 增加弹窗显示控制
+  public addVideo: AddVideo = new AddVideo();
+  public areaDialog: boolean; // 区域树弹窗
+  public addAreaTrees: AddTreeArea[]; // 区域树结构
+  public addAreaTree: AddTreeArea = new AddTreeArea(); // 区域树选择
+  public addServicesAreas: SelectItem[]; // 服务区列表
+  public highsdData: SelectItem[]; // 上下行选择数据
+  public storeList: SelectItem[]; // 店铺列表
+  public videoGroupList: SelectItem[]; // 分组列表
+  // 其他提示弹窗相关
   public cleanTimer: any; // 清除时钟
-
+  public msgs: Message[] = []; // 消息弹窗
   constructor(
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
@@ -31,21 +38,26 @@ export class VideomComponent implements OnInit {
 
   ngOnInit() {
     this.cols = [
-      {field: 'vin', header: 'Vin'},
-      {field: 'year', header: 'Year'},
-      {field: 'brand', header: 'Brand'},
-      {field: 'color', header: 'Color'}
+      {field: 'id', header: '摄像头id'},
+      {field: 'cameraNumber', header: '摄像头编号'},
+      {field: 'groupcameraNameName', header: '摄像头名称'},
+      {field: 'showLocation', header: '监视窗位置'},
+      {field: 'idt', header: '添加时间'},
     ];
-    this.cars = [
-      {vin: 'dsad231ff', year: '2012', brand: 'VW', color: 'Orange'},
-      {vin: 'gwregre345', year: '2011', brand: 'Audi', color: 'Black'},
-      {vin: 'h354htr', year: '2005', brand: 'Renault', color: 'Gray'},
-      {vin: 'j6w54qgh', year: '2003', brand: 'BMW', color: 'Blue'},
-    ];
+    this.updateVideoDate();
+  }
+  public updateVideoDate(): void {
+    this.videomService.searchList({page: 1, nums: 100}).subscribe(
+      (value) => {
+        console.log(value.data.contents);
+        this.videos = value.data.contents;
+      }
+    );
   }
   // 选中后赋值
   public onRowSelect(event): void {
-    this.car1 = this.cloneCar(event.data);
+    console.log(event.data);
+    this.video = this.cloneCar(event.data);
   }
   // 遍历修改后的数据，并把它赋值给car1
   public cloneCar(c: any): any {
@@ -57,35 +69,34 @@ export class VideomComponent implements OnInit {
     }
     return car;
   }
-  // 增加、保存增加
-  public addClick(): void {
-    this.addDialog = true;
-  }
+  // 增加
   public addsSave(): void {
+    console.log(this.addVideo);
+     if (this.addVideo.inStore === '1') {
+     this.addVideo.inStore = true;
+   } else {
+     this.addVideo.inStore = false;
+   }
     this.confirmationService.confirm({
       message: `确定要增加吗？`,
       header: '增加提醒',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.globalService.eventSubject.next({display: true});
-        this.videomService.addList().subscribe(
+        this.videomService.addItem(this.addVideo).subscribe(
           (value) => {
-            if (value.state) {
-              setTimeout(() => {
-                this.globalService.eventSubject.next({display: false});
-                const carsSave = [...this.cars];
-                carsSave.push(this.addCar);
-                this.cars = carsSave;
-                if (this.cleanTimer) {
-                  clearTimeout(this.cleanTimer);
-                }
+            if (value.status === '200') {
+              this.globalService.eventSubject.next({display: false});
+              if (this.cleanTimer) {
+                clearTimeout(this.cleanTimer);
+              }
+              this.msgs = [];
+              this.msgs.push({severity: 'success', summary: '增加提醒', detail: value.message});
+              this.updateCashDate();
+              this.cleanTimer = setTimeout(() => {
                 this.msgs = [];
-                this.msgs.push({severity: 'success', summary: '增加提醒', detail: value.msg});
-                this.cleanTimer = setTimeout(() => {
-                  this.msgs = [];
-                }, 3000);
-                this.addDialog = false;
               }, 3000);
+              this.addDialog = false;
             } else {
               setTimeout(() => {
                 this.globalService.eventSubject.next({display: false});
@@ -101,6 +112,7 @@ export class VideomComponent implements OnInit {
             }
           },
           (err) => {
+            console.log(err);
             setTimeout(() => {
               this.globalService.eventSubject.next({display: false});
               if (this.cleanTimer) {
@@ -118,93 +130,9 @@ export class VideomComponent implements OnInit {
       reject: () => {}
     });
   }
-  // 修改、保存修改
-  public revampClick() {
-    if (this.selectedCars3 === undefined || this.selectedCars3.length === 0) {
-      if (this.cleanTimer) {
-        clearTimeout(this.cleanTimer);
-      }
-      this.msgs = [];
-      this.msgs.push({severity: 'error', summary: '操作错误', detail: '请选择需要修改的项'});
-      this.cleanTimer = setTimeout(() => {
-        this.msgs = [];
-      }, 3000);
-      this.revampDialog = false;
-    } else if (this.selectedCars3.length > 1) {
-      if (this.cleanTimer) {
-        clearTimeout(this.cleanTimer);
-      }
-      this.cleanTimer = setTimeout(() => {
-        this.msgs = [];
-      }, 3000);
-      this.msgs.push({severity: 'error', summary: '操作错误', detail: '修改只能选择一项'});
-      this.revampDialog = false;
-    } else if (this.selectedCars3.length === 1) {
-      this.revampDialog = true;
-    }
-
-  }
-  public revampSave(): void {
-    this.confirmationService.confirm({
-      message: `确定要修改吗？`,
-      header: '修改提醒',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.globalService.eventSubject.next({display: true});
-        this.videomService.modifyList().subscribe(
-          (value) => {
-            if (value.state) {
-              setTimeout(() => {
-                this.globalService.eventSubject.next({display: false});
-                const carsSave = [...this.cars];
-                carsSave[this.cars.indexOf(this.selectedCars3[0])] = this.car1;
-                this.cars = carsSave;
-                if (this.cleanTimer) {
-                  clearTimeout(this.cleanTimer);
-                }
-                this.msgs = [];
-                this.msgs.push({severity: 'success', summary: '修改提醒', detail: value.msg});
-                this.cleanTimer = setTimeout(() => {
-                  this.msgs = [];
-                }, 3000);
-                this.selectedCars3 = undefined;
-                this.revampDialog = false;
-              }, 3000);
-            } else {
-              setTimeout(() => {
-                this.globalService.eventSubject.next({display: false});
-                if (this.cleanTimer) {
-                  clearTimeout(this.cleanTimer);
-                }
-                this.msgs = [];
-                this.msgs.push({severity: 'error', summary: '修改提醒', detail: '服务器处理失败'});
-                this.cleanTimer = setTimeout(() => {
-                  this.msgs = [];
-                }, 3000);
-              }, 3000);
-            }
-          },
-          (err) => {
-            setTimeout(() => {
-              this.globalService.eventSubject.next({display: false});
-              if (this.cleanTimer) {
-                clearTimeout(this.cleanTimer);
-              }
-              this.msgs = [];
-              this.msgs.push({severity: 'error', summary: '修改提醒', detail: '连接服务器失败'});
-              this.cleanTimer = setTimeout(() => {
-                this.msgs = [];
-              }, 3000);
-            }, 3000);
-          }
-        );
-      },
-      reject: () => {}
-    });
-  }
   // 删除
   public deleteFirm(): void {
-    if (this.selectedCars3 === undefined || this.selectedCars3.length === 0) {
+    if (this.selectedvideos === undefined || this.selectedvideos.length === 0) {
       if (this.cleanTimer) {
         clearTimeout(this.cleanTimer);
       }
@@ -215,137 +143,243 @@ export class VideomComponent implements OnInit {
       }, 3000);
     } else {
       this.confirmationService.confirm({
-        message: `确定要删除这${this.selectedCars3.length}项吗？`,
+        message: `确定要删除这${this.selectedvideos.length}项吗？`,
         header: '删除提醒',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
           this.globalService.eventSubject.next({display: true});
-          this.videomService.deleteList().subscribe(
-            (value) => {
-              if (value.state) {
-                setTimeout(() => {
-                  this.globalService.eventSubject.next({display: false});
-                  this.selectedCars3.map((val, inx) => {
-                    const index = this.cars.indexOf(val);
-                    this.cars = this.cars.filter((val1, i) => i !== index);
-                  });
-                  if (this.cleanTimer) {
-                    clearTimeout(this.cleanTimer);
-                  }
-                  this.msgs = [];
-                  this.selectedCars3 = undefined;
-                  this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.msg});
-                  this.cleanTimer = setTimeout(() => {
+          if (this.selectedvideos.length === 1) {
+            this.videomService.deleteItem(this.selectedvideos[0].id).subscribe(
+              (value) => {
+                if (value.status === '200') {
+                  setTimeout(() => {
+                    this.globalService.eventSubject.next({display: false});
+                    if (this.cleanTimer) {
+                      clearTimeout(this.cleanTimer);
+                    }
                     this.msgs = [];
+                    this.selectedvideos = undefined;
+                    this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.message});
+                    this.cleanTimer = setTimeout(() => {
+                      this.msgs = [];
+                    }, 3000);
+                    this.updateCashDate();
                   }, 3000);
-                }, 3000);
-              } else {
-                setTimeout(() => {
-                  this.globalService.eventSubject.next({display: false});
-                  if (this.cleanTimer) {
-                    clearTimeout(this.cleanTimer);
-                  }
-                  this.msgs = [];
-                  this.msgs.push({severity: 'error', summary: '删除提醒', detail: '服务器处理失败'});
-                  this.cleanTimer = setTimeout(() => {
+                } else {
+                  setTimeout(() => {
+                    this.globalService.eventSubject.next({display: false});
+                    if (this.cleanTimer) {
+                      clearTimeout(this.cleanTimer);
+                    }
                     this.msgs = [];
+                    this.msgs.push({severity: 'error', summary: '删除提醒', detail: '服务器处理失败'});
+                    this.cleanTimer = setTimeout(() => {
+                      this.msgs = [];
+                    }, 3000);
                   }, 3000);
-                }, 3000);
-              }
-            },
-            (err) => {
-              setTimeout(() => {
-                this.globalService.eventSubject.next({display: false});
-                if (this.cleanTimer) {
-                  clearTimeout(this.cleanTimer);
                 }
-                this.msgs = [];
-                this.msgs.push({severity: 'error', summary: '删除提醒', detail: '连接服务器失败'});
-                this.cleanTimer = setTimeout(() => {
+              },
+              (err) => {
+                setTimeout(() => {
+                  this.globalService.eventSubject.next({display: false});
+                  if (this.cleanTimer) {
+                    clearTimeout(this.cleanTimer);
+                  }
                   this.msgs = [];
-                }, 3000);
-              });
+                  this.msgs.push({severity: 'error', summary: '删除提醒', detail: '连接服务器失败'});
+                  this.cleanTimer = setTimeout(() => {
+                    this.msgs = [];
+                  }, 3000);
+                });
+              }
+            );
+          } else {
+            const ids = [];
+            for (let i = 0; i < this.selectedvideos.length; i ++) {
+              ids.push(this.selectedvideos[i].id);
             }
-          );
+            this.videomService.deleteList(ids).subscribe(
+              (value) => {
+                if (value.status === '200') {
+                  setTimeout(() => {
+                    this.globalService.eventSubject.next({display: false});
+                    if (this.cleanTimer) {
+                      clearTimeout(this.cleanTimer);
+                    }
+                    this.msgs = [];
+                    this.selectedvideos = undefined;
+                    this.updateCashDate();
+                    this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.message});
+                    this.cleanTimer = setTimeout(() => {
+                      this.msgs = [];
+                    }, 3000);
+                  }, 3000);
+                } else {
+                  setTimeout(() => {
+                    this.globalService.eventSubject.next({display: false});
+                    if (this.cleanTimer) {
+                      clearTimeout(this.cleanTimer);
+                    }
+                    this.msgs = [];
+                    this.msgs.push({severity: 'error', summary: '删除提醒', detail: '服务器处理失败'});
+                    this.cleanTimer = setTimeout(() => {
+                      this.msgs = [];
+                    }, 3000);
+                  }, 3000);
+                }
+              },
+              (err) => {
+                setTimeout(() => {
+                  this.globalService.eventSubject.next({display: false});
+                  if (this.cleanTimer) {
+                    clearTimeout(this.cleanTimer);
+                  }
+                  this.msgs = [];
+                  this.msgs.push({severity: 'error', summary: '删除提醒', detail: '连接服务器失败'});
+                  this.cleanTimer = setTimeout(() => {
+                    this.msgs = [];
+                  }, 3000);
+                });
+              }
+            );
+          }
         },
         reject: () => {}
       });
     }
   }
-  // 搜索
-  public searchKeydown(e): void {
-    if (e.keyCode === 13) {
-      this.searchClick();
-    }
-  }
-  public searchClick(): void {
-    this.globalService.eventSubject.next({display: true});
-    this.videomService.searchList({'name': '文君', 'age': '18'}).subscribe(
-      (value) => {
-        console.log(value);
-        /*setTimeout(() => {
-          this.globalService.eventSubject.next({display: false});
-          if (value.state) {
-            if (this.cleanTimer) {
-              clearTimeout(this.cleanTimer);
-            }
-            this.msgs = [];
-            this.msgs.push({severity: 'success', summary: '搜索提醒', detail: '搜索成功'});
-            this.cleanTimer = setTimeout(() => {
-              this.msgs = [];
-            }, 3000);
-            this.cars = value.data;
-          } else {
-            if (this.cleanTimer) {
-              clearTimeout(this.cleanTimer);
-            }
-            this.msgs = [];
-            this.msgs.push({severity: 'error', summary: '搜索提醒', detail: '无数据'});
-            this.cleanTimer = setTimeout(() => {
-              this.msgs = [];
-            }, 3000);
-          }
-        }, 3000);*/
-      },
-      (error) => {
-        console.log(error);
-        setTimeout(() => {
-          this.globalService.eventSubject.next({display: false});
-          if (this.cleanTimer) {
-            clearTimeout(this.cleanTimer);
-          }
-          this.msgs = [];
-          this.msgs.push({severity: 'error', summary: '查询失败', detail: '连接服务器失败'});
-          this.cleanTimer = setTimeout(() => {
-            this.msgs = [];
-          }, 3000);
-        }, 3000);
+  // 选择区域
+  public AreaTreeClick(): void {
+    this.areaDialog = true;
+    this.videomService.searchAreaList({page: 1, nums: 100}).subscribe(
+      (val) => {
+        this.addAreaTrees = this.initializeTree(val.data.contents);
       }
     );
   }
-  // 查看详情
-  public checkClick(): void {
-    if (this.selectedCars3 === undefined || this.selectedCars3.length === 0) {
-      if (this.cleanTimer) {
-        clearTimeout(this.cleanTimer);
-      }
+  public treeOnNodeSelect(event) {
+    // this.areaDialog = false;
+    // this.addAreaTreeSelect.push(event.node);
+    // console.log(this.addAreaTree);
+  }
+  public treeSelectAreaClick(): void {
+    const a = parseFloat(this.addAreaTree.level);
+    if (a >= 2 ) {
+      this.areaDialog = false;
+      this.videomService.searchServiceAreaList(this.addAreaTree.id).subscribe(
+        value => {
+          this.addServicesAreas = this.initializeServiceArea(value.data);
+        }
+      );
+    } else {
       this.msgs = [];
-      this.msgs.push({severity: 'error', summary: '操作错误', detail: '请选择需要查看的项'});
+      this.msgs.push({severity: 'error', summary: '操作错误', detail: '请选择市'});
       this.cleanTimer = setTimeout(() => {
         this.msgs = [];
       }, 3000);
-      this.revampDialog = false;
-    } else if (this.selectedCars3.length > 1) {
-      if (this.cleanTimer) {
-        clearTimeout(this.cleanTimer);
-      }
-      this.cleanTimer = setTimeout(() => {
-        this.msgs = [];
-      }, 3000);
-      this.msgs.push({severity: 'error', summary: '操作错误', detail: '查看详情只能选择一项'});
-      this.revampDialog = false;
-    } else if (this.selectedCars3.length === 1) {
-      this.detailsDialog = true;
     }
+  }
+  // 选择服务区
+  public serviceChange(e): void {
+    this.addVideo.serviceAreaId = e.value.id;
+    this.videomService.searchHighDirection(e.value.id).subscribe(
+      (value) => {
+        this.highsdData = this.initializeServiceAreaDirec(value.data);
+      }
+    );
+  }
+  // 选择上下行
+  public directionChange(e): void {
+    this.addVideo.saOrientationId = e.value.id;
+    console.log(e.value.id);
+    this.videomService.searchStoreItem(e.value.orientaionId).subscribe(
+      (value) => {
+        this.storeList = this.initializeStore(value.data);
+      }
+    );
+    this.videomService.searchVideoGroupList(e.value.orientaionId).subscribe(
+      (value) => {
+        this.videoGroupList = this.initializeVideoGroup(value.data);
+      }
+    );
+  }
+  // 选择店铺
+  public storeChange(e): void {
+    this.addVideo.storeId = e.value.id;
+  }
+  // 选择视频分组
+  public videoGroupChange(e): void {
+    this.addVideo.groupId = e.value.id;
+  }
+  // 数据格式化
+  public initializeTree(data): any {
+    const oneChild = [];
+    for (let i = 0; i < data.length; i++) {
+      const childnode =  new TreeNode();
+      childnode.label = data[i].areaName;
+      childnode.id = data[i].id;
+      childnode.areaCode = data[i].areaCode;
+      childnode.parentId = data[i].parentId;
+      childnode.enabled = data[i].enabled;
+      childnode.cityType = data[i].cityType;
+      childnode.level = data[i].level;
+      if (childnode === null) {
+        childnode.children = [];
+      } else {
+        childnode.children = this.initializeTree(data[i].administrativeAreaTree);
+      }
+      oneChild.push(childnode);
+    }
+    return oneChild;
+  }
+  public initializeServiceArea(data): any {
+    const oneChild = [];
+    for (let i = 0; i < data.length; i++) {
+      const childnode =  new SelectItem();
+      childnode.name = data[i].name;
+      childnode.id = data[i].id;
+      childnode.administrativeAreaId = data[i].administrativeAreaId;
+      oneChild.push(childnode);
+    }
+    return oneChild;
+  }
+  public initializeServiceAreaDirec(data): any {
+    const oneChild = [];
+    if (data) {
+      for (let i = 0; i < data.length; i++) {
+        const childnode =  new SelectItem();
+        childnode.name = data[i].flagName + '：' + data[i].source + '—>' + data[i].destination;
+        childnode.code = data[i].flag;
+        childnode.destination = data[i].id;
+        childnode.id = data[i].id;
+        childnode.flag = data[i].flag;
+        childnode.flagName = data[i].flagName;
+        childnode.orientaionId = data[i].id;
+        childnode.source = data[i].source;
+        oneChild.push(childnode);
+      }
+    }
+    return oneChild;
+  }
+  public initializeStore(data): any {
+    const oneChild = [];
+    for (let i = 0; i < data.length; i++) {
+      const childnode =  new SelectItem();
+      childnode.name = data[i].storeName;
+      childnode.id = data[i].id;
+      childnode.categoryCode = data[i].categoryCode;
+      oneChild.push(childnode);
+    }
+    return oneChild;
+  }
+  public initializeVideoGroup(data): any {
+    const oneChild = [];
+    for (let i = 0; i < data.length; i++) {
+      const childnode =  new SelectItem();
+      childnode.name = data[i].groupName;
+      childnode.id = data[i].id;
+      oneChild.push(childnode);
+    }
+    return oneChild;
   }
 }
