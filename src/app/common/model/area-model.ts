@@ -22,7 +22,7 @@ export class AreaList {
   draggable?: boolean;
   droppable?: boolean;
 }*/
-/*export class AddTreeItem {
+export class AddTreeItem {
   id?: number;
   areaName?: string;
   areaCode?: string;
@@ -41,6 +41,6 @@ export class AreaList {
   styleClass?: string;
   draggable?: boolean;
   droppable?: boolean;
-}*/
+}
 
 

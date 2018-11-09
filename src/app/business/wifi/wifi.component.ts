@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {ConfirmationService, Message, MessageService} from 'primeng/api';
-import {VideomService} from '../../common/services/videom.service';
 import {GlobalService} from '../../common/services/global.service';
 import {AddWifi, Wifi} from '../../common/model/wifi-model';
 import {WifiService} from '../../common/services/wifi.service';

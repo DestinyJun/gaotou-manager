@@ -1,82 +1,102 @@
-import {Component, OnInit} from '@angular/core';
-import {AddUser, User} from '../../common/model/user-model';
-import {UserService} from '../../common/services/user.service';
+import { Component, OnInit } from '@angular/core';
 import {ConfirmationService, Message, MessageService} from 'primeng/api';
-import {GlobalService} from '../../common/services/global.service';
-import {SelectItem} from '../../common/model/shared-model';
-import {DatePipe} from '@angular/common';
+import {OrgService} from '../../../common/services/org.service';
+import {GlobalService} from '../../../common/services/global.service';
+import {AddDuty, Duty} from '../../../common/model/org-model';
+import {SelectItem} from '../../../common/model/shared-model';
 
 @Component({
-  selector: 'app-user',
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.css']
+  selector: 'app-org-duty',
+  templateUrl: './org-duty.component.html',
+  styleUrls: ['./org-duty.component.css']
 })
-export class UserComponent implements OnInit {
-  // table显示相关
-  public users: User[]; // 整个table数据
+export class OrgDutyComponent implements OnInit {
+// table显示相关
+  public duties: Duty[]; // 整个table数据
   public cols: any[]; // 表头
-  public cash: any; // 接收选中的值
-  public selectedUsers: User[]; // 多个选择
-  public sex = ['男', '女'];
+  public duty: any; // 接收选中的值
+  public selectedDuties: Duty[]; // 多个选择
   // 增加相关
   public addDialog: boolean; // 增加弹窗显示控制
-  public addUser: AddUser = new AddUser(); // 添加参数字段
+  public addDuty: AddDuty = new AddDuty(); // 添加参数字段
   public addCompanySelect: SelectItem[]; // 公司列表
   public addDepSelect: SelectItem[]; // 部门列表
-  public addDepTopDutySelect: SelectItem[]; // 职务
+  public addDepTopDutySelect: SelectItem[]; // 上级职务
   // 其他提示弹窗相关
   public cleanTimer: any; // 清除时钟
   public msgs: Message[] = []; // 消息弹窗
   constructor(
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private userService: UserService,
-    private globalService: GlobalService,
-    private datePipe: DatePipe,
-  ) {}
+    private orgService: OrgService,
+    private globalService: GlobalService
+  ) { }
 
   ngOnInit() {
     this.cols = [
-      {field: 'realName', header: '姓名'},
-      {field: 'telNumber', header: '电话'},
-      {field: 'gender', header: '性别'},
+      {field: 'id', header: '职务id'},
+      {field: 'dutyName', header: '职务名称'},
+      {field: 'level', header: '部门等级'},
+      {field: 'description', header: '部门描述'},
       {field: 'organizationName', header: '所属公司'},
-      {field: 'deptName', header: '所属部门'},
-      {field: 'dutyName', header: '职务'},
-      {field: 'idt', header: '添加时间'}
     ];
-  this.updateUserDate();
+    this.updateDutyDate();
   }
-  public updateUserDate(): void {
-    this.userService.searchList({page: 1, nums: 1000}).subscribe(
-      (value) => {
-        console.log(value);
-        this.users = value.data.contents;
-        this.users.map((val, index) => {
-          val.gender = this.sex[val.gender - 1];
-        });
+  public updateDutyDate(): void {
+   /* this.orgService.searchDepartList({page: 1, nums: 100}).subscribe(
+      (val) => {
+        this.orgs = val.data.contents;
       }
-    );
-    this.userService.searchCompanyList({page: 1, nums: 100}).subscribe(
+    );*/
+    this.orgService.searchCompanyList({page: 1, nums: 100}).subscribe(
       (val) => {
         this.addCompanySelect = this.initializeSelectCompany(val.data.contents);
       }
     );
+    this.orgService.searchDutyList({page: 1, nums: 100}).subscribe(
+      (val) => {
+        console.log(val);
+        this.duties = val.data.contents;
+      }
+    );
+  }
+  public cleanData(): void {
+    this.addDuty = {};
+    this.addCompanySelect = [];
+    this.addDepSelect = [];
+    this.addDepTopDutySelect = [];
+    console.log(this.addCompanySelect);
   }
   // 选中后赋值
   public onRowSelect(event): void {
-    // console.log(event);
+    console.log(event.data);
+    this.duty = this.cloneCar(event.data);
+  }
+  // 遍历修改后的数据，并把它赋值给car1
+  public cloneCar(c: any): any {
+    const car = {};
+    for (const prop in c) {
+      if (c) {
+        car[prop] = c[prop];
+      }
+    }
+    return car;
   }
   // 增加
   public addsSave(): void {
-    console.log(this.addUser);
+    console.log(this.addDuty);
+    if (this.addDuty.boss === '1') {
+      this.addDuty.boss = false;
+    } else {
+      this.addDuty.boss = true;
+    }
     this.confirmationService.confirm({
       message: `确定要增加吗？`,
       header: '增加提醒',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.globalService.eventSubject.next({display: true});
-        this.userService.addItem(this.addUser).subscribe(
+        this.orgService.addDutyItem(this.addDuty).subscribe(
           (value) => {
             if (value.status === '200') {
               this.globalService.eventSubject.next({display: false});
@@ -85,11 +105,12 @@ export class UserComponent implements OnInit {
               }
               this.msgs = [];
               this.msgs.push({severity: 'success', summary: '增加提醒', detail: value.message});
-              this.updateUserDate();
+              this.updateDutyDate();
               this.cleanTimer = setTimeout(() => {
                 this.msgs = [];
               }, 3000);
               this.addDialog = false;
+              this.cleanData();
             } else {
               setTimeout(() => {
                 this.globalService.eventSubject.next({display: false});
@@ -97,6 +118,7 @@ export class UserComponent implements OnInit {
                   clearTimeout(this.cleanTimer);
                 }
                 this.msgs = [];
+                this.cleanData();
                 this.msgs.push({severity: 'error', summary: '增加提醒', detail: '服务器处理失败'});
                 this.cleanTimer = setTimeout(() => {
                   this.msgs = [];
@@ -123,12 +145,9 @@ export class UserComponent implements OnInit {
       reject: () => {}
     });
   }
-  public timeOnSelect(e): void {
-    this.addUser.birthday = this.datePipe.transform(e, 'yyyy-MM-dd');
-  }
   // 删除
   public deleteFirm(): void {
-    if (this.selectedUsers === undefined || this.selectedUsers.length === 0) {
+    if (this.selectedDuties === undefined || this.selectedDuties.length === 0) {
       if (this.cleanTimer) {
         clearTimeout(this.cleanTimer);
       }
@@ -139,13 +158,13 @@ export class UserComponent implements OnInit {
       }, 3000);
     } else {
       this.confirmationService.confirm({
-        message: `确定要删除这${this.selectedUsers.length}项吗？`,
+        message: `确定要删除这${this.selectedDuties.length}项吗？`,
         header: '删除提醒',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
           this.globalService.eventSubject.next({display: true});
-          if (this.selectedUsers.length === 1) {
-            this.userService.deleteItem(this.selectedUsers[0].id).subscribe(
+          if (this.selectedDuties.length === 1) {
+            this.orgService.deleteDutyItem(this.selectedDuties[0].id).subscribe(
               (value) => {
                 if (value.status === '200') {
                   this.globalService.eventSubject.next({display: false});
@@ -157,12 +176,12 @@ export class UserComponent implements OnInit {
                     clearTimeout(this.cleanTimer);
                   }
                   this.msgs = [];
-                  this.selectedUsers = undefined;
+                  this.selectedDuties = undefined;
                   this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.message});
                   this.cleanTimer = setTimeout(() => {
                     this.msgs = [];
                   }, 3000);
-                  this.updateUserDate();
+                  this.updateDutyDate();
                 } else {
                   setTimeout(() => {
                     this.globalService.eventSubject.next({display: false});
@@ -193,10 +212,10 @@ export class UserComponent implements OnInit {
             );
           } else {
             const ids = [];
-            for (let i = 0; i < this.selectedUsers.length; i ++) {
-              ids.push(this.selectedUsers[i].id);
+            for (let i = 0; i < this.selectedDuties.length; i ++) {
+              ids.push(this.selectedDuties[i].id);
             }
-            this.userService.deleteList(ids).subscribe(
+            this.orgService.deleteDutyItem(ids).subscribe(
               (value) => {
                 if (value.status === '200') {
                   setTimeout(() => {
@@ -209,8 +228,8 @@ export class UserComponent implements OnInit {
                       clearTimeout(this.cleanTimer);
                     }
                     this.msgs = [];
-                    this.selectedUsers = undefined;
-                    this.updateUserDate();
+                    this.selectedDuties = undefined;
+                    this.updateDutyDate();
                     this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.message});
                     this.cleanTimer = setTimeout(() => {
                       this.msgs = [];
@@ -252,15 +271,15 @@ export class UserComponent implements OnInit {
   }
   // 选择公司
   public companyChange(e): void {
-    this.addUser.organizationName = e.value.name;
-    this.addUser.organizationId = e.value.id;
-    this.userService.searchCompanyIdDepList(e.value.id).subscribe(
+    this.addDuty.organizationName = e.value.name;
+    this.addDuty.organizationId = e.value.id;
+    this.orgService.searchCompanyIdDepList(e.value.id).subscribe(
       (value) => {
         console.log(value);
         this.addDepSelect = this.initializeSelectOrg(value.data);
       }
     );
-    this.userService.searchCompanyIdDepIdDutyList({companyId: e.value.id, depId: null}).subscribe(
+    this.orgService.searchCompanyIdDepIdDutyList({companyId: e.value.id, depId: null}).subscribe(
       (val) => {
         console.log(val);
         this.addDepTopDutySelect = this.initializeSelectDuty(val.data);
@@ -269,19 +288,19 @@ export class UserComponent implements OnInit {
   }
   // 选择部门
   public orgsChange(e): void {
-    this.addUser.deptName = e.value.name;
-    this.addUser.deptId = e.value.id;
-    this.userService.searchCompanyIdDepIdDutyList({companyId: this.addUser.organizationId, depId: e.value.id}).subscribe(
+    this.addDuty.deptName = e.value.name;
+    this.addDuty.deptId = e.value.id;
+    this.orgService.searchCompanyIdDepIdDutyList({companyId:  this.addDuty.organizationId, depId: e.value.id}).subscribe(
       (val) => {
         console.log(val);
         this.addDepTopDutySelect = this.initializeSelectDuty(val.data);
       }
     );
   }
-  // 选择部门
-  public dutyChange(e): void {
-    this.addUser.dutyName = e.value.name;
-    this.addUser.dutyId = e.value.id;
+  // 选择上级职务
+  public topDutyChange(e): void {
+    console.log(e);
+    this.addDuty.pid = e.value.id;
   }
   // 数据格式化
   public initializeSelectCompany(data): any {
@@ -300,8 +319,6 @@ export class UserComponent implements OnInit {
       const childnode =  new SelectItem();
       childnode.name = data[i].deptName;
       childnode.id = data[i].id;
-      childnode.pid = data[i].pid;
-      childnode.pids = data[i].pids;
       oneChild.push(childnode);
     }
     return oneChild;

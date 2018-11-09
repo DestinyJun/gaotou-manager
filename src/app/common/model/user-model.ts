@@ -27,6 +27,7 @@ export class AddUser {
   deptName?: string; // 部门名称
   dutyId?: number; // 职务ID
   dutyName?: string; // 职务名称
+
   realName?: string; // 真实姓名
   userName?: string; // 用户名
   telNumber?: string; // 电话号码

@@ -2,16 +2,16 @@
 <p-messages [(value)]="msgs" [closable]="true" [style]="{'position':'fixed','top': '0','margin-top': '0','width': '100vw','z-index':'9999'}"></p-messages>
 <!--确认弹窗-->
 <p-confirmDialog acceptLabel="确认" rejectLabel="取消"></p-confirmDialog>
-<app-s-loation locationTitle="服务区字段管理"></app-s-loation>
-<div class="serarea-manage">
-  <h4 class="text-center">服务区字段管理</h4>
+<app-s-loation locationTitle="部门管理"></app-s-loation>
+<h1 class="text-center">部门管理</h1>
+<div class="video-manage">
   <!--按钮-->
   <div class="btn-manner">
     <button class="btn btn-primary" (click)="addDialog = true">增加</button>
     <button class="btn btn-danger" type="button" (click)="deleteFirm()">删除</button>
   </div>
   <!--数据-->
-  <p-table [columns]="cols" [value]="fields" selectionMode="multiple" [(selection)]="selectedfields" (onRowSelect)="onRowSelect($event)">
+  <p-table [columns]="cols" [value]="orgs" selectionMode="multiple" [(selection)]="selectedorgs">
     <ng-template pTemplate="header" let-columns>
       <tr>
         <th *ngFor="let col of columns">
@@ -30,61 +30,69 @@
   <!--增加弹框-->
   <p-dialog header="增加信息" [(visible)]="addDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="800">
     <div class="ui-g ui-fluid">
-      <!--所属分类-->
       <div class="ui-g-6">
         <div class="ui-g-4">
-          <label for="attributeCategoryId">所属分类：</label>
+          <label for="addCompany">所属公司：</label>
         </div>
         <div class="ui-g-8">
-          <p-dropdown id="attributeCategoryId" [options]="addFieldType" (onChange)="fieldTypeChange($event)" [style]="{'width':'182px'}" scrollHeight="120px" optionLabel="name" placeholder="请选择所属分类..."></p-dropdown>
+          <p-dropdown id="addCompany" [options]="addCompanySelect" (onChange)="companyChange($event)" [style]="{'width':'182px'}" scrollHeight="120px" optionLabel="name" placeholder="请选择所属公司..."></p-dropdown>
         </div>
       </div>
-      <!--选择方向-->
       <div class="ui-g-6">
         <div class="ui-g-4">
-          <label>选择方向：</label>
+          <label for="addOrgs">所属部门：</label>
         </div>
         <div class="ui-g-8">
-          <p-radioButton id="addenabled1" name="group1" value="1" [(ngModel)]="addField.saOrientationFlag" label="公共" inputId="opt2"></p-radioButton>
-          <p-radioButton id="addenabled2" name="group1" value="2" [(ngModel)]="addField.saOrientationFlag" label="上行" inputId="opt3"></p-radioButton>
-          <p-radioButton id="addenabled3" name="group1" value="3" [(ngModel)]="addField.saOrientationFlag" label="下行" inputId="opt3"></p-radioButton>
+          <p-dropdown id="addOrgs" [options]="addOrgSelect" (onChange)="orgsChange($event)" [style]="{'width':'182px'}" scrollHeight="120px" optionLabel="name" placeholder="请选择所属部门..."></p-dropdown>
         </div>
       </div>
-      <!--字段名称-->
       <div class="ui-g-6">
         <div class="ui-g-4">
-          <label for="attributeName">字段名称：</label>
+          <label for="adddeptName">部门名称：</label>
         </div>
         <div class="ui-g-8">
-          <input pInputText id="attributeName" [(ngModel)]="addField.attributeName"/>
+          <input pInputText id="adddeptName" [(ngModel)]="addOrg.deptName" />
         </div>
       </div>
-      <!--字段顺序-->
       <div class="ui-g-6">
         <div class="ui-g-4">
-          <label for="position">字段顺序：</label>
+          <label for="addteldeptCode">部门编号：</label>
         </div>
         <div class="ui-g-8">
-          <input pInputText type="number" id="position" [(ngModel)]="addField.position"/>
+          <input pInputText id="addteldeptCode" [(ngModel)]="addOrg.deptCode" />
         </div>
       </div>
-      <!--是否显示在页面表单-->
       <div class="ui-g-6">
         <div class="ui-g-4">
-          <label>是否显示在页面表单：</label>
+          <label for="addfax">部门传真：</label>
         </div>
         <div class="ui-g-8">
-          <p-radioButton id="addenabled1" name="group1" value="1" [(ngModel)]="addField.showTableHead" label="是" inputId="opt2"></p-radioButton>
-          <p-radioButton id="addenabled2" name="group1" value="0" [(ngModel)]="addField.showTableHead" label="否" inputId="opt3"></p-radioButton>
+          <input pInputText id="addfax" [(ngModel)]="addOrg.fax" />
         </div>
       </div>
-      <!--字段描述-->
+      <div class="ui-g-6">
+        <div class="ui-g-4">
+          <label for="addtelNumber">部门电话：</label>
+        </div>
+        <div class="ui-g-8">
+          <input pInputText id="addtelNumber" [(ngModel)]="addOrg.telNumber" />
+        </div>
+      </div>
+      <div class="ui-g-12">
+        <div class="ui-g-4">
+          <label>是否是服务区：</label>
+        </div>
+        <div class="ui-g-8">
+          <p-radioButton name="group1" value="1" label="是" [(ngModel)]="addOrg.deptCategory" inputId="opt2"></p-radioButton>
+          <p-radioButton name="group1" value="0" label="不是" [(ngModel)]="addOrg.deptCategory" inputId="opt1"></p-radioButton>
+        </div>
+      </div>
       <div class="ui-g-12">
         <div class="ui-g-2">
-          <label for="attributeDesc">字段描述：</label>
+          <label for="addintroduction">部门描述：</label>
         </div>
         <div class="ui-g-10">
-          <textarea id="attributeDesc" rows="5" cols="70" pInputTextarea [(ngModel)]="addField.attributeDesc"></textarea>
+          <textarea id="addintroduction" rows="5" cols="70" pInputTextarea [(ngModel)]="addOrg.description"></textarea>
         </div>
       </div>
     </div>

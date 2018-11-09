@@ -1,28 +1,58 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
+import {GlobalService} from './global.service';
 
 @Injectable()
 export class SerareaService {
   // public headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
   public headers = new HttpHeaders({'Content-Type': 'application/json'});
 
-  constructor(private http: HttpClient) { }
-  // 增加接口
-  public addList(): Observable<any> {
-    return this.http.post('http://localhost/gaotouService/adds.php', '');
+  constructor(
+    private http: HttpClient,
+    private globalService: GlobalService
+  ) { }
+  /*****************************字段分类**************************/
+  // 增加
+  public addSaFieldTypeItem(params): Observable<any> {
+    return this.http.post(`${this.globalService.urls}/serviceArea/attributeCategory/add`, params);
   }
-  // 增加删除
-  public deleteList(): Observable<any> {
-    return this.http.post('http://localhost/gaotouService/deletes.php', '');
+  // 删除单个
+  public deleteSaFieldTypeItem(id): Observable<any> {
+    return this.http.get(`${this.globalService.urls}/serviceArea/attributeCategory/delete/${id}`);
   }
-  // 修改接口
-  public modifyList(): Observable<any> {
+  // 删除多个
+  public deleteSaFieldTypeList(params): Observable<any> {
+    return this.http.post(`${this.globalService.urls}/serviceArea/attributeCategory/delete`, params);
+  }
+  // 修改
+  public modifySaFieldTypeItem(): Observable<any> {
     return this.http.post('http://localhost/gaotouService/modify.php', '');
   }
-  // 查询接口
-  public searchList(params): Observable<any> {
-    console.log(params);
-    return this.http.post('http://localhost/gaotouService/search.php', params, {headers: this.headers});
+  // 查询
+  public searchSaFieldTypeList(num): Observable<any> {
+    return this.http.post(`${this.globalService.urls}/serviceArea/attributeCategory/queryByPaging/${num.page}/${num.nums}`, {});
+  }
+
+  /*****************************字段管理**************************/
+  // 增加
+  public addSaFieldItem(params): Observable<any> {
+    return this.http.post(`${this.globalService.urls}/serviceArea/attribute/add`, params);
+  }
+  // 删除单个
+  public deleteSaFieldItem(id): Observable<any> {
+    return this.http.get(`${this.globalService.urls}/serviceArea/attribute/delete/${id}`);
+  }
+  // 删除多个
+  public deleteSaFieldList(params): Observable<any> {
+    return this.http.post(`${this.globalService.urls}/serviceArea/attribute/delete`, params);
+  }
+  // 修改
+  public modifySaFieldItem(): Observable<any> {
+    return this.http.post('http://localhost/gaotouService/modify.php', '');
+  }
+  // 查询
+  public searchSaFieldList(num): Observable<any> {
+    return this.http.post(`${this.globalService.urls}/serviceArea/attribute/queryByPaging/${num.page}/${num.nums}`, {});
   }
 }

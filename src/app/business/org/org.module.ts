@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import { OrgComponent } from './org.component';
 import {OrgRoutersModule} from './org.routers.module';
 import {SharedModule} from '../../common/shared.module';
@@ -16,6 +16,9 @@ import {
 import {TableModule} from 'primeng/table';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { OrgService } from '../../common/services/org.service';
+import { OrgDutyComponent } from './org-duty/org-duty.component';
+import {OrgDepartmentComponent} from './org-department/org-department.component';
+import { OrgCompanyComponent } from './org-company/org-company.component';
 
 @NgModule({
   imports: [
@@ -24,7 +27,6 @@ import { OrgService } from '../../common/services/org.service';
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
-
     TreeTableModule,
     ConfirmDialogModule,
     ProgressSpinnerModule,
@@ -38,7 +40,7 @@ import { OrgService } from '../../common/services/org.service';
     RadioButtonModule,
     CalendarModule
   ],
-  declarations: [OrgComponent],
-  providers: [OrgService, MessageService, ConfirmationService]
+  declarations: [OrgComponent, OrgDutyComponent, OrgDepartmentComponent, OrgCompanyComponent],
+  providers: [OrgService, MessageService, ConfirmationService, DatePipe]
 })
 export class OrgModule { }

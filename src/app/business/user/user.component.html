@@ -8,6 +8,7 @@
   <!--按钮-->
   <div class="btn-manner">
     <button class="btn btn-primary" (click)="addDialog = true">增加</button>
+    <button class="btn btn-danger" type="button" (click)="deleteFirm()">删除</button>
   </div>
   <!--数据-->
   <p-table [columns]="cols" [value]="users" selectionMode="multiple" [(selection)]="selectedUsers" (onRowSelect)="onRowSelect($event)">
@@ -29,6 +30,7 @@
   <!--增加弹框-->
   <p-dialog header="增加信息" [(visible)]="addDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="800">
     <div class="ui-g ui-fluid">
+      <!--所属公司-->
       <div class="ui-g-6">
         <div class="ui-g-4">
           <label for="addorganizationName">所属公司：</label>
@@ -37,14 +39,25 @@
           <p-dropdown id="addorganizationName" [options]="addCompanySelect" (onChange)="companyChange($event)" [style]="{'width':'182px'}" scrollHeight="120px" optionLabel="name" placeholder="请选择所属公司..."></p-dropdown>
         </div>
       </div>
+      <!--所属部门-->
       <div class="ui-g-6">
         <div class="ui-g-4">
           <label for="adddeptName">所属部门：</label>
         </div>
         <div class="ui-g-8">
-          <p-dropdown id="adddeptName" [options]="addOrgSelect" (onChange)="orgsChange($event)" [style]="{'width':'182px'}" scrollHeight="120px" optionLabel="name" placeholder="请选择所属部门..."></p-dropdown>
+          <p-dropdown id="adddeptName" [options]="addDepSelect" (onChange)="orgsChange($event)" [style]="{'width':'182px'}" scrollHeight="120px" optionLabel="name" placeholder="请选择所属部门..."></p-dropdown>
         </div>
       </div>
+      <!--请选择职务-->
+      <div class="ui-g-6">
+        <div class="ui-g-4">
+          <label for="adddutyName">请选择职务：</label>
+        </div>
+        <div class="ui-g-8">
+          <p-dropdown id="adddutyName"  [options]="addDepTopDutySelect" (onChange)="dutyChange($event)" [style]="{'width':'182px'}" scrollHeight="120px" optionLabel="name" placeholder="请选择职位..."></p-dropdown>
+        </div>
+      </div>
+      <!--生日-->
       <div class="ui-g-6">
         <div class="ui-g-4">
           <label for="addbirthday">生日：</label>
@@ -53,14 +66,7 @@
           <p-calendar id="addbirthday" [style]="{'width': '80%'}" (onSelect)="timeOnSelect($event)" placeholder="请点击选择时间......" [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2020" dateFormat="yy-mm-dd"></p-calendar>
         </div>
       </div>
-      <div class="ui-g-6">
-        <div class="ui-g-4">
-          <label for="adddutyName">请选择职务：</label>
-        </div>
-        <div class="ui-g-8">
-          <p-dropdown id="adddutyName"  [style]="{'width':'182px'}" scrollHeight="120px" optionLabel="name" placeholder="请选择职位..."></p-dropdown>
-        </div>
-      </div>
+     <!--请输入姓名-->
       <div class="ui-g-6">
         <div class="ui-g-4">
           <label for="addrealName">请输入姓名：</label>
@@ -69,6 +75,7 @@
           <input pInputText id="addrealName"  [(ngModel)]="addUser.realName" />
         </div>
       </div>
+      <!--用户名-->
       <div class="ui-g-6">
         <div class="ui-g-4">
           <label for="adduserName">用户名：</label>
@@ -77,6 +84,7 @@
           <input pInputText id="adduserName"  [(ngModel)]="addUser.userName" />
         </div>
       </div>
+      <!--电话号码-->
       <div class="ui-g-6">
         <div class="ui-g-4">
           <label for="addtelNumber">电话号码：</label>
@@ -85,6 +93,7 @@
           <input pInputText id="addtelNumber"  [(ngModel)]="addUser.telNumber" />
         </div>
       </div>
+      <!--邮箱-->
       <div class="ui-g-6">
         <div class="ui-g-4">
           <label for="addemail">邮箱：</label>
@@ -93,6 +102,7 @@
           <input pInputText id="addemail"  [(ngModel)]="addUser.email" />
         </div>
       </div>
+      <!--地址-->
       <div class="ui-g-6">
         <div class="ui-g-4">
           <label for="addaddress">地址：</label>
@@ -101,6 +111,7 @@
           <input pInputText id="addaddress"  [(ngModel)]="addUser.address" />
         </div>
       </div>
+      <!--性别-->
       <div class="ui-g-6">
         <div class="ui-g-4">
           <label for="addaddress">性别：</label>
@@ -110,6 +121,7 @@
           <p-radioButton name="group1" value="2" label="女" [(ngModel)]="addUser.gender" inputId="opt3"></p-radioButton>
         </div>
       </div>
+      <!--备注-->
       <div class="ui-g-12">
         <div class="ui-g-2">
           <label for="addremark">备注：</label>

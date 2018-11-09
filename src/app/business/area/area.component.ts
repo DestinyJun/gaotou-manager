@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { AreaService } from '../../common/services/area.service';
 import {ConfirmationService, Message, MessageService} from 'primeng/api';
 import {GlobalService} from '../../common/services/global.service';
-import {AreaList} from '../../common/model/area-model';
+import {AddTreeItem, AreaList} from '../../common/model/area-model';
 import {DatePipe} from '@angular/common';
 import {AddTreeArea} from '../../common/model/shared-model';
-import {AddTreeItem} from '../../common/model/org-model';
+
 @Component({
   selector: 'app-area',
   templateUrl: './area.component.html',

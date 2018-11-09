@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {Field} from '../../../common/model/serarea-model';
+import {AddField, Field} from '../../../common/model/serarea-model';
+import {ConfirmationService, Message, MessageService} from 'primeng/api';
+import {SerareaService} from '../../../common/services/serarea.service';
+import {GlobalService} from '../../../common/services/global.service';
+import {SelectItem, TreeNode} from '../../../common/model/shared-model';
 
 @Component({
   selector: 'app-serarea-fields',
@@ -7,32 +11,256 @@ import {Field} from '../../../common/model/serarea-model';
   styleUrls: ['./serarea-fields.component.css']
 })
 export class SerareaFieldsComponent implements OnInit {
-  public serFileds: Field[];
-  public selectedFileds: string[] = [];
-  constructor() { }
+  // table显示相关
+  public fields: Field[]; // 整个table数据
+  public cols: any[]; // 表头
+  public field: any; // 接收选中的值
+  public selectedfields: Field[]; // 多个选择
+  // 增加相关
+  public addDialog: boolean; // 增加弹窗显示控制
+  public addField: AddField = new AddField();
+  public addFieldType: SelectItem[]; // 服务区列表
+  // 其他提示弹窗相关
+  public cleanTimer: any; // 清除时钟
+  public msgs: Message[] = []; // 消息弹窗
+  constructor(
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService,
+    private serareaService: SerareaService,
+    private globalService: GlobalService
+  ) { }
 
   ngOnInit() {
-    this.uploadFieldDate();
+    this.cols = [
+      {field: 'id', header: '字段ID'},
+      {field: 'attributeName', header: '字段名称'},
+      {field: 'position', header: '字段顺序'},
+      {field: 'attributeDesc', header: '字段描述'},
+      {field: 'idt', header: '添加时间'},
+    ];
+    this.serareaService.searchSaFieldTypeList({page: 1, nums: 100}).subscribe(
+      (val) => {
+        console.log(val.data.contents);
+        this.addFieldType = this.initializeFieldType(val.data.contents);
+      }
+    );
+    this.uploadFieldData();
   }
-  public uploadFieldDate(): void {
-    /*this.serFileds = [
-      {id: 1, fieldName: '服务区名称', fieldCoding: 'serviceName', uploadTime: '2018-08-26 13:06'},
-      {id: 17, fieldName: '服务区所属', fieldCoding: 'serviceAdress', uploadTime: '2018-08-26 13:06'},
-      {id: 18, fieldName: '始建时间', fieldCoding: 'SetTime', uploadTime: '2018-08-26 13:06'},
-      {id: 2, fieldName: '占地面积', fieldCoding: 'floorArea', uploadTime: '2018-08-26 13:06'},
-      {id: 3, fieldName: '运营时间', fieldCoding: 'serviceTime', uploadTime: '2018-08-26 13:06'},
-      {id: 4, fieldName: '保洁人员', fieldCoding: 'cleanerNum', uploadTime: '2018-08-26 13:06'},
-      {id: 5, fieldName: '安保人员', fieldCoding: 'serviceManager', uploadTime: '2018-08-26 13:06'},
-      {id: 7, fieldName: '大车车位', fieldCoding: 'trucksPark', uploadTime: '2018-08-26 13:06'},
-      {id: 8, fieldName: '小车车位', fieldCoding: 'carPark', uploadTime: '2018-08-26 13:06'},
-      {id: 9, fieldName: '客车车位', fieldCoding: 'coachPark', uploadTime: '2018-08-26 13:06'},
-      {id: 10, fieldName: '供电账户', fieldCoding: 'eleAccount', uploadTime: '2018-08-26 13:06'},
-      {id: 11, fieldName: '上次交电费时间', fieldCoding: 'payEleTime', uploadTime: '2018-08-26 13:06'},
-      {id: 13, fieldName: '用水量', fieldCoding: 'WaterAmount', uploadTime: '2018-08-26 13:06'},
-      {id: 14, fieldName: '上次交水费时间', fieldCoding: 'payWaterTime', uploadTime: '2018-08-26 13:06'},
-      {id: 15, fieldName: '服务区管理人员', fieldCoding: 'serviceManager', uploadTime: '2018-08-26 13:06'},
-      {id: 16, fieldName: '管理人电话', fieldCoding: 'serviceManagerPhoone', uploadTime: '2018-08-26 13:06'},
-    ];*/
+  public uploadFieldData(): void {
+    this.serareaService.searchSaFieldList({page: 1, nums: 100}).subscribe(
+      (value) => {
+        console.log(value);
+        this.fields = value.data.contents;
+      }
+    );
   }
-  public addSerFieldWindow(): void {}
+  // 选中后赋值
+  public onRowSelect(event): void {
+    console.log(event.data);
+    this.field = this.cloneCar(event.data);
+  }
+  // 遍历修改后的数据，并把它赋值给car1
+  public cloneCar(c: any): any {
+    const car = {};
+    for (const prop in c) {
+      if (c) {
+        car[prop] = c[prop];
+      }
+    }
+    return car;
+  }
+  // 增加
+  public addsSave(): void {
+    console.log(this.addField);
+    if (this.addField.showTableHead === '1') {
+      this.addField.showTableHead = true;
+    } else {
+      this.addField.showTableHead = false;
+    }
+    this.confirmationService.confirm({
+      message: `确定要增加吗？`,
+      header: '增加提醒',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.globalService.eventSubject.next({display: true});
+        this.serareaService.addSaFieldItem(this.addField).subscribe(
+          (value) => {
+            if (value.status === '200') {
+              this.globalService.eventSubject.next({display: false});
+              if (this.cleanTimer) {
+                clearTimeout(this.cleanTimer);
+              }
+              this.msgs = [];
+              this.msgs.push({severity: 'success', summary: '增加提醒', detail: value.message});
+              this.uploadFieldData();
+              this.cleanTimer = setTimeout(() => {
+                this.msgs = [];
+              }, 3000);
+              this.addDialog = false;
+            } else {
+              setTimeout(() => {
+                this.globalService.eventSubject.next({display: false});
+                if (this.cleanTimer) {
+                  clearTimeout(this.cleanTimer);
+                }
+                this.msgs = [];
+                this.msgs.push({severity: 'error', summary: '增加提醒', detail: '服务器处理失败'});
+                this.cleanTimer = setTimeout(() => {
+                  this.msgs = [];
+                }, 3000);
+              }, 3000);
+            }
+          },
+          (err) => {
+            console.log(err);
+            setTimeout(() => {
+              this.globalService.eventSubject.next({display: false});
+              if (this.cleanTimer) {
+                clearTimeout(this.cleanTimer);
+              }
+              this.msgs = [];
+              this.msgs.push({severity: 'error', summary: '增加提醒', detail: '连接服务器失败'});
+              this.cleanTimer = setTimeout(() => {
+                this.msgs = [];
+              }, 3000);
+            }, 3000);
+          }
+        );
+      },
+      reject: () => {}
+    });
+  }
+  // 删除
+  public deleteFirm(): void {
+    if (this.selectedfields === undefined || this.selectedfields.length === 0) {
+      if (this.cleanTimer) {
+        clearTimeout(this.cleanTimer);
+      }
+      this.msgs = [];
+      this.msgs.push({severity: 'error', summary: '操作错误', detail: '请选择需要删除的项'});
+      this.cleanTimer = setTimeout(() => {
+        this.msgs = [];
+      }, 3000);
+    } else {
+      this.confirmationService.confirm({
+        message: `确定要删除这${this.selectedfields.length}项吗？`,
+        header: '删除提醒',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.globalService.eventSubject.next({display: true});
+          if (this.selectedfields.length === 1) {
+            this.serareaService.deleteSaFieldItem(this.selectedfields[0].id).subscribe(
+              (value) => {
+                if (value.status === '200') {
+                  setTimeout(() => {
+                    this.globalService.eventSubject.next({display: false});
+                    if (this.cleanTimer) {
+                      clearTimeout(this.cleanTimer);
+                    }
+                    this.msgs = [];
+                    this.selectedfields = undefined;
+                    this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.message});
+                    this.cleanTimer = setTimeout(() => {
+                      this.msgs = [];
+                    }, 3000);
+                    this.uploadFieldData();
+                  }, 3000);
+                } else {
+                  setTimeout(() => {
+                    this.globalService.eventSubject.next({display: false});
+                    if (this.cleanTimer) {
+                      clearTimeout(this.cleanTimer);
+                    }
+                    this.msgs = [];
+                    this.msgs.push({severity: 'error', summary: '删除提醒', detail: '服务器处理失败'});
+                    this.cleanTimer = setTimeout(() => {
+                      this.msgs = [];
+                    }, 3000);
+                  }, 3000);
+                }
+              },
+              (err) => {
+                setTimeout(() => {
+                  this.globalService.eventSubject.next({display: false});
+                  if (this.cleanTimer) {
+                    clearTimeout(this.cleanTimer);
+                  }
+                  this.msgs = [];
+                  this.msgs.push({severity: 'error', summary: '删除提醒', detail: '连接服务器失败'});
+                  this.cleanTimer = setTimeout(() => {
+                    this.msgs = [];
+                  }, 3000);
+                });
+              }
+            );
+          } else {
+            const ids = [];
+            for (let i = 0; i < this.selectedfields.length; i ++) {
+              ids.push(this.selectedfields[i].id);
+            }
+            this.serareaService.deleteSaFieldList(ids).subscribe(
+              (value) => {
+                if (value.status === '200') {
+                  setTimeout(() => {
+                    this.globalService.eventSubject.next({display: false});
+                    if (this.cleanTimer) {
+                      clearTimeout(this.cleanTimer);
+                    }
+                    this.msgs = [];
+                    this.selectedfields = undefined;
+                    this.uploadFieldData();
+                    this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.message});
+                    this.cleanTimer = setTimeout(() => {
+                      this.msgs = [];
+                    }, 3000);
+                  }, 3000);
+                } else {
+                  setTimeout(() => {
+                    this.globalService.eventSubject.next({display: false});
+                    if (this.cleanTimer) {
+                      clearTimeout(this.cleanTimer);
+                    }
+                    this.msgs = [];
+                    this.msgs.push({severity: 'error', summary: '删除提醒', detail: '服务器处理失败'});
+                    this.cleanTimer = setTimeout(() => {
+                      this.msgs = [];
+                    }, 3000);
+                  }, 3000);
+                }
+              },
+              (err) => {
+                setTimeout(() => {
+                  this.globalService.eventSubject.next({display: false});
+                  if (this.cleanTimer) {
+                    clearTimeout(this.cleanTimer);
+                  }
+                  this.msgs = [];
+                  this.msgs.push({severity: 'error', summary: '删除提醒', detail: '连接服务器失败'});
+                  this.cleanTimer = setTimeout(() => {
+                    this.msgs = [];
+                  }, 3000);
+                });
+              }
+            );
+          }
+        },
+        reject: () => {}
+      });
+    }
+  }
+  // 字段分类改变
+  public fieldTypeChange(e) {
+    this.addField.attributeCategoryId = e.value.id;
+  }
+  // 数据格式化
+  public initializeFieldType(data): any {
+    const oneChild = [];
+    for (let i = 0; i < data.length; i++) {
+      const childnode =  new SelectItem();
+      childnode.name = data[i].categoryName;
+      childnode.id = data[i].id;
+      oneChild.push(childnode);
+    }
+    return oneChild;
+  }
 }

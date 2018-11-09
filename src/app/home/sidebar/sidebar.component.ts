@@ -15,13 +15,10 @@ export class SidebarComponent implements OnInit {
      /* new NavListChild('数据采集', false, 'department/organization-management'),
       new NavListChild('部门管理', false, 'department/organization')*/
     ] , true),
-    new NavList('公司管理', 'company', 'fa fa-car', false, [
-      /* new NavListChild('数据采集', false, 'department/organization-management'),
-       new NavListChild('部门管理', false, 'department/organization')*/
-    ] , true),
-    new NavList('部门管理', 'org', 'fa fa-car', false, [
-     /* new NavListChild('数据采集', false, 'department/organization-management'),
-      new NavListChild('部门管理', false, 'department/organization')*/
+    new NavList('组织机构', 'org', 'fa fa-car', false, [
+      new NavListChild('公司管理', false, 'org/company', 'fa fa-snowflake-o'),
+      new NavListChild('部门管理', false, 'org/department', 'fa fa-snowflake-o'),
+      new NavListChild('职位管理', false, 'org/duty', 'fa fa-snowflake-o'),
     ] , true),
     new NavList('用户管理', 'user', 'fa fa-bar-chart', false, [
       /*new NavListChild('生产线', false, 'device/proline'),
@@ -37,6 +34,7 @@ export class SidebarComponent implements OnInit {
     ] , true),
     new NavList('服务区管理', '', 'fa fa-cog', false, [
       new NavListChild('服务区', false, 'serarea/sernum', 'fa fa-snowflake-o'),
+      new NavListChild('服务区字段分类', false, 'serarea/types', 'fa fa-snowflake-o'),
       new NavListChild('服务区字段', false, 'serarea/fields', 'fa fa-snowflake-o'),
     ] , true),
     new NavList('门店管理', 'store', 'fa fa-address-card-o', false, [] , true),

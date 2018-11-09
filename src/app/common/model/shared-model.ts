@@ -53,6 +53,8 @@ export class SelectItem {
   orientaionId?: number;
   source?: string;
   categoryCode?: string;
+  pid?: number;
+  pids?: number;
 }
 
 // 添加泛型

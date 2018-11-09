@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import { SerareaComponent } from './serarea.component';
 import {SerareaRoutersModule} from './serarea.routers.module';
 import {SharedModule} from '../../common/shared.module';
@@ -7,16 +7,18 @@ import { SerareaSernumComponent } from './serarea-sernum/serarea-sernum.componen
 import { SerareaFieldsComponent } from './serarea-fields/serarea-fields.component';
 import {TableModule} from 'primeng/table';
 import {
+  CalendarModule,
   CheckboxModule, ConfirmationService,
   ConfirmDialogModule,
-  DialogModule,
+  DialogModule, DropdownModule,
   MessageModule,
   MessageService,
   MessagesModule,
-  ProgressSpinnerModule
+  ProgressSpinnerModule, RadioButtonModule, ScrollPanelModule, TreeModule, TreeTableModule
 } from 'primeng/primeng';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { SerareaService } from '../../common/services/serarea.service';
+import { SerareaFieldtypeComponent } from './serarea-fieldtype/serarea-fieldtype.component';
 
 @NgModule({
   imports: [
@@ -25,19 +27,21 @@ import { SerareaService } from '../../common/services/serarea.service';
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
-    TableModule,
-    CheckboxModule,
-    DialogModule,
-    TableModule,
-    FormsModule,
-    ReactiveFormsModule,
-    DialogModule,
-    MessagesModule,
-    MessageModule,
+
+    TreeTableModule,
     ConfirmDialogModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    TreeModule,
+    TableModule,
+    DialogModule,
+    MessageModule,
+    MessagesModule,
+    ScrollPanelModule,
+    DropdownModule,
+    RadioButtonModule,
+    CalendarModule
   ],
-  declarations: [SerareaComponent, SerareaSernumComponent, SerareaFieldsComponent],
-  providers: [SerareaService, MessageService, ConfirmationService]
+  declarations: [SerareaComponent, SerareaSernumComponent, SerareaFieldsComponent, SerareaFieldtypeComponent],
+  providers: [SerareaService, MessageService, ConfirmationService, DatePipe]
 })
 export class SerareaModule { }

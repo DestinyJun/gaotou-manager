@@ -1,82 +1,72 @@
-import {Component, OnInit} from '@angular/core';
-import {AddUser, User} from '../../common/model/user-model';
-import {UserService} from '../../common/services/user.service';
+import { Component, OnInit } from '@angular/core';
+import {AddTreeArea, TreeNode} from '../../../common/model/shared-model';
 import {ConfirmationService, Message, MessageService} from 'primeng/api';
-import {GlobalService} from '../../common/services/global.service';
-import {SelectItem} from '../../common/model/shared-model';
+import {GlobalService} from '../../../common/services/global.service';
 import {DatePipe} from '@angular/common';
+import {OrgService} from '../../../common/services/org.service';
+import {AddCompany, Company} from '../../../common/model/org-model';
 
 @Component({
-  selector: 'app-user',
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.css']
+  selector: 'app-org-company',
+  templateUrl: './org-company.component.html',
+  styleUrls: ['./org-company.component.css']
 })
-export class UserComponent implements OnInit {
+export class OrgCompanyComponent implements OnInit {
+
   // table显示相关
-  public users: User[]; // 整个table数据
+  public companies: Company[]; // 整个table数据
   public cols: any[]; // 表头
   public cash: any; // 接收选中的值
-  public selectedUsers: User[]; // 多个选择
-  public sex = ['男', '女'];
+  public selectedcompanies: Company[]; // 多个选择公司
   // 增加相关
   public addDialog: boolean; // 增加弹窗显示控制
-  public addUser: AddUser = new AddUser(); // 添加参数字段
-  public addCompanySelect: SelectItem[]; // 公司列表
-  public addDepSelect: SelectItem[]; // 部门列表
-  public addDepTopDutySelect: SelectItem[]; // 职务
+  public areaDialog: boolean; // 区域树弹窗
+  public addCompany: AddCompany = new AddCompany();
+  public addAreaTrees: AddTreeArea[]; // 区域树结构
+  public addAreaTree: AddTreeArea = new AddTreeArea(); // 区域树选择
   // 其他提示弹窗相关
   public cleanTimer: any; // 清除时钟
   public msgs: Message[] = []; // 消息弹窗
   constructor(
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private userService: UserService,
+    private orgService: OrgService,
     private globalService: GlobalService,
     private datePipe: DatePipe,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.cols = [
-      {field: 'realName', header: '姓名'},
-      {field: 'telNumber', header: '电话'},
-      {field: 'gender', header: '性别'},
-      {field: 'organizationName', header: '所属公司'},
-      {field: 'deptName', header: '所属部门'},
-      {field: 'dutyName', header: '职务'},
-      {field: 'idt', header: '添加时间'}
+      {field: 'name', header: '公司名称'},
+      {field: 'telNumber', header: '公司电话'},
+      {field: 'legalPerson', header: '企业法人'},
+      {field: 'address', header: '公司地址'},
+      {field: 'idt', header: '创建时间'},
     ];
-  this.updateUserDate();
+    this.updateCompanyDate();
   }
-  public updateUserDate(): void {
-    this.userService.searchList({page: 1, nums: 1000}).subscribe(
+  public updateCompanyDate(): void {
+    this.orgService.searchCompanyList({page: 1, nums: 100}).subscribe(
       (value) => {
+        this.companies = value.data.contents;
         console.log(value);
-        this.users = value.data.contents;
-        this.users.map((val, index) => {
-          val.gender = this.sex[val.gender - 1];
-        });
-      }
-    );
-    this.userService.searchCompanyList({page: 1, nums: 100}).subscribe(
-      (val) => {
-        this.addCompanySelect = this.initializeSelectCompany(val.data.contents);
       }
     );
   }
   // 选中后赋值
   public onRowSelect(event): void {
-    // console.log(event);
+    console.log(event.data);
   }
   // 增加
   public addsSave(): void {
-    console.log(this.addUser);
+    console.log(this.addCompany);
     this.confirmationService.confirm({
       message: `确定要增加吗？`,
       header: '增加提醒',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.globalService.eventSubject.next({display: true});
-        this.userService.addItem(this.addUser).subscribe(
+        this.orgService.addCompanyItem(this.addCompany).subscribe(
           (value) => {
             if (value.status === '200') {
               this.globalService.eventSubject.next({display: false});
@@ -85,7 +75,7 @@ export class UserComponent implements OnInit {
               }
               this.msgs = [];
               this.msgs.push({severity: 'success', summary: '增加提醒', detail: value.message});
-              this.updateUserDate();
+              this.updateCompanyDate();
               this.cleanTimer = setTimeout(() => {
                 this.msgs = [];
               }, 3000);
@@ -124,11 +114,11 @@ export class UserComponent implements OnInit {
     });
   }
   public timeOnSelect(e): void {
-    this.addUser.birthday = this.datePipe.transform(e, 'yyyy-MM-dd');
+    this.addCompany.foundDate = this.datePipe.transform(e, 'yyyy-MM-dd');
   }
   // 删除
   public deleteFirm(): void {
-    if (this.selectedUsers === undefined || this.selectedUsers.length === 0) {
+    if (this.selectedcompanies === undefined || this.selectedcompanies.length === 0) {
       if (this.cleanTimer) {
         clearTimeout(this.cleanTimer);
       }
@@ -139,30 +129,32 @@ export class UserComponent implements OnInit {
       }, 3000);
     } else {
       this.confirmationService.confirm({
-        message: `确定要删除这${this.selectedUsers.length}项吗？`,
+        message: `确定要删除这${this.selectedcompanies.length}项吗？`,
         header: '删除提醒',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
           this.globalService.eventSubject.next({display: true});
-          if (this.selectedUsers.length === 1) {
-            this.userService.deleteItem(this.selectedUsers[0].id).subscribe(
+          if (this.selectedcompanies.length === 1) {
+            this.orgService.deleteCompanyItem(this.selectedcompanies[0].id).subscribe(
               (value) => {
                 if (value.status === '200') {
-                  this.globalService.eventSubject.next({display: false});
-                  /* this.selectedorgs.map((val, inx) => {
-                     const index = this.cashs.indexOf(val);
-                     this.cashs = this.cashs.filter((val1, i) => i !== index);
-                   });*/
-                  if (this.cleanTimer) {
-                    clearTimeout(this.cleanTimer);
-                  }
-                  this.msgs = [];
-                  this.selectedUsers = undefined;
-                  this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.message});
-                  this.cleanTimer = setTimeout(() => {
+                  setTimeout(() => {
+                    this.globalService.eventSubject.next({display: false});
+                    /* this.selectedcompanies.map((val, inx) => {
+                       const index = this.cashs.indexOf(val);
+                       this.cashs = this.cashs.filter((val1, i) => i !== index);
+                     });*/
+                    if (this.cleanTimer) {
+                      clearTimeout(this.cleanTimer);
+                    }
                     this.msgs = [];
+                    this.selectedcompanies = undefined;
+                    this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.message});
+                    this.cleanTimer = setTimeout(() => {
+                      this.msgs = [];
+                    }, 3000);
+                    this.updateCompanyDate();
                   }, 3000);
-                  this.updateUserDate();
                 } else {
                   setTimeout(() => {
                     this.globalService.eventSubject.next({display: false});
@@ -193,24 +185,24 @@ export class UserComponent implements OnInit {
             );
           } else {
             const ids = [];
-            for (let i = 0; i < this.selectedUsers.length; i ++) {
-              ids.push(this.selectedUsers[i].id);
+            for (let i = 0; i < this.selectedcompanies.length; i ++) {
+              ids.push(this.selectedcompanies[i].id);
             }
-            this.userService.deleteList(ids).subscribe(
+            this.orgService.deleteCompanyList(ids).subscribe(
               (value) => {
                 if (value.status === '200') {
                   setTimeout(() => {
                     this.globalService.eventSubject.next({display: false});
-                    /*this.selectedorgs.map((val, inx) => {
-                      const index = this.cashs.indexOf(val);
-                      this.cashs = this.cashs.filter((val1, i) => i !== index);
-                    });*/
+                    /* this.selectedcompanies.map((val, inx) => {
+                       const index = this.cashs.indexOf(val);
+                       this.cashs = this.cashs.filter((val1, i) => i !== index);
+                     });*/
                     if (this.cleanTimer) {
                       clearTimeout(this.cleanTimer);
                     }
                     this.msgs = [];
-                    this.selectedUsers = undefined;
-                    this.updateUserDate();
+                    this.selectedcompanies = undefined;
+                    this.updateCompanyDate();
                     this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.message});
                     this.cleanTimer = setTimeout(() => {
                       this.msgs = [];
@@ -250,70 +242,45 @@ export class UserComponent implements OnInit {
       });
     }
   }
-  // 选择公司
-  public companyChange(e): void {
-    this.addUser.organizationName = e.value.name;
-    this.addUser.organizationId = e.value.id;
-    this.userService.searchCompanyIdDepList(e.value.id).subscribe(
-      (value) => {
-        console.log(value);
-        this.addDepSelect = this.initializeSelectOrg(value.data);
-      }
-    );
-    this.userService.searchCompanyIdDepIdDutyList({companyId: e.value.id, depId: null}).subscribe(
+  // 选择区域
+  public AreaTreeClick(): void {
+    this.areaDialog = true;
+    this.orgService.searchAreaList({page: 1, nums: 100}).subscribe(
       (val) => {
-        console.log(val);
-        this.addDepTopDutySelect = this.initializeSelectDuty(val.data);
+        this.addAreaTrees = this.initializeTree(val.data.contents);
       }
     );
   }
-  // 选择部门
-  public orgsChange(e): void {
-    this.addUser.deptName = e.value.name;
-    this.addUser.deptId = e.value.id;
-    this.userService.searchCompanyIdDepIdDutyList({companyId: this.addUser.organizationId, depId: e.value.id}).subscribe(
-      (val) => {
-        console.log(val);
-        this.addDepTopDutySelect = this.initializeSelectDuty(val.data);
-      }
-    );
+  public treeOnNodeSelect(event) {
+    // this.areaDialog = false;
+    // this.addAreaTreeSelect.push(event.node);
+    // console.log(this.addAreaTree);
   }
-  // 选择部门
-  public dutyChange(e): void {
-    this.addUser.dutyName = e.value.name;
-    this.addUser.dutyId = e.value.id;
+  public treeSelectAreaClick(): void {
+    this.areaDialog = false;
+    this.addCompany.areaCode = this.addAreaTree.areaCode;
+    this.addCompany.areaName = this.addAreaTree.label;
   }
   // 数据格式化
-  public initializeSelectCompany(data): any {
+  public initializeTree(data): any {
     const oneChild = [];
     for (let i = 0; i < data.length; i++) {
-      const childnode =  new SelectItem();
-      childnode.name = data[i].name;
+      const childnode =  new TreeNode();
+      childnode.label = data[i].areaName;
       childnode.id = data[i].id;
+      childnode.areaCode = data[i].areaCode;
+      childnode.parentId = data[i].parentId;
+      childnode.enabled = data[i].enabled;
+      childnode.cityType = data[i].cityType;
+      childnode.level = data[i].level;
+      if (childnode === null) {
+        childnode.children = [];
+      } else {
+        childnode.children = this.initializeTree(data[i].administrativeAreaTree);
+      }
       oneChild.push(childnode);
     }
     return oneChild;
   }
-  public initializeSelectOrg(data): any {
-    const oneChild = [];
-    for (let i = 0; i < data.length; i++) {
-      const childnode =  new SelectItem();
-      childnode.name = data[i].deptName;
-      childnode.id = data[i].id;
-      childnode.pid = data[i].pid;
-      childnode.pids = data[i].pids;
-      oneChild.push(childnode);
-    }
-    return oneChild;
-  }
-  public initializeSelectDuty(data): any {
-    const oneChild = [];
-    for (let i = 0; i < data.length; i++) {
-      const childnode =  new SelectItem();
-      childnode.name = data[i].dutyName;
-      childnode.id = data[i].id;
-      oneChild.push(childnode);
-    }
-    return oneChild;
-  }
+
 }
