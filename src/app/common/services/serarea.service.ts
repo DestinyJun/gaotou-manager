@@ -55,4 +55,26 @@ export class SerareaService {
   public searchSaFieldList(num): Observable<any> {
     return this.http.post(`${this.globalService.urls}/serviceArea/attribute/queryByPaging/${num.page}/${num.nums}`, {});
   }
+
+  /*****************************服务区**************************/
+  // 增加
+  public addSerAraItem(params): Observable<any> {
+    return this.http.post(`${this.globalService.urls}/serviceArea/add`, params);
+  }
+  // 删除单个
+  public deleteSerAraItem(id): Observable<any> {
+    return this.http.get(`${this.globalService.urls}/serviceArea/delete/${id}`);
+  }
+  // 删除多个
+  public deleteSerAraList(params): Observable<any> {
+    return this.http.post(`${this.globalService.urls}/serviceArea/delete`, params);
+  }
+  // 修改
+  public modifySerAraItem(item): Observable<any> {
+    return this.http.post(`${this.globalService.urls}/serviceArea/update`, item);
+  }
+  // 查询
+  public searchSerAraList(num): Observable<any> {
+    return this.http.post(`${this.globalService.urls}/serviceArea/queryByPaging/${num.page}/${num.nums}`, {});
+  }
 }

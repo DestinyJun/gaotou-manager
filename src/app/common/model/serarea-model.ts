@@ -7,6 +7,7 @@ export class FieldType {
   idt?: string;
   udt?: string;
 }
+
 export class AddFieldType {
   categoryName?: string; // 分类名称
   sequence?: number; // 序列
@@ -28,6 +29,7 @@ export class Field {
   id?: number;
   idt?: string;
 }
+
 export class AddField {
   attributeCategoryId?: number; // 属性分类
   saOrientationFlag?: any; // 单选框(1公共2上行3下行)
@@ -39,10 +41,38 @@ export class AddField {
 
 // 服务区泛型
 export class Serarea {
-  vin;
-  year;
-  brand;
-  color;
+  organizationId?: number; // 机构ID
+  administrativeAreaId?: number; // 区划id
+  attributeValueList?: Coordinate[]; // 经纬度
+  chiefUserId?: number; // 区长用户id
+  createUserId?: number; // 创建用户id
+  createUserName?: string; // 创建的用户名
+  name?: string; // 服务区名
+  status?: any; // 服务区状态
+  deptId?: number; // 部门ID
+  updateUserId?: number; // 修改的用户ID
+  updateUserName?: string; // 修改的用户名
+  id?: number; // 服务区id
+  idt?: string;
+  udt?: string;
+
+}
+
+// 经纬度
+export class Coordinate {
+  attributeCategoryId?: number;
+  attributeDesc?: string;
+  attributeName?: string;
+  attributeValue?: string;
+  foreignKey?: any;
+  id?: number;
+  position?: string;
+  relatedTable?: any;
+  related_column?: any;
+  saAttributeId?: number;
+  saOrientationFlag?: any;
+  serviceAreaId?: number;
+  showTableHead?: any;
 }
 
 

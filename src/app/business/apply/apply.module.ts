@@ -6,27 +6,36 @@ import {TableModule} from 'primeng/table';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DialogModule} from 'primeng/dialog';
 import {
+  CalendarModule,
   ConfirmationService,
-  ConfirmDialogModule,
+  ConfirmDialogModule, DropdownModule,
   MessageModule,
   MessageService,
   MessagesModule,
-  ProgressSpinnerModule
+  ProgressSpinnerModule, RadioButtonModule, ScrollPanelModule, TreeModule, TreeTableModule
 } from 'primeng/primeng';
 import {ApplyService } from '../../common/services/apply.service';
+import {SharedModule} from '../../common/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     ApplyRoutersModule,
-    TableModule,
     FormsModule,
     ReactiveFormsModule,
-    DialogModule,
-    MessagesModule,
-    MessageModule,
+    SharedModule,
+    TreeTableModule,
     ConfirmDialogModule,
     ProgressSpinnerModule,
+    TreeModule,
+    TableModule,
+    DialogModule,
+    MessageModule,
+    MessagesModule,
+    ScrollPanelModule,
+    DropdownModule,
+    RadioButtonModule,
+    CalendarModule
   ],
   declarations: [ApplyComponent],
   providers: [ApplyService, MessageService, ConfirmationService]

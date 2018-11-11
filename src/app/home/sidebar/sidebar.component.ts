@@ -15,7 +15,7 @@ export class SidebarComponent implements OnInit {
      /* new NavListChild('数据采集', false, 'department/organization-management'),
       new NavListChild('部门管理', false, 'department/organization')*/
     ] , true),
-    new NavList('组织机构', 'org', 'fa fa-car', false, [
+    new NavList('组织机构', '', 'fa fa-car', false, [
       new NavListChild('公司管理', false, 'org/company', 'fa fa-snowflake-o'),
       new NavListChild('部门管理', false, 'org/department', 'fa fa-snowflake-o'),
       new NavListChild('职位管理', false, 'org/duty', 'fa fa-snowflake-o'),
@@ -44,7 +44,10 @@ export class SidebarComponent implements OnInit {
     new NavList('视频组管理', 'videomg', 'fa fa-desktop', false, [] , true),
     new NavList('应用访问控制 ', 'apply', 'fa fa-desktop', false, [] , true),
     new NavList('收银机配置', 'cash', 'fa fa-cog', false, [] , true),
-    new NavList('字典管理', 'dict', 'fa fa-cog', false, [] , true),
+    new NavList('字典管理', '', 'fa fa-cog', false, [
+      new NavListChild('字典', false, 'dict', 'fa fa-snowflake-o'),
+      new NavListChild('字典词条', false, 'dict/word', 'fa fa-snowflake-o'),
+    ] , true),
     new NavList('系统配置', 'system', 'fa fa-cog', false, [] , true),
   ];
   public slidinghight: number;

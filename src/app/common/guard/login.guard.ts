@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import {CanActivate, ActivatedRouteSnapshot, Router, RouterStateSnapshot} from '@angular/router';
 import {GlobalService} from '../services/global.service';
-import {ReqService} from '../services/req.service';
 
 @Injectable()
 export class LoginGuard implements CanActivate {
   constructor (
     private localSessionStorage: GlobalService,
-    private req: ReqService,
     public router: Router
   ) {}
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
@@ -15,7 +13,7 @@ export class LoginGuard implements CanActivate {
       return true;
     }
     if (Number(this.localSessionStorage.get('logstatus')) === 14) {
-      this.req.SidUpdate(JSON.stringify({sid: this.localSessionStorage.get('sid')}))
+      /*this.req.SidUpdate(JSON.stringify({sid: this.localSessionStorage.get('sid')}))
         .subscribe(value => {
           console.log('value=' + JSON.stringify(value));
           if (Number(value.status) === 10) {
@@ -28,7 +26,8 @@ export class LoginGuard implements CanActivate {
           }
         });
       return true;
+    }*/
+      return false;
     }
-    return false;
   }
 }

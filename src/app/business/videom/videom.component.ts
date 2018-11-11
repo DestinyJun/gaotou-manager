@@ -44,9 +44,9 @@ export class VideomComponent implements OnInit {
       {field: 'showLocation', header: '监视窗位置'},
       {field: 'idt', header: '添加时间'},
     ];
-    this.updateVideoDate();
+    this.updateVideoData();
   }
-  public updateVideoDate(): void {
+  public updateVideoData(): void {
     this.videomService.searchList({page: 1, nums: 100}).subscribe(
       (value) => {
         console.log(value.data.contents);
@@ -92,7 +92,7 @@ export class VideomComponent implements OnInit {
               }
               this.msgs = [];
               this.msgs.push({severity: 'success', summary: '增加提醒', detail: value.message});
-              this.updateCashDate();
+              this.updateVideoData();
               this.cleanTimer = setTimeout(() => {
                 this.msgs = [];
               }, 3000);
@@ -163,7 +163,7 @@ export class VideomComponent implements OnInit {
                     this.cleanTimer = setTimeout(() => {
                       this.msgs = [];
                     }, 3000);
-                    this.updateCashDate();
+                    this.updateVideoData();
                   }, 3000);
                 } else {
                   setTimeout(() => {
@@ -208,7 +208,7 @@ export class VideomComponent implements OnInit {
                     }
                     this.msgs = [];
                     this.selectedvideos = undefined;
-                    this.updateCashDate();
+                    this.updateVideoData();
                     this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.message});
                     this.cleanTimer = setTimeout(() => {
                       this.msgs = [];

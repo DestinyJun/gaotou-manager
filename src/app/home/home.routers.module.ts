@@ -19,6 +19,7 @@ const homeRoutes: Routes = [
       {path: 'videomg', loadChildren: 'app/business/video-group/video-group.module#VideoGroupModule'},
       {path: 'apply', loadChildren: 'app/business/apply/apply.module#ApplyModule'},
       {path: 'cash', loadChildren: 'app/business/cash/cash.module#CashModule'},
+      {path: 'dict', loadChildren: 'app/business/dict/dict.module#DictModule'},
       {path: 'system', loadChildren: 'app/business/system/system.module#SystemModule'},
     ]
   },
