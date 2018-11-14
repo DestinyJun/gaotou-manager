@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {RouterList} from '../../../common/model/limit-model';
 import {LimitService} from '../../../common/services/limit.service';
 
 @Component({
@@ -8,7 +7,6 @@ import {LimitService} from '../../../common/services/limit.service';
   styleUrls: ['./limit-router.component.css']
 })
 export class LimitRouterComponent implements OnInit {
-  public routerLists: RouterList[];
   public selectedRouter: string[] = [];
   constructor(
     public limitService: LimitService

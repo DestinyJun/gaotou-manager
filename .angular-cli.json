@@ -22,12 +22,13 @@
         "../node_modules/bootstrap/dist/css/bootstrap.css",
         "../node_modules/font-awesome/css/font-awesome.min.css",
         "../node_modules/primeicons/primeicons.css",
-        "../node_modules/primeng/resources/themes/omega/theme.css",
-        "../node_modules/primeng/resources/primeng.css",
+        "../node_modules/primeng/resources/themes/nova-light/theme.css",
+        "../node_modules/primeng/resources/primeng.min.css",
         "styles.css"
       ],
       "scripts": [
-
+        "../node_modules/jquery/dist/jquery.min.js",
+        "../node_modules/bootstrap/dist/js/bootstrap.min.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
@@ -62,9 +63,6 @@
   },
   "defaults": {
     "styleExt": "css",
-    "class": {
-      "spec": false
-    },
     "component": {}
   }
 }
