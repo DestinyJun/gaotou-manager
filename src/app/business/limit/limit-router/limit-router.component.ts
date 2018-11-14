@@ -17,12 +17,6 @@ export class LimitRouterComponent implements OnInit {
   ngOnInit() {
     this.uploadRouterData();
   }
-  public uploadRouterData(): void {
-    this.limitService.getRouters().subscribe(
-      (value) => {
-        this.routerLists = value;
-      }
-    );
-  }
+  public uploadRouterData(): void {}
   public addRoleWindow(): void {}
 }

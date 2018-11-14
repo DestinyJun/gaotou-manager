@@ -3,7 +3,7 @@ import {AddField, Field} from '../../../common/model/serarea-model';
 import {ConfirmationService, Message, MessageService} from 'primeng/api';
 import {SerareaService} from '../../../common/services/serarea.service';
 import {GlobalService} from '../../../common/services/global.service';
-import {SelectItem, TreeNode} from '../../../common/model/shared-model';
+import {SelectItem} from '../../../common/model/shared-model';
 
 @Component({
   selector: 'app-serarea-fields',

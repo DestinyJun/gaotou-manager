@@ -9,9 +9,18 @@ import {LimitRouterComponent} from './limit-router/limit-router.component';
 import {SharedModule} from '../../common/shared.module';
 import { LimitRoleComponent } from './limit-role/limit-role.component';
 import {TableModule} from 'primeng/table';
-import {CheckboxModule} from 'primeng/checkbox';
 import {DialogModule} from 'primeng/dialog';
 import {LimitService} from '../../common/services/limit.service';
+import {
+  CalendarModule, ConfirmationService,
+  ConfirmDialogModule, DropdownModule,
+  MessageModule, MessageService,
+  MessagesModule,
+  ProgressSpinnerModule, RadioButtonModule,
+  ScrollPanelModule,
+  TreeModule,
+  TreeTableModule
+} from 'primeng/primeng';
 
 
 @NgModule({
@@ -21,9 +30,18 @@ import {LimitService} from '../../common/services/limit.service';
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
+    TreeTableModule,
+    ConfirmDialogModule,
+    ProgressSpinnerModule,
+    TreeModule,
     TableModule,
-    CheckboxModule,
     DialogModule,
+    MessageModule,
+    MessagesModule,
+    ScrollPanelModule,
+    DropdownModule,
+    RadioButtonModule,
+    CalendarModule
   ],
   declarations: [
     LimitComponent,
@@ -32,6 +50,6 @@ import {LimitService} from '../../common/services/limit.service';
     LimitRouterComponent,
     LimitRoleComponent
   ],
-  providers: [LimitService]
+  providers: [LimitService, MessageService, ConfirmationService]
 })
 export class LimitModule { }

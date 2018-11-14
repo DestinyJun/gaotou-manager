@@ -48,4 +48,8 @@ export class WifiService {
     return this.http.get(
       `${this.globalService.urls}/serviceArea/orientation/queryByServiceAreaId/${id}`);
   }
+  // 分页查询
+  public searchUserList(num): Observable<any> {
+    return this.http.post(`${this.globalService.urls}/user/queryByPaging/${num.page}/${num.nums}`, {});
+  }
 }

@@ -41,6 +41,11 @@ export class OrgDutyComponent implements OnInit {
       {field: 'organizationName', header: '所属公司'},
     ];
     this.updateDutyDate();
+    this.orgService.searchCompanyList({page: 1, nums: 100}).subscribe(
+      (val) => {
+        this.addCompanySelect = this.initializeSelectCompany(val.data.contents);
+      }
+    );
   }
   public updateDutyDate(): void {
    /* this.orgService.searchDepartList({page: 1, nums: 100}).subscribe(
@@ -48,11 +53,6 @@ export class OrgDutyComponent implements OnInit {
         this.orgs = val.data.contents;
       }
     );*/
-    this.orgService.searchCompanyList({page: 1, nums: 100}).subscribe(
-      (val) => {
-        this.addCompanySelect = this.initializeSelectCompany(val.data.contents);
-      }
-    );
     this.orgService.searchDutyList({page: 1, nums: 100}).subscribe(
       (val) => {
         console.log(val);

@@ -77,4 +77,23 @@ export class SerareaService {
   public searchSerAraList(num): Observable<any> {
     return this.http.post(`${this.globalService.urls}/serviceArea/queryByPaging/${num.page}/${num.nums}`, {});
   }
+
+  /*************************数据联动查询*******************************/
+  // 查询所有公司
+  public searchCompanyList(num): Observable<any> {
+    return this.http.post(`${this.globalService.urls}/organization/queryByPaging/${num.page}/${num.nums}`, {});
+  }
+  // 根据公司id查询部门
+  public searchCompanyIdDepList(id): Observable<any> {
+    return this.http.get(`${this.globalService.urls}/department/queryTreeByOrganizationId/${id}`);
+  }
+  // 查询激活区域
+  public searchAreaList(num): Observable<any> {
+    return this.http.post(
+      `${this.globalService.urls}/administrativeArea/queryTreeByPaging/${num.page}/${num.nums}`, {});
+  }
+  // 查询所有人员树
+  public searchUserList(num): Observable<any> {
+    return this.http.post(`${this.globalService.urls}/user/queryByPaging/${num.page}/${num.nums}`, {});
+  }
 }
