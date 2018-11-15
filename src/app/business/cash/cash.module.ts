@@ -7,14 +7,15 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { CashService } from '../../common/services/cash.service';
 import {MessageModule} from 'primeng/message';
 import {
+  CalendarModule,
   ConfirmationService,
   ConfirmDialogModule,
   DialogModule,
   DropdownModule, MessageService,
   MessagesModule,
-  ProgressSpinnerModule,
+  ProgressSpinnerModule, RadioButtonModule,
   ScrollPanelModule,
-  TreeModule
+  TreeModule, TreeTableModule
 } from 'primeng/primeng';
 import {TableModule} from 'primeng/table';
 
@@ -25,15 +26,18 @@ import {TableModule} from 'primeng/table';
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
-    MessageModule,
+    TreeTableModule,
     ConfirmDialogModule,
     ProgressSpinnerModule,
     TreeModule,
     TableModule,
     DialogModule,
+    MessageModule,
     MessagesModule,
     ScrollPanelModule,
-    DropdownModule
+    DropdownModule,
+    RadioButtonModule,
+    CalendarModule
   ],
   declarations: [CashComponent],
   providers: [CashService, MessageService, ConfirmationService]

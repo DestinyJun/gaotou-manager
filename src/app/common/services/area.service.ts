@@ -11,7 +11,7 @@ export class AreaService {
     private globalService: GlobalService
   ) { }
   // 增加接口
-  public addList(id): Observable<any> {
+  public addItem(id): Observable<any> {
     return this.http.get(`${this.globalService.urls}/administrativeArea/addById/${id}`);
   }
   // 删除一个
@@ -22,6 +22,10 @@ export class AreaService {
   public deleteList(params): Observable<any> {
     return this.http.post(`${this.globalService.urls}/administrativeArea/delete`, params);
   }
+   // 修改接口
+  public modifyItem(params): Observable<any> {
+    return this.http.post(`${this.globalService.urls}/administrativeArea/upload`, params);
+  }
   // 分页查询
   public searchList(num, body): Observable<any> {
     return this.http.post(
@@ -31,12 +35,10 @@ export class AreaService {
   public searchItem(id): Observable<any> {
     return this.http.get(`${this.globalService.urls}/administrativeArea/queryById/${id}`);
   }
+
+  /**************************数据联动*****************************/
   // 查询接口行政区划
   public getAllList(): Observable<any> {
     return this.http.get(`${this.globalService.urls}/administrativeArea/queryAll`);
   }
- /* // 修改接口
-  public modifyList(): Observable<any> {
-    return this.http.post('http://localhost/gaotouService/modify.php', '');
-  }*/
 }

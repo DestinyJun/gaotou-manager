@@ -96,4 +96,8 @@ export class SerareaService {
   public searchUserList(num): Observable<any> {
     return this.http.post(`${this.globalService.urls}/user/queryByPaging/${num.page}/${num.nums}`, {});
   }
+  // 查询服务区字段
+  public searchtSerareaAttribute(): Observable<any> {
+    return this.http.get(`${this.globalService.urls}/serviceArea/queryAllAttribute`);
+  }
 }

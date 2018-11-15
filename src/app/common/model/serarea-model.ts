@@ -30,7 +30,7 @@ export class Field {
 }
 export class AddField {
   attributeCategoryId?: number; // 属性分类
-  saOrientationFlag?: any; // 单选框(1公共2上行3下行)
+  hasOrientation?: any; // 单选框(1公共2上行3下行)
   attributeName?: string; // 字段名称
   attributeDesc?: string; // 字段描述
   position?: number; // 字段顺序
@@ -84,15 +84,9 @@ export class AddSerarea {
   chiefName: string; // 1 区长名
   chiefPhone: string; // 1 区长电话
   serviceAreaName: string; // 2 服务区名
-  commonAttributeValues = []; // 公共属性：经纬度及面积
+  commonAttributeValues: any[]; // 公共属性：经纬度及面积
   upAttributeValues: AddUpDownAttribute = new AddUpDownAttribute(); // 上行;
   downAttributeValues: AddUpDownAttribute = new AddUpDownAttribute(); // 下行
-}
-// 公共属性：经纬度及面积
-export class AddCommonAttribute {
-  // attributeId: number;
-  attributeName: string;
-  value: number;
 }
 // 上下行属性
 export class AddUpDownAttribute {
@@ -100,16 +94,19 @@ export class AddUpDownAttribute {
   destination: string; // 终点
   flag: string; // 上下行标识
   flagName: string; // 上下行
-  attributeValues = [];
+  attributeValues: Array<AddCommonAttribute>;
 }
-// 停车位
-export class AddCarAttribute {
-  attributeName: string; // 停车位类型，大车还是小车
+// 循环属性
+export class AddCommonAttribute {
+  // attributeId: number;
+  attributeName: string;
   value: number;
 }
 
-
-
+/*export class AddCarAttribute {
+  attributeName: string; // 停车位类型，大车还是小车
+  value: number;
+}*/
 
 /*export class AddSerarea {
   'organizationId': 1; // 1 公司ID

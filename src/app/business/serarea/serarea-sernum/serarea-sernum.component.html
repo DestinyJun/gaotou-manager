@@ -28,7 +28,7 @@
     </ng-template>
   </p-table>
   <!--增加弹框-->
-  <p-dialog header="增加信息" [(visible)]="addDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="900">
+  <p-dialog header="增加信息" [(visible)]="addDialog" [responsive]="true" showEffect="fade" blockScroll="true" [modal]="true" [width]="900">
     <div class="ui-g ui-fluid">
       <!--所属公司-->
       <div class="ui-g-6">
@@ -84,115 +84,78 @@
           <input pInputText id="serviceAreaName" placeholder="请输入服务区名称..." [(ngModel)]="addSerarea.serviceAreaName"/>
         </div>
       </div>
-      <!--公共属性-->
+      <!--————————————公共属性————————————-->
       <div class="ui-g-12" style="border-bottom: 2px dotted black">
         <h4 class="text-center">公共属性</h4>
       </div>
-      <!--服务区经度-->
-      <div class="ui-g-6">
+      <div class="ui-g-6" *ngFor="let item of commonAttributeValues;let i = index">
         <div class="ui-g-4">
-          <label for="longitude">服务区经度：</label>
+          <label for="longitude">{{item.attributeName}}：</label>
         </div>
         <div class="ui-g-8">
-          <input pInputText id="longitude" placeholder="请输入服务区经度..." [(ngModel)]="longitude"/>
+          <input pInputText id="longitude" [placeholder]="'请输入'+item.attributeName+'...'" [(ngModel)]="item.value"/>
         </div>
       </div>
-      <!--服务区纬度-->
-      <div class="ui-g-6">
-        <div class="ui-g-4">
-          <label for="latitude">服务区纬度：</label>
-        </div>
-        <div class="ui-g-8">
-          <input pInputText id="latitude" placeholder="请输入服务区纬度..." [(ngModel)]="latitude"/>
-        </div>
-      </div>
-      <!--服务区面积-->
-      <div class="ui-g-6">
-        <div class="ui-g-4">
-          <label for="acreage">服务区面积：</label>
-        </div>
-        <div class="ui-g-8">
-          <input pInputText id="acreage" placeholder="请输入服务区面积..." [(ngModel)]="acreage"/>
-        </div>
-      </div>
-      <!--上行属性-->
+      <!--————————————上行属性————————————-->
       <div class="ui-g-12" style="border-bottom: 2px dotted black">
         <h4 class="text-center">上行属性</h4>
       </div>
-      <!--上行方向起始点-->
       <div class="ui-g-6">
         <div class="ui-g-4">
-          <label for="upSource">上行方向起始点：</label>
+          <label>上行起始点：</label>
         </div>
         <div class="ui-g-8">
-          <input pInputText id="upSource" placeholder="上行方向起始点..." [(ngModel)]="upSource"/>
+          <input pInputText placeholder="上行起始点..." [(ngModel)]="upSource"/>
         </div>
       </div>
-      <!--上行方向终点-->
       <div class="ui-g-6">
         <div class="ui-g-4">
-          <label for="upDestination">上行方向终点：</label>
+          <label>上行结束点：</label>
         </div>
         <div class="ui-g-8">
-          <input pInputText id="upDestination" placeholder="上行方向终点..." [(ngModel)]="upDestination"/>
+          <input pInputText placeholder="上行结束点..." [(ngModel)]="upDestination"/>
         </div>
       </div>
-      <!--上行小车车位-->
-      <div class="ui-g-6">
-        <div class="ui-g-4">
-          <label for="upLittleParking">上行小车车位：</label>
+      <div class="ui-g-6" *ngFor="let item of upAttribute;let i = index">
+        <div class="ui-g-3">
+          <label>{{item.attributeName}}：</label>
         </div>
-        <div class="ui-g-8">
-          <input pInputText id="upLittleParking" type="number" placeholder="上行小车车位..." [(ngModel)]="upLittleParking"/>
+        <div class="ui-g-6">
+          <input pInputText placeholder="上行方向起始点..." [(ngModel)]="item.value"/>
         </div>
-      </div>
-      <!--上行大车车位-->
-      <div class="ui-g-6">
-        <div class="ui-g-4">
-          <label for="upBusParking">上行大车车位：</label>
-        </div>
-        <div class="ui-g-8">
-          <input pInputText id="upBusParking" type="number" placeholder="上行大车车位..." [(ngModel)]="upBusParking"/>
+        <div class="ui-g-3">
+          <button pButton type="button" label="删除" (click)="upAttributeDelete(i)" class="ui-button-raised ui-button-danger"></button>
         </div>
       </div>
-      <!--下行属性-->
+      <!--————————————下行属性————————————-->
       <div class="ui-g-12" style="border-bottom: 2px dotted black">
         <h4 class="text-center">下行属性</h4>
       </div>
-      <!--下行方向起始点-->
       <div class="ui-g-6">
         <div class="ui-g-4">
-          <label for="downSource">下行方向起始点：</label>
+          <label>下行起始点：</label>
         </div>
         <div class="ui-g-8">
-          <input pInputText id="downSource" placeholder="下行方向起始点..." [(ngModel)]="downSource"/>
+          <input pInputText placeholder="下行起始点..." [(ngModel)]="downSource"/>
         </div>
       </div>
-      <!--下行方向终点-->
       <div class="ui-g-6">
         <div class="ui-g-4">
-          <label for="downDestination">下行方向终点：</label>
+          <label>下行结束点：</label>
         </div>
         <div class="ui-g-8">
-          <input pInputText id="downDestination" placeholder="下行方向终点..." [(ngModel)]="downDestination"/>
+          <input pInputText placeholder="下行结束点..." [(ngModel)]="downDestination"/>
         </div>
       </div>
-      <!--下行小车车位-->
-      <div class="ui-g-6">
-        <div class="ui-g-4">
-          <label for="downLittleParking">下行小车车位：</label>
+      <div class="ui-g-6" *ngFor="let item of downAttribute;let i = index">
+        <div class="ui-g-3">
+          <label>{{item.attributeName}}：</label>
         </div>
-        <div class="ui-g-8">
-          <input pInputText id="downLittleParking" type="number" placeholder="下行小车车位..." [(ngModel)]="downLittleParking"/>
+        <div class="ui-g-6">
+          <input pInputText placeholder="上行方向起始点..." [(ngModel)]="item.value"/>
         </div>
-      </div>
-      <!--下行大车车位-->
-      <div class="ui-g-6">
-        <div class="ui-g-4">
-          <label for="downBusParking">下行大车车位：</label>
-        </div>
-        <div class="ui-g-8">
-          <input pInputText id="downBusParking" type="number" placeholder="下行大车车位..." [(ngModel)]="downBusParking"/>
+        <div class="ui-g-3">
+          <button pButton type="button" label="删除" (click)="downAttributeDelete(i)" class="ui-button-raised ui-button-danger"></button>
         </div>
       </div>
     </div>

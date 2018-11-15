@@ -33,9 +33,9 @@ export class SerareaFieldsComponent implements OnInit {
   ngOnInit() {
     this.cols = [
       {field: 'id', header: '字段ID'},
-      {field: 'attributeName', header: '字段名称'},
+      {field: 'attributeName', header: '字段编码'},
+      {field: 'attributeDesc', header: '字段名称'},
       {field: 'position', header: '字段顺序'},
-      {field: 'attributeDesc', header: '字段描述'},
       {field: 'idt', header: '添加时间'},
     ];
     this.serareaService.searchSaFieldTypeList({page: 1, nums: 100}).subscribe(
@@ -76,6 +76,11 @@ export class SerareaFieldsComponent implements OnInit {
       this.addField.showTableHead = true;
     } else {
       this.addField.showTableHead = false;
+    }
+    if (this.addField.hasOrientation === '1') {
+      this.addField.hasOrientation = true;
+    } else {
+      this.addField.hasOrientation = false;
     }
     this.confirmationService.confirm({
       message: `确定要增加吗？`,
@@ -152,30 +157,26 @@ export class SerareaFieldsComponent implements OnInit {
             this.serareaService.deleteSaFieldItem(this.selectedfields[0].id).subscribe(
               (value) => {
                 if (value.status === '200') {
-                  setTimeout(() => {
-                    this.globalService.eventSubject.next({display: false});
-                    if (this.cleanTimer) {
-                      clearTimeout(this.cleanTimer);
-                    }
+                  this.globalService.eventSubject.next({display: false});
+                  if (this.cleanTimer) {
+                    clearTimeout(this.cleanTimer);
+                  }
+                  this.msgs = [];
+                  this.selectedfields = undefined;
+                  this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.message});
+                  this.cleanTimer = setTimeout(() => {
                     this.msgs = [];
-                    this.selectedfields = undefined;
-                    this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.message});
-                    this.cleanTimer = setTimeout(() => {
-                      this.msgs = [];
-                    }, 3000);
-                    this.uploadFieldData();
                   }, 3000);
+                  this.uploadFieldData();
                 } else {
-                  setTimeout(() => {
-                    this.globalService.eventSubject.next({display: false});
-                    if (this.cleanTimer) {
-                      clearTimeout(this.cleanTimer);
-                    }
+                  this.globalService.eventSubject.next({display: false});
+                  if (this.cleanTimer) {
+                    clearTimeout(this.cleanTimer);
+                  }
+                  this.msgs = [];
+                  this.msgs.push({severity: 'error', summary: '删除提醒', detail: '服务器处理失败'});
+                  this.cleanTimer = setTimeout(() => {
                     this.msgs = [];
-                    this.msgs.push({severity: 'error', summary: '删除提醒', detail: '服务器处理失败'});
-                    this.cleanTimer = setTimeout(() => {
-                      this.msgs = [];
-                    }, 3000);
                   }, 3000);
                 }
               },
@@ -201,18 +202,16 @@ export class SerareaFieldsComponent implements OnInit {
             this.serareaService.deleteSaFieldList(ids).subscribe(
               (value) => {
                 if (value.status === '200') {
-                  setTimeout(() => {
-                    this.globalService.eventSubject.next({display: false});
-                    if (this.cleanTimer) {
-                      clearTimeout(this.cleanTimer);
-                    }
+                  this.globalService.eventSubject.next({display: false});
+                  if (this.cleanTimer) {
+                    clearTimeout(this.cleanTimer);
+                  }
+                  this.msgs = [];
+                  this.selectedfields = undefined;
+                  this.uploadFieldData();
+                  this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.message});
+                  this.cleanTimer = setTimeout(() => {
                     this.msgs = [];
-                    this.selectedfields = undefined;
-                    this.uploadFieldData();
-                    this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.message});
-                    this.cleanTimer = setTimeout(() => {
-                      this.msgs = [];
-                    }, 3000);
                   }, 3000);
                 } else {
                   setTimeout(() => {

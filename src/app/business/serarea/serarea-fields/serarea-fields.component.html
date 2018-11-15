@@ -42,21 +42,29 @@
       <!--选择方向-->
       <div class="ui-g-6">
         <div class="ui-g-4">
-          <label>选择方向：</label>
+          <label>是否有方向：</label>
         </div>
         <div class="ui-g-8">
-          <p-radioButton id="addenabled1" name="group1" value="1" [(ngModel)]="addField.saOrientationFlag" label="公共" inputId="opt2"></p-radioButton>
-          <p-radioButton id="addenabled2" name="group1" value="2" [(ngModel)]="addField.saOrientationFlag" label="上行" inputId="opt3"></p-radioButton>
-          <p-radioButton id="addenabled3" name="group1" value="3" [(ngModel)]="addField.saOrientationFlag" label="下行" inputId="opt3"></p-radioButton>
+          <p-radioButton id="addenabled1" name="group1" value="1" [(ngModel)]="addField.hasOrientation" label="有" inputId="opt2"></p-radioButton>
+          <p-radioButton id="addenabled2" name="group1" value="0" [(ngModel)]="addField.hasOrientation" label="否" inputId="opt3"></p-radioButton>
+        </div>
+      </div>
+      <!--字段编码-->
+      <div class="ui-g-6">
+        <div class="ui-g-4">
+          <label for="attributeName">字段编码：</label>
+        </div>
+        <div class="ui-g-8">
+          <input pInputText id="attributeName" [(ngModel)]="addField.attributeName"/>
         </div>
       </div>
       <!--字段名称-->
       <div class="ui-g-6">
         <div class="ui-g-4">
-          <label for="attributeName">字段名称：</label>
+          <label for="attributeDesc">字段名称：</label>
         </div>
         <div class="ui-g-8">
-          <input pInputText id="attributeName" [(ngModel)]="addField.attributeName"/>
+          <input id="attributeDesc" pInputText [(ngModel)]="addField.attributeDesc" />
         </div>
       </div>
       <!--字段顺序-->
@@ -74,19 +82,11 @@
           <label>是否显示在页面表单：</label>
         </div>
         <div class="ui-g-8">
-          <p-radioButton id="addenabled1" name="group1" value="1" [(ngModel)]="addField.showTableHead" label="是" inputId="opt2"></p-radioButton>
-          <p-radioButton id="addenabled2" name="group1" value="0" [(ngModel)]="addField.showTableHead" label="否" inputId="opt3"></p-radioButton>
+          <p-radioButton id="addena1" name="group1" value="1" [(ngModel)]="addField.showTableHead" label="是" inputId="opt2"></p-radioButton>
+          <p-radioButton id="addena2" name="group1" value="0" [(ngModel)]="addField.showTableHead" label="否" inputId="opt3"></p-radioButton>
         </div>
       </div>
-      <!--字段描述-->
-      <div class="ui-g-12">
-        <div class="ui-g-2">
-          <label for="attributeDesc">字段描述：</label>
-        </div>
-        <div class="ui-g-10">
-          <textarea id="attributeDesc" rows="5" cols="70" pInputTextarea [(ngModel)]="addField.attributeDesc"></textarea>
-        </div>
-      </div>
+
     </div>
     <p-footer>
       <div class="ui-dialog-buttonpane ui-helper-clearfix">

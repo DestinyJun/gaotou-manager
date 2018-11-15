@@ -10,6 +10,30 @@ export class CashService {
     private http: HttpClient,
     private globalService: GlobalService
   ) { }
+  // 增加
+  public addItem(params): Observable<any> {
+    return this.http.post(`${this.globalService.urls}/cashRegister/add`, params);
+  }
+  // 删除单个
+  public deleteItem(id): Observable<any> {
+    console.log(id);
+    return this.http.get(`${this.globalService.urls}/cashRegister/delete/${id}`);
+  }
+  // 删除多个
+  public deleteList(params): Observable<any> {
+    return this.http.post(`${this.globalService.urls}/cashRegister/delete`, params);
+  }
+  // 修改
+  public modifyItem(params): Observable<any> {
+    return this.http.post(`${this.globalService.urls}/cashRegister/upload`, params);
+  }
+  // 收银设备分页查询
+  public searchList(num): Observable<any> {
+    return this.http.post(
+      `${this.globalService.urls}/cashRegister/queryByPaging/${num.page}/${num.nums}`, {});
+  }
+
+  /**********************数据联动*****************************/
   // 查询激活区域
   public searchAreaList(num): Observable<any> {
     return this.http.post(
@@ -29,27 +53,5 @@ export class CashService {
   public searchStoreItem(id): Observable<any> {
     return this.http.get(
       `${this.globalService.urls}/storeInfo/queryByOrientationId/${id}`);
-  }
-  // 收银设备分页查询
-  public searchList(num): Observable<any> {
-    return this.http.post(
-      `${this.globalService.urls}/cashRegister/queryByPaging/${num.page}/${num.nums}`, {});
-  }
-  // 增加
-  public addItem(params): Observable<any> {
-    return this.http.post(`${this.globalService.urls}/cashRegister/add`, params);
-  }
-  // 删除单个
-  public deleteItem(id): Observable<any> {
-    console.log(id);
-    return this.http.get(`${this.globalService.urls}/cashRegister/delete/${id}`);
-  }
-  // 删除多个
-  public deleteList(params): Observable<any> {
-    return this.http.post(`${this.globalService.urls}/cashRegister/delete`, params);
-  }
-  // 修改
-  public modifyList(): Observable<any> {
-    return this.http.post('http://localhost/gaotouService/modify.php', '');
   }
 }

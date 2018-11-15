@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {SerareaService} from '../../../common/services/serarea.service';
 import {ConfirmationService, Message, MessageService} from 'primeng/api';
 import {GlobalService} from '../../../common/services/global.service';
-import {Apply} from '../../../common/model/apply-model';
-import {AddDuty} from '../../../common/model/org-model';
 import {AddSerarea, Serarea} from '../../../common/model/serarea-model';
 import {AddTreeArea, SelectItem} from '../../../common/model/shared-model';
 import {TreeNode} from '../../../common/model/cash-model';
@@ -30,17 +28,13 @@ export class SerareaSernumComponent implements OnInit {
   public userDialog: boolean; // 区域树弹窗
   public addUserTrees: AddTreeArea[]; // 用户树结构
   public addUserTree: AddTreeArea = new AddTreeArea(); // 用户树选择
-  public longitude: number; // 经度
-  public latitude: number;  // 维度
-  public acreage: number;  // 面积
+  public commonAttributeValues = []; // 公共属性
+  public upAttribute = []; // 上行属性
+  public downAttribute = []; // 下行属性
   public upSource: string;  // 上行起始点
   public upDestination: string;  // 上行终点
-  public upLittleParking: number;  // 上行小车车位
-  public upBusParking: number;  // 上行大车车位
   public downSource: string;  // 下行起始点
   public downDestination: string;  // 下行终点
-  public downLittleParking: number;  // 下行小车车位
-  public downBusParking: number;  // 下行大车车位
   // 其他提示弹窗相关
   public cleanTimer: any; // 清除时钟
   public msgs: Message[] = []; // 消息弹窗
@@ -72,6 +66,24 @@ export class SerareaSernumComponent implements OnInit {
         console.log(val.data.contents);
       }
     );
+    this.serareaService.searchtSerareaAttribute().subscribe(
+      (value) => {
+        console.log(value.data);
+        value.data.commonAttribute.map((val, index) => {
+          this.commonAttributeValues.push(
+            {attributeName: val.attributeDesc, value: ''}
+          );
+        });
+        value.data.hasOrientationAttribute.map((val, index) => {
+          this.upAttribute.push(
+            {attributeName: val.attributeDesc, value: ''}
+          );
+          this.downAttribute.push(
+            {attributeName: val.attributeDesc, value: ''}
+          );
+        });
+      }
+    );
   }
   public updateApplyListData(): void {
     this.serareaService.searchSerAraList({page: 1, nums: 1000}).subscribe(
@@ -98,29 +110,19 @@ export class SerareaSernumComponent implements OnInit {
   }
   // 增加
   public addsSave(): void {
-    this.addSerarea.commonAttributeValues.push(
-      {attributeName: 'longitude', value: this.longitude},
-      {attributeName: 'latitude', value: this.latitude},
-      {attributeName: 'square_meter', value: this.acreage},
-    );
+    this.addSerarea.commonAttributeValues = this.commonAttributeValues;
     // 上行
     this.addSerarea.upAttributeValues.source = this.upSource;
     this.addSerarea.upAttributeValues.destination = this.upDestination;
     this.addSerarea.upAttributeValues.flag = '2';
     this.addSerarea.upAttributeValues.flagName = '上行';
-    this.addSerarea.upAttributeValues.attributeValues.push(
-      {attributeName: 'little_parking_space', value: this.upLittleParking},
-      {attributeName: 'bus_parking_space', value: this.upBusParking},
-    );
+    this.addSerarea.upAttributeValues.attributeValues = this.upAttribute;
     // 下行
     this.addSerarea.downAttributeValues.source = this.downSource;
     this.addSerarea.downAttributeValues.destination = this.downDestination;
     this.addSerarea.downAttributeValues.flag = '3';
     this.addSerarea.downAttributeValues.flagName = '下行';
-    this.addSerarea.downAttributeValues.attributeValues.push(
-      {attributeName: 'little_parking_space', value: this.downLittleParking},
-      {attributeName: 'bus_parking_space', value: this.downBusParking},
-    );
+    this.addSerarea.downAttributeValues.attributeValues = this.downAttribute;
     console.log(this.addSerarea);
     this.confirmationService.confirm({
       message: `确定要增加吗？`,
@@ -197,19 +199,17 @@ export class SerareaSernumComponent implements OnInit {
             this.serareaService.deleteSerAraItem(this.selectedSerAreas[0].id).subscribe(
               (value) => {
                 if (value.status === '200') {
-                  setTimeout(() => {
-                    this.globalService.eventSubject.next({display: false});
-                    if (this.cleanTimer) {
-                      clearTimeout(this.cleanTimer);
-                    }
+                  this.globalService.eventSubject.next({display: false});
+                  if (this.cleanTimer) {
+                    clearTimeout(this.cleanTimer);
+                  }
+                  this.msgs = [];
+                  this.selectedSerAreas = undefined;
+                  this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.message});
+                  this.cleanTimer = setTimeout(() => {
                     this.msgs = [];
-                    this.selectedSerAreas = undefined;
-                    this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.message});
-                    this.cleanTimer = setTimeout(() => {
-                      this.msgs = [];
-                    }, 3000);
-                    this.updateApplyListData();
                   }, 3000);
+                  this.updateApplyListData();
                 } else {
                   setTimeout(() => {
                     this.globalService.eventSubject.next({display: false});
@@ -246,18 +246,16 @@ export class SerareaSernumComponent implements OnInit {
             this.serareaService.deleteSerAraList(ids).subscribe(
               (value) => {
                 if (value.status === '200') {
-                  setTimeout(() => {
-                    this.globalService.eventSubject.next({display: false});
-                    if (this.cleanTimer) {
-                      clearTimeout(this.cleanTimer);
-                    }
+                  this.globalService.eventSubject.next({display: false});
+                  if (this.cleanTimer) {
+                    clearTimeout(this.cleanTimer);
+                  }
+                  this.msgs = [];
+                  this.selectedSerAreas = undefined;
+                  this.updateApplyListData();
+                  this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.message});
+                  this.cleanTimer = setTimeout(() => {
                     this.msgs = [];
-                    this.selectedSerAreas = undefined;
-                    this.updateApplyListData();
-                    this.msgs.push({severity: 'success', summary: '删除提醒', detail: value.message});
-                    this.cleanTimer = setTimeout(() => {
-                      this.msgs = [];
-                    }, 3000);
                   }, 3000);
                 } else {
                   setTimeout(() => {
@@ -352,6 +350,17 @@ export class SerareaSernumComponent implements OnInit {
     this.addSerarea.chiefName = this.addUserTree.label;
     this.addSerarea.chiefPhone = this.addUserTree.areaCode;
 
+  }
+  // 上行下属性删除
+  public upAttributeDelete(i): void {
+    this.upAttribute = this.upAttribute.filter((item, index) => {
+      return i !== index;
+    });
+  }
+  public downAttributeDelete(i): void {
+    this.downAttribute = this.upAttribute.filter((item, index) => {
+      return i !== index;
+    });
   }
   /************************数据格式化**************************/
  // 公司数据格式化

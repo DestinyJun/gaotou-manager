@@ -8,7 +8,7 @@ import { SerareaFieldsComponent } from './serarea-fields/serarea-fields.componen
 import {TableModule} from 'primeng/table';
 import {
   CalendarModule,
-  CheckboxModule, ConfirmationService,
+  ConfirmationService,
   ConfirmDialogModule,
   DialogModule, DropdownModule,
   MessageModule,
@@ -27,7 +27,6 @@ import { SerareaFieldtypeComponent } from './serarea-fieldtype/serarea-fieldtype
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
-
     TreeTableModule,
     ConfirmDialogModule,
     ProgressSpinnerModule,

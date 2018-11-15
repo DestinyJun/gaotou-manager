@@ -70,7 +70,6 @@ export class CashComponent implements OnInit {
     }
     return car;
   }
-
   // 增加
   public addsSave(): void {
     this.confirmationService.confirm({
@@ -116,90 +115,6 @@ export class CashComponent implements OnInit {
               }
               this.msgs = [];
               this.msgs.push({severity: 'error', summary: '增加提醒', detail: '连接服务器失败'});
-              this.cleanTimer = setTimeout(() => {
-                this.msgs = [];
-              }, 3000);
-            }, 3000);
-          }
-        );
-      },
-      reject: () => {}
-    });
-  }
-  // 修改、保存修改
-  public revampClick() {
-    if (this.selectedCashs === undefined || this.selectedCashs.length === 0) {
-      if (this.cleanTimer) {
-        clearTimeout(this.cleanTimer);
-      }
-      this.msgs = [];
-      this.msgs.push({severity: 'error', summary: '操作错误', detail: '请选择需要修改的项'});
-      this.cleanTimer = setTimeout(() => {
-        this.msgs = [];
-      }, 3000);
-      this.revampDialog = false;
-    } else if (this.selectedCashs.length > 1) {
-      if (this.cleanTimer) {
-        clearTimeout(this.cleanTimer);
-      }
-      this.cleanTimer = setTimeout(() => {
-        this.msgs = [];
-      }, 3000);
-      this.msgs.push({severity: 'error', summary: '操作错误', detail: '修改只能选择一项'});
-      this.revampDialog = false;
-    } else if (this.selectedCashs.length === 1) {
-      this.revampDialog = true;
-    }
-
-  }
-  public revampSave(): void {
-    this.confirmationService.confirm({
-      message: `确定要修改吗？`,
-      header: '修改提醒',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.globalService.eventSubject.next({display: true});
-        this.cashService.modifyList().subscribe(
-          (value) => {
-            if (value.state) {
-              setTimeout(() => {
-                this.globalService.eventSubject.next({display: false});
-                const carsSave = [...this.cashs];
-                carsSave[this.cashs.indexOf(this.selectedCashs[0])] = this.cash;
-                this.cashs = carsSave;
-                if (this.cleanTimer) {
-                  clearTimeout(this.cleanTimer);
-                }
-                this.msgs = [];
-                this.msgs.push({severity: 'success', summary: '修改提醒', detail: value.msg});
-                this.cleanTimer = setTimeout(() => {
-                  this.msgs = [];
-                }, 3000);
-                this.selectedCashs = undefined;
-                this.revampDialog = false;
-              }, 3000);
-            } else {
-              setTimeout(() => {
-                this.globalService.eventSubject.next({display: false});
-                if (this.cleanTimer) {
-                  clearTimeout(this.cleanTimer);
-                }
-                this.msgs = [];
-                this.msgs.push({severity: 'error', summary: '修改提醒', detail: '服务器处理失败'});
-                this.cleanTimer = setTimeout(() => {
-                  this.msgs = [];
-                }, 3000);
-              }, 3000);
-            }
-          },
-          (err) => {
-            setTimeout(() => {
-              this.globalService.eventSubject.next({display: false});
-              if (this.cleanTimer) {
-                clearTimeout(this.cleanTimer);
-              }
-              this.msgs = [];
-              this.msgs.push({severity: 'error', summary: '修改提醒', detail: '连接服务器失败'});
               this.cleanTimer = setTimeout(() => {
                 this.msgs = [];
               }, 3000);
@@ -336,6 +251,91 @@ export class CashComponent implements OnInit {
       });
     }
   }
+  // 修改、保存修改
+/*  public revampClick() {
+    if (this.selectedCashs === undefined || this.selectedCashs.length === 0) {
+      if (this.cleanTimer) {
+        clearTimeout(this.cleanTimer);
+      }
+      this.msgs = [];
+      this.msgs.push({severity: 'error', summary: '操作错误', detail: '请选择需要修改的项'});
+      this.cleanTimer = setTimeout(() => {
+        this.msgs = [];
+      }, 3000);
+      this.revampDialog = false;
+    } else if (this.selectedCashs.length > 1) {
+      if (this.cleanTimer) {
+        clearTimeout(this.cleanTimer);
+      }
+      this.cleanTimer = setTimeout(() => {
+        this.msgs = [];
+      }, 3000);
+      this.msgs.push({severity: 'error', summary: '操作错误', detail: '修改只能选择一项'});
+      this.revampDialog = false;
+    } else if (this.selectedCashs.length === 1) {
+      this.revampDialog = true;
+    }
+
+  }
+  public revampSave(): void {
+    this.confirmationService.confirm({
+      message: `确定要修改吗？`,
+      header: '修改提醒',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.globalService.eventSubject.next({display: true});
+        this.cashService.modifyList().subscribe(
+          (value) => {
+            if (value.state) {
+              setTimeout(() => {
+                this.globalService.eventSubject.next({display: false});
+                const carsSave = [...this.cashs];
+                carsSave[this.cashs.indexOf(this.selectedCashs[0])] = this.cash;
+                this.cashs = carsSave;
+                if (this.cleanTimer) {
+                  clearTimeout(this.cleanTimer);
+                }
+                this.msgs = [];
+                this.msgs.push({severity: 'success', summary: '修改提醒', detail: value.msg});
+                this.cleanTimer = setTimeout(() => {
+                  this.msgs = [];
+                }, 3000);
+                this.selectedCashs = undefined;
+                this.revampDialog = false;
+              }, 3000);
+            } else {
+              setTimeout(() => {
+                this.globalService.eventSubject.next({display: false});
+                if (this.cleanTimer) {
+                  clearTimeout(this.cleanTimer);
+                }
+                this.msgs = [];
+                this.msgs.push({severity: 'error', summary: '修改提醒', detail: '服务器处理失败'});
+                this.cleanTimer = setTimeout(() => {
+                  this.msgs = [];
+                }, 3000);
+              }, 3000);
+            }
+          },
+          (err) => {
+            setTimeout(() => {
+              this.globalService.eventSubject.next({display: false});
+              if (this.cleanTimer) {
+                clearTimeout(this.cleanTimer);
+              }
+              this.msgs = [];
+              this.msgs.push({severity: 'error', summary: '修改提醒', detail: '连接服务器失败'});
+              this.cleanTimer = setTimeout(() => {
+                this.msgs = [];
+              }, 3000);
+            }, 3000);
+          }
+        );
+      },
+      reject: () => {}
+    });
+  }*/
+
   // 搜索
   /*public searchKeydown(e): void {
     if (e.keyCode === 13) {

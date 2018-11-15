@@ -1,6 +1,6 @@
-export class AreaList {
+export class Area {
   data?: any;
-  children?: AreaList[];
+  children?: Area[];
 }
 
 /*export class AddTreeArea {
@@ -22,19 +22,19 @@ export class AreaList {
   draggable?: boolean;
   droppable?: boolean;
 }*/
-export class AddTreeItem {
+export class AddTree {
   id?: number;
   areaName?: string;
   areaCode?: string;
   level?: string;
   enabled?: boolean;
   parentId?: number;
-  children?: AddTreeItem[];
+  children?: AddTree[];
   pids?: string;
   cityType?: string;
   idt?: string;
   status?: boolean;
-  parent?: AddTreeItem;
+  parent?: AddTree;
   icon?: any;
   expandedIcon?: any;
   collapsedIcon?: any;
