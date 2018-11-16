@@ -13,9 +13,9 @@ import {TreeNode} from '../../../common/model/cash-model';
 })
 export class SerareaSernumComponent implements OnInit {
   // table显示相关
-  public SerAreas: Serarea[]; // 整个table数据
+  public serAreas: Serarea[]; // 整个table数据
   public cols: any[]; // 表头
-  public SerArea: any; // 接收选中的值
+  public serArea: any; // 接收选中的值
   public selectedSerAreas: Serarea[]; // 多个选择
   // 增加相关
   public addDialog: boolean; // 增加弹窗显示控制
@@ -35,6 +35,9 @@ export class SerareaSernumComponent implements OnInit {
   public upDestination: string;  // 上行终点
   public downSource: string;  // 下行起始点
   public downDestination: string;  // 下行终点
+  // 修改
+  public revampDialog: boolean; // 修改弹窗
+  public revampSerArea: any;
   // 其他提示弹窗相关
   public cleanTimer: any; // 清除时钟
   public msgs: Message[] = []; // 消息弹窗
@@ -88,15 +91,13 @@ export class SerareaSernumComponent implements OnInit {
   public updateApplyListData(): void {
     this.serareaService.searchSerAraList({page: 1, nums: 1000}).subscribe(
       (value) => {
-        console.log(value);
-        this.SerAreas = value.data.contents;
+        this.serAreas = value.data.contents;
       }
     );
   }
   // 选中后赋值
   public onRowSelect(event): void {
-    console.log(event.data);
-    this.SerArea = this.cloneCar(event.data);
+    this.serArea = this.cloneCar(event.data);
   }
   // 遍历修改后的数据，并把它赋值给car1
   public cloneCar(c: any): any {
@@ -291,10 +292,108 @@ export class SerareaSernumComponent implements OnInit {
       });
     }
   }
+  // 修改、保存修改
+  public revampClick() {
+    if (this.selectedSerAreas === undefined || this.selectedSerAreas.length === 0) {
+      if (this.cleanTimer) {
+        clearTimeout(this.cleanTimer);
+      }
+      this.msgs = [];
+      this.msgs.push({severity: 'error', summary: '操作错误', detail: '请选择需要修改的项'});
+      this.cleanTimer = setTimeout(() => {
+        this.msgs = [];
+      }, 3000);
+      this.revampDialog = false;
+    } else if (this.selectedSerAreas.length > 1) {
+      if (this.cleanTimer) {
+        clearTimeout(this.cleanTimer);
+      }
+      this.cleanTimer = setTimeout(() => {
+        this.msgs = [];
+      }, 3000);
+      this.msgs.push({severity: 'error', summary: '操作错误', detail: '修改只能选择一项'});
+      this.revampDialog = false;
+    } else if (this.selectedSerAreas.length === 1) {
+      // this.globalService.eventSubject.next({display: true});
+      this.serareaService.searchSerAraListItem({id: this.serArea.id}).subscribe(
+        (val) => {
+          if (val.status === '200') {
+            console.log(val.data);
+            this.globalService.eventSubject.next({display: false});
+          } else {
+            // this.globalService.eventSubject.next({display: false});
+            this.msgs = [];
+            this.msgs.push({severity: 'error', summary: '请求异常', detail: '网络请求异常'});
+            this.cleanTimer = setTimeout(() => {
+              this.msgs = [];
+            }, 3000);
+          }
+        }
+      );
+    }
+
+  }
+  public revampSave(): void {
+    this.confirmationService.confirm({
+      message: `确定要修改吗？`,
+      header: '修改提醒',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.globalService.eventSubject.next({display: true});
+        this.serareaService.modifySerAraItem({}).subscribe(
+          (value) => {
+            if (value.state) {
+              setTimeout(() => {
+                this.globalService.eventSubject.next({display: false});
+                if (this.cleanTimer) {
+                  clearTimeout(this.cleanTimer);
+                }
+                this.msgs = [];
+                this.msgs.push({severity: 'success', summary: '修改提醒', detail: value.msg});
+                this.cleanTimer = setTimeout(() => {
+                  this.msgs = [];
+                }, 3000);
+                this.selectedSerAreas = undefined;
+                this.revampDialog = false;
+              }, 3000);
+            } else {
+              setTimeout(() => {
+                this.globalService.eventSubject.next({display: false});
+                if (this.cleanTimer) {
+                  clearTimeout(this.cleanTimer);
+                }
+                this.msgs = [];
+                this.msgs.push({severity: 'error', summary: '修改提醒', detail: '服务器处理失败'});
+                this.cleanTimer = setTimeout(() => {
+                  this.msgs = [];
+                }, 3000);
+              }, 3000);
+            }
+          },
+          (err) => {
+            setTimeout(() => {
+              this.globalService.eventSubject.next({display: false});
+              if (this.cleanTimer) {
+                clearTimeout(this.cleanTimer);
+              }
+              this.msgs = [];
+              this.msgs.push({severity: 'error', summary: '修改提醒', detail: '连接服务器失败'});
+              this.cleanTimer = setTimeout(() => {
+                this.msgs = [];
+              }, 3000);
+            }, 3000);
+          }
+        );
+      },
+      reject: () => {}
+    });
+  }
   // 选择公司
   public companyChange(e): void {
     this.addSerarea.organizationName = e.value.name;
     this.addSerarea.organizationId = e.value.id;
+    this.revampSerArea.organizationName = e.value.name;
+    this.revampSerArea.organizationId = e.value.id;
     this.serareaService.searchCompanyIdDepList(e.value.id).subscribe(
       (value) => {
         console.log(value);
@@ -306,6 +405,8 @@ export class SerareaSernumComponent implements OnInit {
   public orgsChange(e): void {
     this.addSerarea.deptName = e.value.name;
     this.addSerarea.deptId = e.value.id;
+    this.revampSerArea.deptName = e.value.name;
+    this.revampSerArea.deptId = e.value.id;
   }
   // 选择区域
   public AreaTreeClick(): void {
@@ -326,6 +427,8 @@ export class SerareaSernumComponent implements OnInit {
     if (a >= 2 ) {
       this.addSerarea.administrativeAreaId = this.addAreaTree.id;
       this.addSerarea.administrativeAreaName = this.addAreaTree.label;
+      this.revampSerArea.administrativeAreaId = this.addAreaTree.id;
+      this.revampSerArea.administrativeAreaName = this.addAreaTree.label;
       this.areaDialog = false;
     } else {
       this.msgs = [];
@@ -349,6 +452,9 @@ export class SerareaSernumComponent implements OnInit {
     this.addSerarea.chiefUserId = this.addUserTree.id;
     this.addSerarea.chiefName = this.addUserTree.label;
     this.addSerarea.chiefPhone = this.addUserTree.areaCode;
+    this.revampSerArea.chiefUserId = this.addUserTree.id;
+    this.revampSerArea.chiefName = this.addUserTree.label;
+    this.revampSerArea.chiefPhone = this.addUserTree.areaCode;
 
   }
   // 上行下属性删除

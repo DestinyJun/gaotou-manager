@@ -73,6 +73,10 @@ export class SerareaService {
   public modifySerAraItem(item): Observable<any> {
     return this.http.post(`${this.globalService.urls}/serviceArea/update`, item);
   }
+  // 单个id指定查询
+  public searchSerAraListItem(params): Observable<any> {
+    return this.http.get(`${this.globalService.urls}/serviceArea/queryById/${params.id}`);
+  }
   // 查询
   public searchSerAraList(num): Observable<any> {
     return this.http.post(`${this.globalService.urls}/serviceArea/queryByPaging/${num.page}/${num.nums}`, {});
