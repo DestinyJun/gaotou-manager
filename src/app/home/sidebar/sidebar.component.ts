@@ -48,7 +48,9 @@ export class SidebarComponent implements OnInit {
       new NavListChild('字典', false, 'dict', 'fa fa-snowflake-o'),
       new NavListChild('字典词条', false, 'dict/word', 'fa fa-snowflake-o'),
     ] , true),
-    new NavList('系统配置', 'system', 'fa fa-cog', false, [] , true),
+    new NavList('系统配置', 'system', 'fa fa-cog', false, [
+      new NavListChild('事件类型', false, 'dict', 'fa fa-snowflake-o'),
+    ] , true),
   ];
   public slidinghight: number;
   public slidingTop: number;
